@@ -6,7 +6,7 @@
         display: none;
     }
     .teamrow.ineligible {
-        color: #bbb;
+        color: #888;
     }
 </style>
 <script>
@@ -46,7 +46,7 @@
     </thead>
     <tbody>
         {% for eligible, teamid, team, affiliation, score in data %}
-        <tr class="teamrow {% if not eligible %}in{% endif %}eligible {% if eligible and teamid == session.team_id %}blue lighten-3 {% endif %}visible"><td class="rank">{{ rank }}</td><td>{{ team }}</td><td>{{ affiliation }}</td><td>{{ score }}</td></tr>
+        <tr class="teamrow {% if not eligible %}in{% endif %}eligible {% if teamid == session.team_id %}blue lighten-3 {% endif %}visible"><td class="rank">{{ rank }}</td><td>{{ team }}</td><td>{{ affiliation }}</td><td>{{ score }}</td></tr>
         {% endfor %}
     </tbody>
 </table>
