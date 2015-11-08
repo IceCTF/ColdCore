@@ -15,12 +15,17 @@ function toggle() {
     state = !state;
 }
 </script>
+<style type="text/css">
+    .collapsible-header {
+        background-color: #eee;
+    }
+</style>
 {% endblock %}
 {% block content %}
 <p>You are scoring on behalf of {{ team.name }}. If this is incorrect, you should
 <a href="{{ url_for('logout') }}">logout</a> and login with the correct team key.</p>
 <a href="javascript:toggle()">Toggle collapsed state</a>
-<ul class="collapsible popout" data-collapsible="expandable">
+<ul class="collapsible" data-collapsible="expandable">
     {% for challenge in challenges %}
     <li>
         <div class="collapsible-header{% if challenge not in solved %} active{% endif %}">
