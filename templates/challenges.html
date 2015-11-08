@@ -29,9 +29,9 @@ function toggle() {
     {% for challenge in challenges %}
     <li>
         <div class="collapsible-header{% if challenge not in solved %} active{% endif %}">
-            <strong>{{ challenge.name }}</strong>
-            <span class="left" style="margin-right: -5px;">{% if challenge in solved %}<i class="material-icons">check_circle</i>{% endif %}</span>
-            <span class="right">{{ challenge.category }} {{ challenge.points }}pt</span>
+            <strong style="font-size: 110%;">{{ challenge.name }}</strong>
+            <span class="left" style="margin-right: -5px;">{% if challenge in solved %}<i class="material-icons">check</i>{% endif %}</span>
+            <span class="right">{{ challenge.category }} <b>&middot;</b> {{ challenge.points }} pt</span>
         </div>
         <div class="collapsible-body">
             <p>{{ challenge.description }}</p>
@@ -44,7 +44,7 @@ function toggle() {
                         <input id="flag" name="flag" type="text" />
                         <label for="flag">Flag</label>
                     </div>
-                    <button class="btn waves-effect waves-light" type="submit">Submit flag</button>
+                    <button class="btn waves-effect waves-light" type="submit">Submit</button>
                 </div>
                 <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
             </form><br />
