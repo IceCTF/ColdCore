@@ -1,15 +1,47 @@
 {% extends "base.html" %}
 {% block title %}Team Dashboard{% endblock %}
+{% block head %}
+<style type="text/css">
+    section:not(first-child) {
+        margin-top: 15px;
+    }
+    section:last-child {
+        margin-bottom: 30px;
+    }
+    td:last-child, th:last-child {
+        text-align: right;
+    }
+    form {
+        margin-top: 20px;
+        margin-bottom: 25px;
+    }
+    .bigger {
+        font-size: medium;
+    }
+    h4 {
+        font-weight: 400;
+    }
+    th {
+        font-weight: normal;
+    }
+    td, h5 {
+        font-weight: 300;
+    }
+</style>
+{% endblock %}
 {% block content %}
 <h2>{{ team.name }}</h2>
-<h3>Team information</h3>
+<section>
+<h4>Team information</h4>
 <p>Your team key is <code>{{ team.key }}</code>. Share this with your teammates,
 and keep it in a safe place. You need it to log in. If you lose it, an organizer
 can send it to your team email, which is shown below.</p>
 <p>Your team email is <code>{{ team.email }}</code>, and you are affiliated with
 {{ team.affiliation }}.</p>
 <p>Your team is currently marked {{ "eligible" if team.eligible else "ineligible" }}.</p>
-<h3>Edit information</h3>
+</section>
+<section>
+<h4>Edit information</h4>
 <p>{{ config.eligibility }}</p>
 <p>If you do not meet these requirements, you are still welcome to play, but you
 will not be eligible for prizes. By checking the "Eligibility Certification"
@@ -35,35 +67,46 @@ status before sending you prizes.</p>
     <br /><br />
     <button class="btn waves-effect waves-light" type="submit">Update team</button>
 </form>
-<h3>Score calculation</h3>
-<p>You have solved the following problems:</p>
+</section>
+<section>
+<h4>Score calculation</h4>
+{% if team_solves.count() %}
+<h5>Solved problems</h5>
 <table>
     <thead>
-        <tr><th>Name</th><th>Category</th><th>Value</th><th>Time</th></tr>
+        <tr><th>Name</th><th>Category</th><th>Time</th><th>Value</th></tr>
     </thead>
     <tbody>
         {% for solve in team_solves %}
         <tr>
             <td>{{ solve.challenge.name }}</td>
             <td>{{ solve.challenge.category }}</td>
+            <td><abbr class="time" title="{{ solve.time }}">{{ solve.time }}</abbr></td>
             <td>{{ solve.challenge.points }}</td>
-            <td>{{ solve.time }}</td>
         {% endfor %}
     </tbody>
 </table>
-<p>The following score adjustments have been made:</p>
+{% else %}
+<p>No problems have been solved.</p>
+{% endif %}
+{% if team_adjustments.count() %}
+<h5>Score adjustments</h5>
 <table>
     <thead>
-        <tr><th>Value</th><th>Reason</th></tr>
+        <tr><th>Reason</th><th>Value</th></tr>
     </thead>
     <tbody>
         {% for adj in team_adjustments %}
         <tr>
-            <td>{{ adj.value }}</td>
             <td>{{ adj.reason }}</td>
+            <td>{{ adj.value }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-<p>This brings your score to a total of {{ team_score }}.</p>
+{% else %}
+<p>No score adjustments have been made.</p>
+{% endif %}
+<p class="right"><strong class="bigger">Your score is {{ team_score }}.</strong></p>
+</section>
 {% endblock %}

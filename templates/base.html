@@ -11,35 +11,39 @@
         {% block head %}{% endblock %}
     </head>
     <body>
-        <nav class="blue darken-3">
-            <div class="container">
-                <div class="nav-wrapper">
-                    <ul class="left">
-                        {% if config.competition_is_running and logged_in %}
-                        <li><a href="{{ url_for('challenges') }}">Challenges</a></li>
-                        <li><a href="{{ url_for('scoreboard') }}">Scoreboard</a></li>
-                        {% endif %}
-                    </ul>
-                    <a href="#" class="center brand-logo">{{ config.ctf_name }}</a>
-                    <ul class="right">
-                        {% if logged_in %}
-                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                        <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
-                        {% endif %}
-                        {% if not logged_in %}
-                        <li><a href="{{ url_for('register') }}">Register</a></li>
-                        <li><a href="{{ url_for('login') }}">Login</a></li>
-                        {% endif %}
-                    </ul>
+        <div class="navbar-fixed">
+            <nav class="blue darken-3">
+                <div class="container">
+                    <div class="nav-wrapper">
+                        <ul class="left">
+                            {% if config.competition_is_running and logged_in %}
+                            <li><a href="{{ url_for('challenges') }}">Challenges</a></li>
+                            <li><a href="{{ url_for('scoreboard') }}">Scoreboard</a></li>
+                            {% endif %}
+                        </ul>
+                        <a href="#" class="center brand-logo">{{ config.ctf_name }}</a>
+                        <ul class="right">
+                            {% if logged_in %}
+                            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                            <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
+                            {% endif %}
+                            {% if not logged_in %}
+                            <li><a href="{{ url_for('register') }}">Register</a></li>
+                            <li><a href="{{ url_for('login') }}">Login</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </div>
         <div class="container">
             {% block content %}{% endblock %}
         </div>
         {% if config.cdn %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.min.js"></script>
+        <script>$("abbr.time").timeago();</script>
         {% else %}
         <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
         <script src="{{ url_for('static', filename='materialize.min.js') }}"></script>
