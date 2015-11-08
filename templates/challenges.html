@@ -29,8 +29,9 @@ function toggle() {
     {% for challenge in challenges %}
     <li>
         <div class="collapsible-header{% if challenge not in solved %} active{% endif %}">
-            <strong>{% if challenge in solved %}<i class="material-icons">check</i>{% endif %}{{ challenge.name }}</strong>
-            <span class="right">{% if challenge in solved %}Solved{% else %}Unsolved{% endif %}: {{ challenge.points }}pt. {{ challenge.category }}</span>
+            <strong>{{ challenge.name }}</strong>
+            <span class="left" style="margin-right: -5px;">{% if challenge in solved %}<i class="material-icons">check_circle</i>{% endif %}</span>
+            <span class="right">{{ challenge.category }} {{ challenge.points }}pt</span>
         </div>
         <div class="collapsible-body">
             <p>{{ challenge.description }}</p>
