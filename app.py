@@ -42,8 +42,8 @@ def scoreboard():
     if not data or not graphdata:
         data = utils.calculate_scores()
         graphdata = utils.calculate_graph(data)
-        utils.set_complex("scoreboard", data, 120)
-        utils.set_complex("graph", graphdata, 120)
+        utils.set_complex("scoreboard", data, 1)
+        utils.set_complex("graph", graphdata, 1)
     return render_template("scoreboard.html", data=data, graphdata=graphdata)
 
 @app.route('/login/', methods=["GET", "POST"])
@@ -151,12 +151,11 @@ def submit(challenge):
     if g.redis.get("rl{}".format(g.team.id)):
         return "You're submitting flags too fast!"
 
-    g.redis.set("rl{}".format(g.team.id), str(datetime.now()), config.flag_rl)
-
     if g.team.solved(chal):
         flash("You've already solved that problem!")
     elif chal.flag != flag:
         flash("Incorrect flag.")
+        g.redis.set("rl{}".format(g.team.id), str(datetime.now()), config.flag_rl)
         ChallengeFailure.create(team=g.team, challenge=chal, attempt=flag, time=datetime.now())
     else:
         flash("Correct!")
