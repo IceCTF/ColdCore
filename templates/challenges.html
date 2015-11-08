@@ -41,7 +41,7 @@ function toggle() {
             <form action="{{ url_for('submit', challenge=challenge.id) }}" method="POST">
                 <div class="container">
                     <div class="input-field">
-                        <input id="flag" name="flag" type="text" />
+                        <input required id="flag" name="flag" type="text" />
                         <label for="flag">Flag</label>
                     </div>
                     <button class="btn waves-effect waves-light" type="submit">Submit</button>
