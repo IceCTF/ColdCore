@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Scoreboard{% endblock %}
+{% block content %}
+<h2>Scoreboard</h2>
+<table>
+    <thead>
+        <tr><th>Rank</th><th>Team</th><th>Affiliation</th><th>Score</th></tr>
+    </thead>
+    <tbody>
+        {% for eligible, rank, team, affiliation, score in data %}
+        <tr style="color: {{ "black" if eligible else "#bbb" }}"><td>{{ rank }}</td><td>{{ team }}</td><td>{{ affiliation }}</td><td>{{ score }}</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

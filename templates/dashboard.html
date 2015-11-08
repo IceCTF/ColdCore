@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Team Dashboard{% endblock %}
+{% block content %}
+<h2>{{ team.name }}</h2>
+<h3>Team information</h3>
+<p>Your team key is <code>{{ team.key }}</code>. Share this with your teammates,
+and keep it in a safe place. You need it to log in. If you lose it, an organizer
+can send it to your team email, which is shown below.</p>
+<p>Your team email is <code>{{ team.email }}</code>, and you are affiliated with
+{{ team.affiliation }}.</p>
+<p>Your team is currently marked {{ "eligible" if team.eligible else "ineligible" }}.</p>
+<h3>Edit information</h3>
+<p>{{ config.eligibility }}</p>
+<p>If you do not meet these requirements, you are still welcome to play, but you
+will not be eligible for prizes. By checking the "Eligibility Certification"
+checkbox below, you are certifying that you meet the prize eligibility 
+requirement. We may request appropriate documentation to verify your eligibility
+status before sending you prizes.</p>
+<form method="POST">
+    <div class="input-field">
+        <label for="team-name">Team Name</label>
+        <input id="team-name" name="team_name" type="text" value="{{ team.name }}" />
+    </div>
+    <div class="input-field">
+        <label for="team-email">Team Email</label>
+        <input id="team-email" name="team_email" type="email" value="{{ team.email }}" />
+    </div>
+    <div class="input-field">
+        <label for="affiliation">Affiliation</label>
+        <input id="affiliation" name="affiliation" type="text" value="{{ team.affiliation }}" />
+    </div>
+    <input id="team-eligibility" name="team_eligibility" type="checkbox"{% if team.eligible %} checked="checked"{% endif %}/>
+    <label for="team-eligibility">Eligibility Certification</label>
+    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+    <br /><br />
+    <button class="btn waves-effect waves-light" type="submit">Update team</button>
+</form>
+<h3>Score calculation</h3>
+<p>You have solved the following problems:</p>
+<table>
+    <thead>
+        <tr><th>Name</th><th>Category</th><th>Value</th><th>Time</th></tr>
+    </thead>
+    <tbody>
+        {% for solve in team_solves %}
+        <tr>
+            <td>{{ solve.challenge.name }}</td>
+            <td>{{ solve.challenge.category }}</td>
+            <td>{{ solve.challenge.points }}</td>
+            <td>{{ solve.time }}</td>
+        {% endfor %}
+    </tbody>
+</table>
+<p>The following score adjustments have been made:</p>
+<table>
+    <thead>
+        <tr><th>Value</th><th>Reason</th></tr>
+    </thead>
+    <tbody>
+        {% for adj in team_adjustments %}
+        <tr>
+            <td>{{ adj.value }}</td>
+            <td>{{ adj.reason }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p>This brings your score to a total of {{ team_score }}.</p>
+{% endblock %}

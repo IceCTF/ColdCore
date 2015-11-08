@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Login</h2>
+<form method="POST">
+    <div class="input-field">
+        <input id="team-key" name="team_key" type="text" />
+        <label for="team-key">Team Key</label>
+        <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+    </div>
+    <button class="btn waves-effect waves-light" type="submit">Login</button>
+</form>
+{% endblock %}

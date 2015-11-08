@@ -1,0 +1,32 @@
+#!/usr/bin/python3
+from database import *
+import sys
+import yaml
+import random
+
+operation = sys.argv[1]
+if operation == "create-tables":
+    db.create_tables([Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment])
+    print("Tables created")
+
+elif operation == "drop-tables":
+    if input("Are you sure? Type yes to continue: ") == "yes":
+        db.drop_tables([Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment])
+        print("Done")
+    else:
+        print("Okay, nothing happened.")
+
+elif operation == "add-challenge":
+    challengefile = sys.argv[2]
+    with open(challengefile) as f:
+        chal = Challenge.create(**yaml.load(f))
+        print("Challenge added with id {}".format(chal.id))
+
+elif operation == "gen-challenge":
+    n = int(sys.argv[2])
+    for i in range(n):
+        name = str(random.randint(0, 999999999))
+        chal = Challenge.create(name="Challenge {}".format(name), category="Generated", description="Free flags. it's the number in the problem name lorem ipsum dolor sit whatever i don't even care", points=random.randint(50, 400), flag=name)
+        print("Challenge added with id {}".format(chal.id))
+
+# vim: syntax=python:ft=python

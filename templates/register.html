@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Register a Team</h2>
+<h3>Important information about {{ config.ctf_name }}</h3>
+<p>{{ config.eligibility }}</p>
+<p>If you do not meet these requirements, you are still welcome to play, but you
+will not be eligible for prizes. By checking the "Eligibility Certification"
+checkbox below, you are certifying that you meet the prize eligibility 
+requirement. We may request appropriate documentation to verify your eligibility
+status before sending you prizes.</p>
+<p>After registering, you will be directed to your team's dashboard. This will
+contain a "team key", which is used to log in. <strong>Please store your team
+key in a safe place, and share it with your team members.</strong></p>
+<h3>Registration form</h3>
+<form method="POST">
+    <div class="input-field">
+        <input id="team-name" name="team_name" type="text" />
+        <label for="team-name">Team Name</label>
+    </div>
+    <div class="input-field">
+        <input id="team-email" name="team_email" type="email" />
+        <label for="team-email">Team Email</label>
+    </div>
+    <div class="input-field">
+        <input id="affiliation" name="affiliation" type="text" />
+        <label for="affiliation">Affiliation</label>
+    </div>
+    <input id="team-eligibility" name="team_eligibility" type="checkbox" />
+    <label for="team-eligibility">Eligibility Certification</label>
+    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+    <br /><br />
+    <button class="btn waves-effect waves-light" type="submit">Create team</button>
+</form>
+{% endblock %}
