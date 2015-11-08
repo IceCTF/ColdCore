@@ -1,14 +1,49 @@
 {% extends "base.html" %}
 {% block title %}Scoreboard{% endblock %}
+{% block head %}
+<style type="text/css">
+    .teamrow:not(.visible) {
+        display: none;
+    }
+    .teamrow.ineligible {
+        color: #bbb;
+    }
+</style>
+<script>
+    var ineligibleShown = true;
+    function recalcRanks() {
+        $(".teamrow.visible").each(function(i, x) {
+            $(x).children(".rank").html(i + 1);
+        });
+    }
+    function hideIneligible() {
+        $(".teamrow.ineligible").removeClass("visible");
+        recalcRanks();
+    }
+    function showIneligible() {
+        $(".teamrow.ineligible").addClass("visible");
+        recalcRanks();
+    }
+    function toggleIneligible() {
+        if(ineligibleShown) hideIneligible();
+        else showIneligible();
+        ineligibleShown = !ineligibleShown;
+    }
+    document.onready = function() {
+        recalcRanks();
+    }
+</script>
+{% endblock %}
 {% block content %}
 <h2>Scoreboard</h2>
+<a href="javascript:toggleIneligible()">Toggle ineligible team display</a>
 <table>
     <thead>
         <tr><th>Rank</th><th>Team</th><th>Affiliation</th><th>Score</th></tr>
     </thead>
     <tbody>
-        {% for eligible, rank, team, affiliation, score in data %}
-        <tr style="color: {{ "black" if eligible else "#bbb" }}"><td>{{ rank }}</td><td>{{ team }}</td><td>{{ affiliation }}</td><td>{{ score }}</td></tr>
+        {% for eligible, team, affiliation, score in data %}
+        <tr class="teamrow {% if not eligible %}in{% endif %}eligible visible"><td class="rank">{{ rank }}</td><td>{{ team }}</td><td>{{ affiliation }}</td><td>{{ score }}</td></tr>
         {% endfor %}
     </tbody>
 </table>
