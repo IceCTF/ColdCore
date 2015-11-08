@@ -12,7 +12,7 @@
         text-align: right;
     }
     form {
-        margin-top: 20px;
+        margin-top: 30px;
         margin-bottom: 25px;
     }
     .bigger {
@@ -32,35 +32,45 @@
 {% block content %}
 <h2>{{ team.name }}</h2>
 <section>
+<div class="row">
+    <div class="col s12">
+        <div class="card blue darken-1">
+            <div class="card-content white-text">
+                <span class="card-title">Login information</span>
+                <p>Your team key is <code>{{ team.key }}</code>. Share this with your teammates,
+                and keep it in a safe place. <strong>You need your team key in order to log in.
+                </strong>If you lose it, an organizer can send it to your team email, which is shown below.</p>
+            </div>
+        </div>
+    </div>
+</div>
 <h4>Team information</h4>
-<p>Your team key is <code>{{ team.key }}</code>. Share this with your teammates,
-and keep it in a safe place. You need it to log in. If you lose it, an organizer
-can send it to your team email, which is shown below.</p>
+<p>Your score is currently {{ team_score }}. <a href="{{ url_for('challenges') }}">Go solve more challenges!</a></p>
 <p>Your team email is <code>{{ team.email }}</code>, and you are affiliated with
 {{ team.affiliation }}.</p>
 <p>Your team is currently marked {{ "eligible" if team.eligible else "ineligible" }}.</p>
 </section>
 <section>
 <h4>Edit information</h4>
-<p>{{ config.eligibility }}</p>
-<p>If you do not meet these requirements, you are still welcome to play, but you
-will not be eligible for prizes. By checking the "Eligibility Certification"
-checkbox below, you are certifying that you meet the prize eligibility 
-requirement. We may request appropriate documentation to verify your eligibility
-status before sending you prizes.</p>
 <form method="POST">
     <div class="input-field">
         <label for="team-name">Team Name</label>
-        <input id="team-name" name="team_name" type="text" value="{{ team.name }}" />
+        <input required id="team-name" name="team_name" type="text" value="{{ team.name }}" />
     </div>
     <div class="input-field">
         <label for="team-email">Team Email</label>
-        <input id="team-email" name="team_email" type="email" value="{{ team.email }}" />
+        <input required id="team-email" name="team_email" type="email" value="{{ team.email }}" />
     </div>
     <div class="input-field">
         <label for="affiliation">Affiliation</label>
-        <input id="affiliation" name="affiliation" type="text" value="{{ team.affiliation }}" />
+        <input required id="affiliation" name="affiliation" type="text" value="{{ team.affiliation }}" />
     </div>
+    <p>{{ config.eligibility }}</p>
+    <p>If you do not meet these requirements, you are still welcome to play, but you
+    will not be eligible for prizes. By checking the "Eligibility Certification"
+    checkbox below, you are certifying that you meet the prize eligibility 
+    requirement. We may request appropriate documentation to verify your eligibility
+    status before sending you prizes.</p>
     <input id="team-eligibility" name="team_eligibility" type="checkbox"{% if team.eligible %} checked="checked"{% endif %}/>
     <label for="team-eligibility">Eligibility Certification</label>
     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
@@ -72,38 +82,46 @@ status before sending you prizes.</p>
 <h4>Score calculation</h4>
 {% if team_solves.count() %}
 <h5>Solved problems</h5>
-<table>
-    <thead>
-        <tr><th>Name</th><th>Category</th><th>Time</th><th>Value</th></tr>
-    </thead>
-    <tbody>
-        {% for solve in team_solves %}
-        <tr>
-            <td>{{ solve.challenge.name }}</td>
-            <td>{{ solve.challenge.category }}</td>
-            <td><abbr class="time" title="{{ solve.time }}">{{ solve.time }}</abbr></td>
-            <td>{{ solve.challenge.points }}</td>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="row">
+    <div class="col s10 offset-s1">
+        <table>
+            <thead>
+                <tr><th>Name</th><th>Category</th><th>Time</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+                {% for solve in team_solves %}
+                <tr>
+                    <td>{{ solve.challenge.name }}</td>
+                    <td>{{ solve.challenge.category }}</td>
+                    <td><abbr class="time" title="{{ solve.time }}">{{ solve.time }}</abbr></td>
+                    <td>{{ solve.challenge.points }}</td>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% else %}
 <p>No problems have been solved.</p>
 {% endif %}
 {% if team_adjustments.count() %}
 <h5>Score adjustments</h5>
-<table>
-    <thead>
-        <tr><th>Reason</th><th>Value</th></tr>
-    </thead>
-    <tbody>
-        {% for adj in team_adjustments %}
-        <tr>
-            <td>{{ adj.reason }}</td>
-            <td>{{ adj.value }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="row">
+    <div class="col s10 offset-s1">
+        <table>
+            <thead>
+                <tr><th>Reason</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+                {% for adj in team_adjustments %}
+                <tr>
+                    <td>{{ adj.reason }}</td>
+                    <td>{{ adj.value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% else %}
 <p>No score adjustments have been made.</p>
 {% endif %}

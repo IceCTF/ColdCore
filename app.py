@@ -77,6 +77,7 @@ def register():
 @app.route('/logout/')
 def logout():
     session.pop("team_id")
+    flash("You've successfully logged out.")
     return redirect(url_for('root'))
 
 # Debugging things

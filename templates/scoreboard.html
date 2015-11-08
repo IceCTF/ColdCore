@@ -42,8 +42,8 @@
         <tr><th>Rank</th><th>Team</th><th>Affiliation</th><th>Score</th></tr>
     </thead>
     <tbody>
-        {% for eligible, team, affiliation, score in data %}
-        <tr class="teamrow {% if not eligible %}in{% endif %}eligible visible"><td class="rank">{{ rank }}</td><td>{{ team }}</td><td>{{ affiliation }}</td><td>{{ score }}</td></tr>
+        {% for eligible, teamid, team, affiliation, score in data %}
+        <tr class="teamrow {% if not eligible %}in{% endif %}eligible {% if teamid == session.team_id %}blue lighten-3 {% endif %}visible"><td class="rank">{{ rank }}</td><td>{{ team }}</td><td>{{ affiliation }}</td><td>{{ score }}</td></tr>
         {% endfor %}
     </tbody>
 </table>

@@ -46,7 +46,7 @@ def calculate_scores():
         scores[solve.team_id] += solve.challenge.points
     for adjustment in adjustments:
         scores[adjustment.team_id] += adjustment.value
-    return [(team_mapping[i[0]].eligible, team_mapping[i[0]].name, team_mapping[i[0]].affiliation, i[1]) for idx, i in enumerate(sorted(scores.items(), key=lambda k: (-k[1], most_recent_solve[k[0]])))]
+    return [(team_mapping[i[0]].eligible, i[0], team_mapping[i[0]].name, team_mapping[i[0]].affiliation, i[1]) for idx, i in enumerate(sorted(scores.items(), key=lambda k: (-k[1], most_recent_solve[k[0]])))]
 
 def get_complex(key):
     i = g.redis.get(key)
