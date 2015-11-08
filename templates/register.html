@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block head %}
+<script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}
 {% block content %}
 <h2>Register a Team</h2>
 <p>After registering, you will be directed to your team's dashboard. This will
@@ -26,8 +29,9 @@ team members.</strong></p>
     status before sending you prizes.</p>
     <input id="team-eligibility" name="team_eligibility" type="checkbox" />
     <label for="team-eligibility">Eligibility Certification</label>
-    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
     <br /><br />
+    <div class="g-recaptcha" data-sitekey="{{ config.secret.recaptcha_key }}"></div>
+    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
     <button class="btn waves-effect waves-light" type="submit">Create team</button>
 </form>
 {% endblock %}

@@ -36,10 +36,10 @@
     <div class="col s12">
         <div class="card blue darken-1">
             <div class="card-content white-text">
-                <span class="card-title">Login information</span>
-                <p>Your team key is <code>{{ team.key }}</code>. Share this with your teammates,
-                and keep it in a safe place. <strong>You need your team key in order to log in.
-                </strong>If you lose it, an organizer can send it to your team email, which is shown below.</p>
+                <span class="card-title">Team key: <code>{{ team.key }}</code></span>
+                <p>Share this with your teammates, and keep it in a safe place. <strong>You need your team key 
+                in order to log in.</strong> If you lose it, an organizer can send it to your team email,
+                which is shown below.</p>
             </div>
         </div>
     </div>
@@ -127,4 +127,24 @@
 {% endif %}
 <p class="right"><strong class="bigger">Your score is {{ team_score }}.</strong></p>
 </section>
+<div id="firstlogin" class="modal">
+    <div class="modal-content">
+        <h4>Welcome to {{ config.ctf_name }}!</h4>
+        <p>Hi, {{ team.name }}! Welcome to {{ config.ctf_name }}, {{ config.tagline }}.</p>
+         
+        <p>First off, please check the email you signed up with. You must confirm your account to solve problems. If needed, you can change the Team Email or resend confirmation on this page.</p>
+         
+        <p>Your Team Key will be under Login Information. It was also sent to your team email. This is the only way to log in, so distribute it to your team members.</p>
+         
+        <p>Once that's done, we recommend you read the Rules and FAQ. Then, do some Practice to warm up for the competition, or join the Chat to meet your fellow competitors and ask questions. The competition will begin soon enough, but in the meanwhile, explore the site!</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Dismiss</a>
+    </div>
+</div>
+{% endblock %}
+{% block postscript %}
+{% if first_login %}
+<script>$("#firstlogin").openModal();</script>
+{% endif %}
 {% endblock %}

@@ -3,6 +3,7 @@
         <title>{{ config.ctf_name }} :: {% block title %}Home{% endblock %}</title>
         {% if config.cdn %}
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.css" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         {% else %}
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='materialize.min.css') }}" />
@@ -16,8 +17,10 @@
                 <div class="container">
                     <div class="nav-wrapper">
                         <ul class="left">
-                            {% if config.competition_is_running and logged_in %}
+                            {% if config.competition_is_running %}
+                            {% if logged_in %}
                             <li><a href="{{ url_for('challenges') }}">Challenges</a></li>
+                            {% endif %}
                             <li><a href="{{ url_for('scoreboard') }}">Scoreboard</a></li>
                             {% endif %}
                         </ul>
@@ -43,6 +46,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.js"></script>
         <script>$("abbr.time").timeago();</script>
         {% else %}
         <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
@@ -53,5 +57,7 @@
                 Materialize.toast({{ message | tojson }}, 4000);
             {% endfor %}
         </script>
+        {% block postscript %}
+        {% endblock %}
     </body>
 </html>

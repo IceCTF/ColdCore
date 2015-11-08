@@ -18,10 +18,12 @@
     }
     function hideIneligible() {
         $(".teamrow.ineligible").removeClass("visible");
+        $("#toggle").html("Show ineligible teams");
         recalcRanks();
     }
     function showIneligible() {
         $(".teamrow.ineligible").addClass("visible");
+        $("#toggle").html("Hide ineligible teams");
         recalcRanks();
     }
     function toggleIneligible() {
@@ -36,15 +38,35 @@
 {% endblock %}
 {% block content %}
 <h2>Scoreboard</h2>
-<a href="javascript:toggleIneligible()">Toggle ineligible team display</a>
+<div id="chart"></div>
+<a href="javascript:toggleIneligible()" id="toggle">Hide ineligible teams</a>
 <table>
     <thead>
         <tr><th>Rank</th><th>Team</th><th>Affiliation</th><th>Score</th></tr>
     </thead>
     <tbody>
         {% for eligible, teamid, team, affiliation, score in data %}
-        <tr class="teamrow {% if not eligible %}in{% endif %}eligible {% if teamid == session.team_id %}blue lighten-3 {% endif %}visible"><td class="rank">{{ rank }}</td><td>{{ team }}</td><td>{{ affiliation }}</td><td>{{ score }}</td></tr>
+        <tr class="teamrow {% if not eligible %}in{% endif %}eligible {% if eligible and teamid == session.team_id %}blue lighten-3 {% endif %}visible"><td class="rank">{{ rank }}</td><td>{{ team }}</td><td>{{ affiliation }}</td><td>{{ score }}</td></tr>
         {% endfor %}
     </tbody>
 </table>
+{% endblock %}
+{% block postscript %}
+<script>
+    var graphData = {{ graphdata | tojson }};
+    var groupn = 0;
+    var groups = new vis.DataSet();
+    var items = [];
+    graphData.forEach(function(team) {
+        var teamName = team[0];
+        var scoreEvents = team[1];
+        groups.add({ id: groupn, content: teamName, options: { drawPoints: false, interpolation: false } });
+        scoreEvents.forEach(function(evt) {
+            items.push({ x: evt[0], y: evt[1], group: groupn });
+        });
+        groupn++;
+    });
+    var dataset = new vis.DataSet(items);
+    var graph = new vis.Graph2d(document.getElementById('chart'), dataset, groups, {legend: true, dataAxis: {left: {range: {min: 0}}}});
+</script>
 {% endblock %}

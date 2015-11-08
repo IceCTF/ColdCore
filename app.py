@@ -8,6 +8,7 @@ from peewee import fn
 import config
 import utils
 import redis
+import requests
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -37,10 +38,13 @@ def root():
 @app.route('/scoreboard/')
 def scoreboard():
     data = utils.get_complex("scoreboard")
-    if not data:
+    graphdata = utils.get_complex("graph")
+    if not data or not graphdata:
         data = utils.calculate_scores()
-        utils.set_complex("scoreboard", data, 10)
-    return render_template("scoreboard.html", data=data)
+        graphdata = utils.calculate_graph(data)
+        utils.set_complex("scoreboard", data, 120)
+        utils.set_complex("graph", graphdata, 120)
+    return render_template("scoreboard.html", data=data, graphdata=graphdata)
 
 @app.route('/login/', methods=["GET", "POST"])
 def login():
@@ -64,12 +68,24 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     elif request.method == "POST":
+        if "g-recaptcha-response" not in request.form:
+            flash("Please complete the CAPTCHA.")
+            return render_template("register.html")
+
+        captcha_response = request.form["g-recaptcha-response"]
+        verify_data = dict(secret=config.secret.recaptcha_secret, response=captcha_response, remoteip=utils.get_ip())
+        result = requests.post("https://www.google.com/recaptcha/api/siteverify", verify_data).json()["success"]
+        if not result:
+            flash("Invalid CAPTCHA response.")
+            return render_template("register.html")
+
         team_name = request.form["team_name"]
         team_email = request.form["team_email"]
         team_elig = "team_eligibility" in request.form
         affiliation = request.form["affiliation"]
         team_key = utils.generate_team_key()
         team = Team.create(name=team_name, email=team_email, eligible=team_elig, affiliation=affiliation, key=team_key)
+        TeamAccess.create(team=team, ip=utils.get_ip(), time=datetime.now())
         session["team_id"] = team.id
         flash("Team created.")
         return redirect(url_for('dashboard'))
@@ -98,7 +114,12 @@ def dashboard():
         team_solves = ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge).where(ChallengeSolve.team == g.team)
         team_adjustments = ScoreAdjustment.select().where(ScoreAdjustment.team == g.team)
         team_score = sum([i.challenge.points for i in team_solves] + [i.value for i in team_adjustments])
-        return render_template("dashboard.html", team_solves=team_solves, team_adjustments=team_adjustments, team_score=team_score)
+        first_login = False
+        if g.team.first_login:
+            first_login = True
+            g.team.first_login = False
+            g.team.save()
+        return render_template("dashboard.html", team_solves=team_solves, team_adjustments=team_adjustments, team_score=team_score, first_login=first_login)
     elif request.method == "POST":
         team_name = request.form["team_name"]
         team_email = request.form["team_email"]
