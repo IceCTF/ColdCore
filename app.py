@@ -84,8 +84,13 @@ def register():
         team_elig = "team_eligibility" in request.form
         affiliation = request.form["affiliation"]
         team_key = utils.generate_team_key()
-        team = Team.create(name=team_name, email=team_email, eligible=team_elig, affiliation=affiliation, key=team_key)
+        confirmation_key = utils.generate_confirmation_key()
+        team = Team.create(name=team_name, email=team_email, eligible=team_elig, affiliation=affiliation, key=team_key,
+                           email_confirmation_key=confirmation_key)
         TeamAccess.create(team=team, ip=utils.get_ip(), time=datetime.now())
+
+        utils.send_confirmation_email(team_email, confirmation_key, team_key)
+
         session["team_id"] = team.id
         flash("Team created.")
         return redirect(url_for('dashboard'))
@@ -107,6 +112,17 @@ def assign_random():
 
 # Things that require a team
 
+@app.route('/confirm_email/', methods=["POST"])
+@utils.login_required
+def confirm_email():
+    if request.form["confirmation_key"] == g.team.email_confirmation_key:
+        flash("Email confirmed!")
+        g.team.email_confirmed = True
+        g.team.save()
+    else:
+        flash("Incorrect confirmation key.")
+    return redirect(url_for('dashboard'))
+
 @app.route('/team/', methods=["GET", "POST"])
 @utils.login_required
 def dashboard():
@@ -125,17 +141,28 @@ def dashboard():
         team_email = request.form["team_email"]
         affiliation = request.form["affiliation"]
         team_elig = "team_eligibility" in request.form
+
+        email_changed = (team_email != g.team.email)
+
         g.team.name = team_name
         g.team.email = team_email
         g.team.affiliation = affiliation
         g.team.eligible = team_elig
+        if email_changed:
+            g.team.email_confirmation_key = utils.generate_confirmation_key()
+            g.team.email_confirmed = False
+            utils.send_confirmation_email(team_email, g.team.email_confirmation_key, g.team.key)
+            flash("Changes saved. Please check your email for a new confirmation key.")
+        else:
+            flash("Changes saved.")
         g.team.save()
-        flash("Changes saved.")
+
+
         return redirect(url_for('dashboard'))
 
 @app.route('/challenges/')
 @utils.competition_running_required
-@utils.login_required
+@utils.confirmed_email_required
 def challenges():
     chals = Challenge.select().order_by(Challenge.points)
     solved = Challenge.select().join(ChallengeSolve).where(ChallengeSolve.team == g.team)
@@ -143,7 +170,7 @@ def challenges():
 
 @app.route('/submit/<int:challenge>/', methods=["POST"])
 @utils.competition_running_required
-@utils.login_required
+@utils.confirmed_email_required
 def submit(challenge):
     chal = Challenge.get(Challenge.id == challenge)
     flag = request.form["flag"]

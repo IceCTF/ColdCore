@@ -6,6 +6,7 @@ cdn = True
 proxied_ip_header = "X-Forwarded-For"
 flag_rl = 10
 teams_on_graph = 10
+mail_from = "tjctf@sandbox1431.mailgun.org"
 
 # Don't touch these. Instead, copy secrets.example to secrets and edit that.
 import yaml

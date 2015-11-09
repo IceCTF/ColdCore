@@ -1,6 +1,7 @@
 import random
 import config
 import json
+import requests
 from datetime import datetime
 from functools import wraps
 from flask import request, session, redirect, url_for, flash, g
@@ -14,6 +15,9 @@ def generate_random_string(length=32, chars=allowed_chars):
 def generate_team_key():
     return config.ctf_name.lower() + "_" + generate_random_string(32, allowed_chars)
 
+def generate_confirmation_key():
+    return generate_random_string(48)
+
 def get_ip():
     return request.headers.get(config.proxied_ip_header, request.remote_addr)
 
@@ -23,6 +27,18 @@ def login_required(f):
         if "team_id" not in session:
             flash("You need to be logged in to access that page.")
             return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated
+
+def confirmed_email_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if "team_id" not in session:
+            flash("You need to be logged in to access that page.")
+            return redirect(url_for('login'))
+        if not g.team.email_confirmed:
+            flash("You need to confirm your email in order to access that page.")
+            return redirect(url_for('dashboard'))
         return f(*args, **kwargs)
     return decorated
 
@@ -78,3 +94,20 @@ def get_complex(key):
 
 def set_complex(key, val, ex):
     g.redis.set(key, json.dumps(val), ex)
+
+def send_email(to, subject, text):
+    return requests.post("{}/messages".format(config.secret.mailgun_url), {"from": config.mail_from, "to": to, "subject": subject, "text": text}, auth=("api", config.secret.mailgun_key))
+
+def send_confirmation_email(team_email, confirmation_key, team_key):
+    send_email(team_email, "Welcome to {}!".format(config.ctf_name),
+"""Hello, and thanks for registering for {}! Before you can start solving problems,
+you must confirm your email by entering this code into the team dashboard:
+
+{}
+
+Once you've done that, your account will be enabled, and you will be able to access
+the challenges. If you have any trouble, feel free to contact an organizer!
+
+If you didn't register an account, then you can disregard this email.
+
+In case you lose it, your team key is: {}""".format(config.ctf_name, confirmation_key, team_key))
