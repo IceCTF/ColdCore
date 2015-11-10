@@ -6,6 +6,7 @@ from database import Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailu
 from datetime import datetime
 from peewee import fn
 import config
+import flag
 import utils
 import redis
 import requests
@@ -182,19 +183,8 @@ def submit(challenge):
     chal = Challenge.get(Challenge.id == challenge)
     flag = request.form["flag"]
 
-    if g.redis.get("rl{}".format(g.team.id)):
-        return "You're submitting flags too fast!"
-
-    if g.team.solved(chal):
-        flash("You've already solved that problem!")
-    elif chal.flag != flag:
-        flash("Incorrect flag.")
-        g.redis.set("rl{}".format(g.team.id), str(datetime.now()), config.flag_rl)
-        ChallengeFailure.create(team=g.team, challenge=chal, attempt=flag, time=datetime.now())
-    else:
-        flash("Correct!")
-        g.redis.delete("scoreboard")
-        ChallengeSolve.create(team=g.team, challenge=chal, time=datetime.now())
+    code, message = flag.submit_flag(g.team, chal, flag)
+    flash(message)
     return redirect(url_for('challenges'))
 
 # Manage Peewee database sessions and Redis
