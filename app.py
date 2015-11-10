@@ -5,8 +5,11 @@ app.secret_key = "nope"
 from database import Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, db
 from datetime import datetime
 from peewee import fn
+
+from utils import decorators, flag, cache, misc
+import utils.scoreboard
+
 import config
-import flag
 import utils
 import redis
 import requests
@@ -38,13 +41,13 @@ def root():
 
 @app.route('/scoreboard/')
 def scoreboard():
-    data = utils.get_complex("scoreboard")
-    graphdata = utils.get_complex("graph")
+    data = cache.get_complex("scoreboard")
+    graphdata = cache.get_complex("graph")
     if not data or not graphdata:
-        data = utils.calculate_scores()
-        graphdata = utils.calculate_graph(data)
-        utils.set_complex("scoreboard", data, 1)
-        utils.set_complex("graph", graphdata, 1)
+        data = utils.scoreboard.calculate_scores()
+        graphdata = utils.scoreboard.calculate_graph(data)
+        utils.scoreboard.set_complex("scoreboard", data, 1)
+        utils.scoreboard.set_complex("graph", graphdata, 1)
 
     afdata = ChallengeSolve.select(ChallengeSolve, Challenge, Team).join(Challenge).join(Team, on=Team.id == ChallengeSolve.team).order_by(ChallengeSolve.time.desc()).limit(8)
     return render_template("scoreboard.html", data=data, graphdata=graphdata, afdata=afdata)
@@ -58,7 +61,7 @@ def login():
 
         try:
             team = Team.get(Team.key == team_key)
-            TeamAccess.create(team=team, ip=utils.get_ip(), time=datetime.now())
+            TeamAccess.create(team=team, ip=misc.get_ip(), time=datetime.now())
             session["team_id"] = team.id
             flash("Login success.")
             return redirect(url_for('dashboard'))
@@ -76,7 +79,7 @@ def register():
             return render_template("register.html")
 
         captcha_response = request.form["g-recaptcha-response"]
-        verify_data = dict(secret=config.secret.recaptcha_secret, response=captcha_response, remoteip=utils.get_ip())
+        verify_data = dict(secret=config.secret.recaptcha_secret, response=captcha_response, remoteip=misc.get_ip())
         result = requests.post("https://www.google.com/recaptcha/api/siteverify", verify_data).json()["success"]
         if not result:
             flash("Invalid CAPTCHA response.")
@@ -86,13 +89,13 @@ def register():
         team_email = request.form["team_email"]
         team_elig = "team_eligibility" in request.form
         affiliation = request.form["affiliation"]
-        team_key = utils.generate_team_key()
-        confirmation_key = utils.generate_confirmation_key()
+        team_key = misc.generate_team_key()
+        confirmation_key = misc.generate_confirmation_key()
         team = Team.create(name=team_name, email=team_email, eligible=team_elig, affiliation=affiliation, key=team_key,
                            email_confirmation_key=confirmation_key)
-        TeamAccess.create(team=team, ip=utils.get_ip(), time=datetime.now())
+        TeamAccess.create(team=team, ip=misc.get_ip(), time=datetime.now())
 
-        utils.send_confirmation_email(team_email, confirmation_key, team_key)
+        email.send_confirmation_email(team_email, confirmation_key, team_key)
 
         session["team_id"] = team.id
         flash("Team created.")
@@ -116,7 +119,7 @@ def assign_random():
 # Things that require a team
 
 @app.route('/confirm_email/', methods=["POST"])
-@utils.login_required
+@decorators.login_required
 def confirm_email():
     if request.form["confirmation_key"] == g.team.email_confirmation_key:
         flash("Email confirmed!")
@@ -127,7 +130,7 @@ def confirm_email():
     return redirect(url_for('dashboard'))
 
 @app.route('/team/', methods=["GET", "POST"])
-@utils.login_required
+@decorators.login_required
 def dashboard():
     if request.method == "GET":
         team_solves = ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge).where(ChallengeSolve.team == g.team)
@@ -157,9 +160,9 @@ def dashboard():
         g.team.affiliation = affiliation
         g.team.eligible = team_elig
         if email_changed:
-            g.team.email_confirmation_key = utils.generate_confirmation_key()
+            g.team.email_confirmation_key = misc.generate_confirmation_key()
             g.team.email_confirmed = False
-            utils.send_confirmation_email(team_email, g.team.email_confirmation_key, g.team.key)
+            misc.send_confirmation_email(team_email, g.team.email_confirmation_key, g.team.key)
             flash("Changes saved. Please check your email for a new confirmation key.")
         else:
             flash("Changes saved.")
@@ -169,21 +172,21 @@ def dashboard():
         return redirect(url_for('dashboard'))
 
 @app.route('/challenges/')
-@utils.competition_running_required
-@utils.confirmed_email_required
+@decorators.competition_running_required
+@decorators.confirmed_email_required
 def challenges():
     chals = Challenge.select().order_by(Challenge.points)
     solved = Challenge.select().join(ChallengeSolve).where(ChallengeSolve.team == g.team)
     return render_template("challenges.html", challenges=chals, solved=solved)
 
 @app.route('/submit/<int:challenge>/', methods=["POST"])
-@utils.competition_running_required
-@utils.confirmed_email_required
+@decorators.competition_running_required
+@decorators.confirmed_email_required
 def submit(challenge):
     chal = Challenge.get(Challenge.id == challenge)
-    flag = request.form["flag"]
+    flagval = request.form["flag"]
 
-    code, message = flag.submit_flag(g.team, chal, flag)
+    code, message = flag.submit_flag(g.team, chal, flagval)
     flash(message)
     return redirect(url_for('challenges'))
 
@@ -212,7 +215,7 @@ def csrf_protect():
 
 def generate_csrf_token():
     if '_csrf_token' not in session:
-        session['_csrf_token'] = utils.generate_random_string(64)
+        session['_csrf_token'] = misc.generate_random_string(64)
     return session['_csrf_token']
 
 app.jinja_env.globals['csrf_token'] = generate_csrf_token
