@@ -70,7 +70,7 @@ def calculate_scores():
     return [(team_mapping[i[0]].eligible, i[0], team_mapping[i[0]].name, team_mapping[i[0]].affiliation, i[1]) for idx, i in enumerate(sorted(scores.items(), key=lambda k: (-k[1], most_recent_solve[k[0]])))]
 
 def calculate_graph(scoredata):
-    solves = list(ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge))
+    solves = list(ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge).order_by(ChallengeSolve.time))
     adjustments = list(ScoreAdjustment.select())
     scoredata = [i for i in scoredata if i[0]] # Only eligible teams are on the score graph
     graph_data = []

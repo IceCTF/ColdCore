@@ -44,7 +44,9 @@ def scoreboard():
         graphdata = utils.calculate_graph(data)
         utils.set_complex("scoreboard", data, 1)
         utils.set_complex("graph", graphdata, 1)
-    return render_template("scoreboard.html", data=data, graphdata=graphdata)
+
+    afdata = ChallengeSolve.select(ChallengeSolve, Challenge, Team).join(Challenge).join(Team, on=Team.id == ChallengeSolve.team).order_by(ChallengeSolve.time.desc()).limit(8)
+    return render_template("scoreboard.html", data=data, graphdata=graphdata, afdata=afdata)
 
 @app.route('/login/', methods=["GET", "POST"])
 def login():
@@ -137,6 +139,11 @@ def dashboard():
             g.team.save()
         return render_template("dashboard.html", team_solves=team_solves, team_adjustments=team_adjustments, team_score=team_score, first_login=first_login)
     elif request.method == "POST":
+        if g.redis.get("ul{}".format(session["team_id"])):
+            flash("You're changing your information too fast!")
+            return redirect(url_for('dashboard'))
+
+        g.redis.set("ul{}".format(session["team_id"]), str(datetime.now()), 120)
         team_name = request.form["team_name"]
         team_email = request.form["team_email"]
         affiliation = request.form["affiliation"]

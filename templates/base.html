@@ -8,6 +8,7 @@
         {% else %}
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='materialize.min.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='icons.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vis.min.css') }}" />
         {% endif %}
         {% block head %}{% endblock %}
     </head>
@@ -47,11 +48,13 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.4.3/jquery.timeago.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.js"></script>
-        <script>$("abbr.time").timeago();</script>
         {% else %}
         <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
         <script src="{{ url_for('static', filename='materialize.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='timeago.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vis.min.js') }}"></script>
         {% endif %}
+        <script>$("abbr.time").timeago();</script>
         <script id="toasts" type="text/javascript">
             {% for message in get_flashed_messages() %}
                 Materialize.toast({{ message | tojson }}, 4000);
