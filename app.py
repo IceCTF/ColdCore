@@ -6,7 +6,7 @@ from database import Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailu
 from datetime import datetime
 from peewee import fn
 
-from utils import decorators, flag, cache, misc
+from utils import decorators, flag, cache, misc, captcha
 import utils.scoreboard
 
 import config
@@ -74,15 +74,9 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     elif request.method == "POST":
-        if "g-recaptcha-response" not in request.form:
-            flash("Please complete the CAPTCHA.")
-            return render_template("register.html")
-
-        captcha_response = request.form["g-recaptcha-response"]
-        verify_data = dict(secret=config.secret.recaptcha_secret, response=captcha_response, remoteip=misc.get_ip())
-        result = requests.post("https://www.google.com/recaptcha/api/siteverify", verify_data).json()["success"]
-        if not result:
-            flash("Invalid CAPTCHA response.")
+        error, message = captcha.verify_captcha()
+        if error:
+            flash(message)
             return render_template("register.html")
 
         team_name = request.form["team_name"]
@@ -91,6 +85,7 @@ def register():
         affiliation = request.form["affiliation"]
         team_key = misc.generate_team_key()
         confirmation_key = misc.generate_confirmation_key()
+
         team = Team.create(name=team_name, email=team_email, eligible=team_elig, affiliation=affiliation, key=team_key,
                            email_confirmation_key=confirmation_key)
         TeamAccess.create(team=team, ip=misc.get_ip(), time=datetime.now())
