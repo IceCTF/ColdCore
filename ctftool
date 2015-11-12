@@ -41,8 +41,10 @@ elif operation == "gen-team":
         t.key = "autogen{}".format(t.id)
         t.save()
         print("Team added with id {}".format(t.id))
-        for i in random.sample(chals, 5):
-            ChallengeSolve.create(team=t, challenge=i, time=ctz)
-            ctz = ctz + (diff * random.randint(-10, 10))
+
+    for i in range(n * 10):
+        chal = random.choice(chals)
+        ctz -= diff
+        ChallengeSolve.create(team=Team.get(Team.id == (i % n) + 1), challenge=chal, time=ctz)
 
 # vim: syntax=python:ft=python

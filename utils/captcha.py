@@ -3,9 +3,10 @@ from flask import request
 from . import misc
 
 import config
+import requests
 
 def verify_captcha():
-    if "g-captcha-response" not in request.form:
+    if "g-recaptcha-response" not in request.form:
         return CAPTCHA_NOT_COMPLETED
 
     captcha_response = request.form["g-recaptcha-response"]

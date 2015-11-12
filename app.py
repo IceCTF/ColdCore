@@ -6,7 +6,7 @@ from database import Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailu
 from datetime import datetime
 from peewee import fn
 
-from utils import decorators, flag, cache, misc, captcha
+from utils import decorators, flag, cache, misc, captcha, email
 import utils.scoreboard
 
 import config
