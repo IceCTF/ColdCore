@@ -41,13 +41,30 @@ class ChallengeSolve(BaseModel):
     challenge = ForeignKeyField(Challenge, related_name='solves')
     time = DateTimeField()
 
+    class Meta:
+        primary_key = CompositeKey('team', 'challenge')
+
 class ChallengeFailure(BaseModel):
     team = ForeignKeyField(Team, related_name='failures')
     challenge = ForeignKeyField(Challenge, related_name='failures')
     attempt = CharField()
     time = DateTimeField()
 
+class ChallengeWriteup(BaseModel):
+    team = ForeignKeyField(Team, related_name='writeups')
+    challenge = ForeignKeyField(Challenge, related_name='writeups')
+    text = TextField()
+
+class WriteupRating(BaseModel):
+    writeup = ForeignKeyField(ChallengeWriteup, related_name='ratings')
+    team = ForeignKeyField(Team, related_name='writeupratings')
+    rating = IntegerField()
+
 class ScoreAdjustment(BaseModel):
     team = ForeignKeyField(Team, related_name='adjustments')
     value = IntegerField()
     reason = TextField()
+
+class AdminUser(BaseModel):
+    username = CharField()
+    password = CharField()
