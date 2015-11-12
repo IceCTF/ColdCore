@@ -42,26 +42,6 @@
         <h3>Score progression</h3>
         <div id="chart"></div>
     </div>
-    <!--
-    <div class="col s12 m6">
-        <h3>Activity feed</h3>
-        <table>
-            <thead>
-                <tr><th>Team</th><th>Challenge</th><th>Time</th><th>Points</th></tr>
-            </thead>
-            <tbody>
-                {% for solve in afdata %}
-                <tr>
-                    <td>{{ solve.team.name }}</td>
-                    <td>{{ solve.challenge.name }}</td>
-                    <td><abbr class="time" title="{{ solve.time }}">{{ solve.time }}</abbr></td>
-                    <td>{{ solve.challenge.points }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    -->
 </div>
 <h3>Rankings</h3>
 <a href="javascript:toggleIneligible()" id="toggle">Hide ineligible teams</a>

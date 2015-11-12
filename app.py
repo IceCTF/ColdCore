@@ -53,8 +53,7 @@ def scoreboard():
         utils.scoreboard.set_complex("scoreboard", data, 1)
         utils.scoreboard.set_complex("graph", graphdata, 1)
 
-    afdata = ChallengeSolve.select(ChallengeSolve, Challenge, Team).join(Challenge).join(Team, on=Team.id == ChallengeSolve.team).order_by(ChallengeSolve.time.desc()).limit(8)
-    return render_template("scoreboard.html", data=data, graphdata=graphdata, afdata=afdata)
+    return render_template("scoreboard.html", data=data, graphdata=graphdata)
 
 @app.route('/login/', methods=["GET", "POST"])
 def login():
