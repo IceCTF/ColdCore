@@ -33,6 +33,10 @@ def scoreboard_variables():
 
     return var
 
+# Blueprints
+from modules import api
+app.register_blueprint(api.api)
+
 # Publically accessible things
 
 @app.route('/')

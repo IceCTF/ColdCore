@@ -28,9 +28,9 @@ function toggle() {
 <ul class="collapsible" data-collapsible="expandable">
     {% for challenge in challenges %}
     <li>
-        <div class="collapsible-header{% if challenge not in solved %} active{% endif %}">
+        <div id="header{{ challenge.id }}" class="collapsible-header{% if challenge not in solved %} active{% endif %}">
             <strong style="font-size: 110%;">{{ challenge.name }}</strong>
-            <span class="left" style="margin-right: -5px;">{% if challenge in solved %}<i class="material-icons">check</i>{% endif %}</span>
+            <span class="left" style="margin-right: -5px;"><i id="check{{ challenge.id }}" style="display:{{ "block" if challenge in solved else "none" }}" class="material-icons">check</i></span>
             <span class="right">{{ challenge.category }} <b>&middot;</b> {{ challenge.points }} pt</span>
         </div>
         <div class="collapsible-body">
@@ -38,11 +38,11 @@ function toggle() {
             {% if challenge in solved %}
             <p>You've solved this challenge!</p>
             {% else %}
-            <form action="{{ url_for('submit', challenge=challenge.id) }}" method="POST">
+            <form action="{{ url_for('submit', challenge=challenge.id) }}" data-challengeid="{{ challenge.id }}" method="POST">
                 <div class="container">
                     <div class="input-field">
-                        <input required id="flag" name="flag" type="text" />
-                        <label for="flag">Flag</label>
+                        <input required id="flag{{ challenge.id }}" name="flag" type="text" />
+                        <label for="flag{{ challenge.id }}">Flag</label>
                     </div>
                     <button class="btn waves-effect waves-light" type="submit">Submit</button>
                 </div>
@@ -53,4 +53,24 @@ function toggle() {
     </li>
     {% endfor %}
 </ul>
+{% endblock %}
+{% block postscript %}
+{% if config.apisubmit %}
+<script>
+    $("form").submit(function(e) {
+        var id = $(this).attr("data-challengeid");
+        api.makeCall("/submit/" + id + ".json", {flag: $("#flag" + id).val()}, function(data) {
+            if(data.code) {
+                Materialize.toast(data.message, 4000);
+            }
+            else {
+                Materialize.toast("Flag accepted!", 4000);
+                $("#check" + id).show();
+                $("#header" + id).click();
+            }
+        });
+        return false;
+    });
+</script>
+{% endif %}
 {% endblock %}

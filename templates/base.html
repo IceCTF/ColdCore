@@ -54,6 +54,7 @@
         <script src="{{ url_for('static', filename='timeago.min.js') }}"></script>
         <script src="{{ url_for('static', filename='vis.min.js') }}"></script>
         {% endif %}
+        <script src="{{ url_for('static', filename='api.js') }}"></script>
         <script>$("abbr.time").timeago();</script>
         <script id="toasts" type="text/javascript">
             {% for message in get_flashed_messages() %}
