@@ -13,14 +13,16 @@ import random
 import utils
 import utils.admin
 
+tables = [Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, NewsItem, TroubleTicket, TicketComment, Notification, ScoreAdjustment, AdminUser]
+
 operation = sys.argv[1]
 if operation == "create-tables":
-    db.create_tables([Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, AdminUser])
+    [i.create_table() for i in tables]
     print("Tables created")
 
 elif operation == "drop-tables":
     if input("Are you sure? Type yes to continue: ") == "yes":
-        db.drop_tables([Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, AdminUser])
+        [i.drop_table() for i in tables]
         print("Done")
     else:
         print("Okay, nothing happened.")

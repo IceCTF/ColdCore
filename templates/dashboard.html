@@ -85,14 +85,16 @@
         <label for="affiliation">Affiliation</label>
         <input required id="affiliation" name="affiliation" type="text" value="{{ team.affiliation }}" />
     </div>
-    <p>{{ config.eligibility }}</p>
-    <p>If you do not meet these requirements, you are still welcome to play, but you
-    will not be eligible for prizes. By checking the "Eligibility Certification"
-    checkbox below, you are certifying that you meet the prize eligibility 
-    requirement. We may request appropriate documentation to verify your eligibility
-    status before sending you prizes.</p>
-    <input id="team-eligibility" name="team_eligibility" type="checkbox"{% if team.eligible %} checked="checked"{% endif %}/>
-    <label for="team-eligibility">Eligibility Certification</label>
+    {% if not team.eligibility_locked %}
+        <p>{{ config.eligibility }}</p>
+        <p>If you do not meet these requirements, you are still welcome to play, but you
+        will not be eligible for prizes. By checking the "Eligibility Certification"
+        checkbox below, you are certifying that you meet the prize eligibility 
+        requirement. We may request appropriate documentation to verify your eligibility
+        status before sending you prizes.</p>
+        <input id="team-eligibility" name="team_eligibility" type="checkbox"{% if team.eligible %} checked="checked"{% endif %}/>
+        <label for="team-eligibility">Eligibility Certification</label>
+    {% endif %}
     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
     <br /><br />
     <button class="btn waves-effect waves-light" type="submit">Update team</button>

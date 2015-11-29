@@ -10,6 +10,7 @@ class Team(BaseModel):
     email = CharField()
     affiliation = CharField()
     eligible = BooleanField()
+    eligibility_locked = BooleanField(default=False)
     first_login = BooleanField(default=True)
     email_confirmed = BooleanField(default=False)
     email_confirmation_key = CharField()
@@ -27,7 +28,7 @@ class Team(BaseModel):
 class TeamAccess(BaseModel):
     team = ForeignKeyField(Team, related_name='accesses')
     ip = CharField()
-    time = DateField()
+    time = DateTimeField()
 
 class Challenge(BaseModel):
     name = CharField()
@@ -51,15 +52,26 @@ class ChallengeFailure(BaseModel):
     attempt = CharField()
     time = DateTimeField()
 
-class ChallengeWriteup(BaseModel):
-    team = ForeignKeyField(Team, related_name='writeups')
-    challenge = ForeignKeyField(Challenge, related_name='writeups')
-    text = TextField()
+class NewsItem(BaseModel):
+    summary = CharField()
+    description = TextField()
 
-class WriteupRating(BaseModel):
-    writeup = ForeignKeyField(ChallengeWriteup, related_name='ratings')
-    team = ForeignKeyField(Team, related_name='writeupratings')
-    rating = IntegerField()
+class TroubleTicket(BaseModel):
+    team = ForeignKeyField(Team, related_name='tickets')
+    summary = CharField()
+    description = TextField()
+    active = BooleanField(default=True)
+    opened_at = DateTimeField()
+
+class TicketComment(BaseModel):
+    ticket = ForeignKeyField(TroubleTicket, related_name='comments')
+    comment_by = CharField()
+    comment = TextField()
+    time = DateTimeField()
+
+class Notification(BaseModel):
+    team = ForeignKeyField(Team, related_name='notifications')
+    notification = TextField()
 
 class ScoreAdjustment(BaseModel):
     team = ForeignKeyField(Team, related_name='adjustments')

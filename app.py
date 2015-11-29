@@ -107,15 +107,6 @@ def logout():
     flash("You've successfully logged out.")
     return redirect(url_for('root'))
 
-# Debugging things
-
-@app.route('/assign-random/')
-def assign_random():
-    if not app.debug:
-        return "Nope."
-    session["team_id"] = Team.select().order_by(fn.Random()).get().id
-    return "OK"
-
 # Things that require a team
 
 @app.route('/confirm_email/', methods=["POST"])
@@ -142,6 +133,7 @@ def dashboard():
             g.team.first_login = False
             g.team.save()
         return render_template("dashboard.html", team_solves=team_solves, team_adjustments=team_adjustments, team_score=team_score, first_login=first_login)
+
     elif request.method == "POST":
         if g.redis.get("ul{}".format(session["team_id"])):
             flash("You're changing your information too fast!")
@@ -158,7 +150,9 @@ def dashboard():
         g.team.name = team_name
         g.team.email = team_email
         g.team.affiliation = affiliation
-        g.team.eligible = team_elig
+        if not g.team.eligibility_locked:
+            g.team.eligible = team_elig
+
         if email_changed:
             g.team.email_confirmation_key = misc.generate_confirmation_key()
             g.team.email_confirmed = False
