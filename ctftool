@@ -1,18 +1,23 @@
 #!/usr/bin/python3
 from database import *
 from datetime import datetime, timedelta
+import getpass
+import os
+import os.path
 import sys
 import yaml
 import random
+import utils
+import utils.admin
 
 operation = sys.argv[1]
 if operation == "create-tables":
-    db.create_tables([Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment])
+    db.create_tables([Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, AdminUser])
     print("Tables created")
 
 elif operation == "drop-tables":
     if input("Are you sure? Type yes to continue: ") == "yes":
-        db.drop_tables([Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment])
+        db.drop_tables([Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, AdminUser])
         print("Done")
     else:
         print("Okay, nothing happened.")
@@ -46,5 +51,24 @@ elif operation == "gen-team":
         chal = random.choice(chals)
         ctz -= diff
         ChallengeSolve.create(team=Team.get(Team.id == (i % n) + 1), challenge=chal, time=ctz)
+
+elif operation == "add-admin":
+    username = input("Username: ")
+    password = getpass.getpass().encode()
+    pwhash = utils.admin.create_password(password)
+    AdminUser.create(username=username, password=pwhash)
+    print("AdminUser created")
+
+elif operation == "scan":
+    path = sys.argv[2]
+    dirs = [j for j in [os.path.join(path, i) for i in os.listdir(path)] if os.path.isdir(j)]
+    print(dirs)
+    n = 0
+    for d in dirs:
+        if os.path.exists(os.path.join(d, "problem.yml")):
+            with open(os.path.join(d, "problem.yml")) as f:
+                n += 1
+                Challenge.create(**yaml.load(f))
+    print(n, "challenges loaded")
 
 # vim: syntax=python:ft=python

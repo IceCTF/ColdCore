@@ -34,7 +34,8 @@ function toggle() {
             <span class="right">{{ challenge.category }} <b>&middot;</b> {{ challenge.points }} pt</span>
         </div>
         <div class="collapsible-body">
-            <p>{{ challenge.description }}</p>
+            <p>{{ challenge.description | safe }}<br />
+            The challenge author is {{ challenge.author }}; talk to them for hints if you're stuck.</p>
             {% if challenge in solved %}
             <p>You've solved this challenge!</p>
             {% else %}

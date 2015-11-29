@@ -1,0 +1,11 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<h2>{{ team.name }}</h2>
+<p>This team is <strong>{{ "eligible" if team.eligible else "not eligible" }}</strong>.</p>
+<p>This team's affiliation is <strong>{{ team.affiliation }}</strong></p>
+<h3>Email</h3>
+<p>This team's email is <strong>{{ team.email }} ({{ "confirmed" if team.email_confirmed else "unconfirmed" }})</strong>.</p>
+{% if not team.email_confirmed or 1 %}
+<p>This team's confirmation key is <code>{{ team.email_confirmation_key }}</code>.
+{% endif %}
+{% endblock %}

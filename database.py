@@ -32,6 +32,7 @@ class TeamAccess(BaseModel):
 class Challenge(BaseModel):
     name = CharField()
     category = CharField()
+    author = CharField()
     description = TextField()
     points = IntegerField()
     flag = CharField()

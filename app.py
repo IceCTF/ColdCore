@@ -34,8 +34,9 @@ def scoreboard_variables():
     return var
 
 # Blueprints
-from modules import api
+from modules import api, admin
 app.register_blueprint(api.api)
+app.register_blueprint(admin.admin)
 
 # Publically accessible things
 

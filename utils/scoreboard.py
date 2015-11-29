@@ -5,6 +5,23 @@ from .cache import get_complex, set_complex
 
 import config
 
+def get_all_scores(teams, solves, adjustments):
+    scores = {team.id: 0 for team in teams}
+    for solve in solves:
+        scores[solve.team_id] += solve.challenge.points
+
+    for adjustment in adjustments:
+        scores[adjustment.team_id] += adjustment.value
+
+    return scores
+
+def get_last_solves(teams, solves):
+    last = {team.id: datetime(1970, 1, 1) for team in teams}
+    for solve in solves:
+        if solve.time > last[solve.team_id]:
+            last[solve.team_id] = solve.time
+    return last
+
 def calculate_scores():
     solves = ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge)
     adjustments = ScoreAdjustment.select()

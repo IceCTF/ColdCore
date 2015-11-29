@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<table>
+    <thead>
+        <tr><th>Team</th><th>Affiliation</th><th>Eligible</th><th>Last solve</th><th>Score</th></tr>
+    </thead>
+    <tbody>
+        {% for team in teams %}
+        <tr>
+            <td>
+                <a href="{{ url_for('admin.admin_show_team', tid=team.id) }}">{{ team.name }}</a>
+            </td>
+            <td>{{ team.affiliation }}</td>
+            <td>{{ "Eligible" if team.eligible else "Ineligible" }}</td>
+            <td><abbr class="time" title="{{ lastsolvedata[team.id] }}">{{ lastsolvedata[team.id] }}</abbr></td>
+            <td>{{ scoredata[team.id] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

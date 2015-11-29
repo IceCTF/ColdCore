@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<h2>Login</h2>
+<form method="POST">
+    <div class="input-field">
+        <input id="username" name="username" type="text" />
+        <label for="username">Username</label>
+    </div>
+    <div class="input-field">
+        <input id="password" name="password" type="password" />
+        <label for="password">Password</label>
+    </div>
+    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+    <button class="btn waves-effect waves-light" type="submit">Login</button>
+</form>
+{% endblock %}
