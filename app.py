@@ -1,6 +1,5 @@
 from flask import Flask, render_template, session, redirect, url_for, request, g, flash
 app = Flask(__name__)
-app.secret_key = "nope"
 
 from database import Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, db
 from datetime import datetime
@@ -13,6 +12,8 @@ import config
 import utils
 import redis
 import requests
+
+app.secret_key = config.secret.key
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
