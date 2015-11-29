@@ -8,6 +8,8 @@ proxied_ip_header = "X-Forwarded-For"
 flag_rl = 10
 teams_on_graph = 10
 mail_from = "tjctf@sandbox1431.mailgun.org"
+static_prefix = "http://127.0.0.1/tjctf-static/"
+static_dir = "/home/fwilson/web/tjctf-static/"
 
 # Don't touch these. Instead, copy secrets.example to secrets and edit that.
 import yaml

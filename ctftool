@@ -1,9 +1,12 @@
 #!/usr/bin/python3
 from database import *
 from datetime import datetime, timedelta
+import config
 import getpass
+import hashlib
 import os
 import os.path
+import shutil
 import sys
 import yaml
 import random
@@ -64,11 +67,39 @@ elif operation == "scan":
     dirs = [j for j in [os.path.join(path, i) for i in os.listdir(path)] if os.path.isdir(j)]
     print(dirs)
     n = 0
+
     for d in dirs:
+        staticpaths = {}
+        if os.path.exists(os.path.join(d, "static.yml")):
+            with open(os.path.join(d, "static.yml")) as f:
+                statics = yaml.load(f)
+                for static in statics:
+                    h = hashlib.sha256()
+                    with open(os.path.join(d, static), "rb") as staticfile:
+                        while True:
+                            buf = staticfile.read(4096)
+                            h.update(buf)
+                            if not buf:
+                                break
+
+                    if "." in static:
+                        name, ext = static.split(".", maxsplit=1)
+                        fn = "{}_{}.{}".format(name, h.hexdigest(), ext)
+                    else:
+                        fn = "{}_{}".format(static, h.hexdigest())
+                    staticpaths[static] = fn
+                    shutil.copy(os.path.join(d, static), os.path.join(config.static_dir, fn))
+                    print(fn)
+
         if os.path.exists(os.path.join(d, "problem.yml")):
             with open(os.path.join(d, "problem.yml")) as f:
                 n += 1
-                Challenge.create(**yaml.load(f))
+                data = yaml.load(f)
+                for i in staticpaths:
+                    print("looking for |{}|".format(i))
+                    data["description"] = data["description"].replace("|{}|".format(i), "{}{}".format(config.static_prefix, staticpaths[i]))
+                Challenge.create(**data)
+
     print(n, "challenges loaded")
 
 # vim: syntax=python:ft=python
