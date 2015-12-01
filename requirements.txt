@@ -1,0 +1,6 @@
+requests
+peewee
+flask
+bcrypt
+redis
+pyyaml
