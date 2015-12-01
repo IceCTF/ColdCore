@@ -15,11 +15,12 @@
     <body>
         {% if "admin" in session %}
         <div class="navbar-fixed">
-            <nav class="blue darken-3">
+            <nav class="red darken-3">
                 <div class="container">
                     <div class="nav-wrapper">
                         <ul class="left">
                             <li><a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a></li>
+                            <li><a href="{{ url_for('admin.admin_tickets') }}">Tickets</a></li>
                         </ul>
                         <a href="#" class="center brand-logo">{{ config.ctf_name }} Admin</a>
                         <ul class="right">

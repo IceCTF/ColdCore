@@ -1,0 +1,27 @@
+{% extends "admin/base.html" %}
+{% block title %}Trouble Tickets{% endblock %}
+{% block content %}
+<h2>Trouble tickets</h2>
+{% if tickets %}
+The following tickets are open:
+<div class="collection">
+    {% for ticket in tickets %}
+        {% if ticket.active %}
+        <a class="collection-item" href="{{ url_for('.admin_ticket_detail', ticket=ticket.id) }}">#{{ ticket.id }} {{ ticket.summary }} ({{ ticket.team.name }})</a>
+        {% endif %}
+    {% endfor %}
+</div>
+
+The following tickets are closed:
+<div class="collection">
+    {% for ticket in tickets %}
+        {% if not ticket.active %}
+        <a class="collection-item" href="{{ url_for('.admin_ticket_detail', ticket=ticket.id) }}">#{{ ticket.id }} {{ ticket.summary }} ({{ ticket.team.name }})</a>
+        {% endif %}
+    {% endfor %}
+</div>
+{% else %}
+Yay, no tickets!
+{% endif %}
+
+{% endblock %}

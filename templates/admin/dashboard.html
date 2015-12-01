@@ -1,5 +1,13 @@
 {% extends "admin/base.html" %}
 {% block content %}
+{% if tickets %}
+<div class="card red darken-1">
+    <div class="card-content white-text">
+        <span class="card-title">Unresolved issues</span>
+        <p>There are unresolved trouble tickets.</p>
+    </div>
+</div>
+{% endif %}
 <table>
     <thead>
         <tr><th>Team</th><th>Affiliation</th><th>Eligible</th><th>Last solve</th><th>Score</th></tr>

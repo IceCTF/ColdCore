@@ -32,3 +32,11 @@ def competition_running_required(f):
         return f(*args, **kwargs)
     return decorated
 
+def admin_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if "admin" not in session:
+            flash("You must be an admin to access that page.")
+            return redirect(url_for("admin.admin_login"))
+        return f(*args, **kwargs)
+    return decorated

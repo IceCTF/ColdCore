@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+{% block title %}Ticket #{{ ticket.id }}{% endblock %}
+{% block content %}
+<h2>Ticket #{{ ticket.id }}: {{ ticket.summary }}</h2>
+<p>{{ ticket.description }}</p>
+<small><abbr class="time" title="{{ ticket.opened_at }}">{{ ticket.opened_at }}</abbr> &middot; {{ ticket.team.name }}</small>
+{% for comment in comments %}
+<p>{{ comment.comment }}</p>
+<small><abbr class="time" title="{{ comment.time }}">{{ comment.time }}</abbr> &middot; {{ comment.comment_by }}</small>
+{% endfor %}
+<br />
+<form action="{{ url_for('admin.admin_ticket_comment', ticket=ticket.id) }}" method="POST">
+    <div class="input-field">
+        <textarea id="comment" name="comment" class="materialize-textarea"></textarea>
+        <label for="comment">Comment</label>
+    </div>
+    <input id="resolved" name="resolved" type="checkbox" {% if not ticket.active %}checked="checked"{% endif %} />
+    <label for="resolved">Mark resolved</label><br /><br />
+    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+    <button class="btn waves-effect waves-light" type="submit">Update ticket</button>
+</form>
+{% endblock %}

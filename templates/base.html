@@ -24,6 +24,9 @@
                             {% endif %}
                             <li><a href="{{ url_for('scoreboard') }}">Scoreboard</a></li>
                             {% endif %}
+                            {% if logged_in %}
+                            <li><a href="{{ url_for('team_tickets') }}">Tickets</a></li>
+                            {% endif %}
                         </ul>
                         <a href="#" class="center brand-logo">{{ config.ctf_name }}</a>
                         <ul class="right">
@@ -41,6 +44,15 @@
             </nav>
         </div>
         <div class="container">
+            {% for notification in notifications %}
+            <div class="card yellow darken-2" id="notification{{ notification.id }}" onclick="dismissNotification({{ notification.id }});" style="cursor: hand;">
+                <div class="card-content">
+                    {{ notification.notification | safe }} (Click to dismiss)
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="container">
             {% block content %}{% endblock %}
         </div>
         {% if config.cdn %}
@@ -55,7 +67,14 @@
         <script src="{{ url_for('static', filename='vis.min.js') }}"></script>
         {% endif %}
         <script src="{{ url_for('static', filename='api.js') }}"></script>
-        <script>$("abbr.time").timeago();</script>
+        <script>
+            $("abbr.time").timeago();
+            function dismissNotification(id) {
+                api.makeCall("/dismiss/" + id + ".json", {}, function() {
+                    $("#notification" + id).slideUp();
+                });
+            }
+        </script>
         <script id="toasts" type="text/javascript">
             {% for message in get_flashed_messages() %}
                 Materialize.toast({{ message | tojson }}, 4000);

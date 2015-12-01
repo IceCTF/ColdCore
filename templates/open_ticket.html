@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Open Ticket{% endblock %}
+{% block content %}
+<h2>Open a Trouble Ticket</h2>
+<p>If you're having an issue with the platform or your account, you should open
+a trouble ticket. You should also submit a ticket if a problem is broken. Please
+don't submit a ticket if you're stuck on a problem, and need a hint &endash; if
+that is the case, please contact the author of the problem on IRC.</p>
+<p>The issue summary should be a one-sentence description of the problem you
+are having. You should elaborate on the issue in the description field.</p>
+
+<form method="POST">
+    <div class="input-field">
+        <input required id="summary" name="summary" type="text" />
+        <label for="summary">Issue summary</label>
+    </div>
+    <div class="input-field">
+        <textarea required id="description" name="description" class="materialize-textarea"></textarea>
+        <label for="description">Issue description</label>
+    </div>
+    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+    <button class="btn waves-effect waves-light" type="submit">Open ticket</button>
+</form>
+{% endblock %}

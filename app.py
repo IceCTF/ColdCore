@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for, request, g, flash
 app = Flask(__name__)
 
-from database import Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, db
+from database import Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, TroubleTicket, TicketComment, Notification, db
 from datetime import datetime
 from peewee import fn
 
@@ -29,8 +29,10 @@ def scoreboard_variables():
     if "team_id" in session:
         var["logged_in"] = True
         var["team"] = g.team
+        var["notifications"] = Notification.select().where(Notification.team == g.team)
     else:
         var["logged_in"] = False
+        var["notifications"] = []
 
     return var
 
@@ -171,7 +173,8 @@ def dashboard():
 def challenges():
     chals = Challenge.select().order_by(Challenge.points)
     solved = Challenge.select().join(ChallengeSolve).where(ChallengeSolve.team == g.team)
-    return render_template("challenges.html", challenges=chals, solved=solved)
+    categories = sorted(list({chal.category for chal in chals}))
+    return render_template("challenges.html", challenges=chals, solved=solved, categories=categories)
 
 @app.route('/submit/<int:challenge>/', methods=["POST"])
 @decorators.competition_running_required
@@ -183,6 +186,70 @@ def submit(challenge):
     code, message = flag.submit_flag(g.team, chal, flagval)
     flash(message)
     return redirect(url_for('challenges'))
+
+# Trouble tickets
+
+@app.route('/tickets/')
+@decorators.login_required
+def team_tickets():
+    return render_template("tickets.html", tickets=list(g.team.tickets))
+
+@app.route('/tickets/new/', methods=["GET", "POST"])
+@decorators.login_required
+def open_ticket():
+    if request.method == "GET":
+        return render_template("open_ticket.html")
+    elif request.method == "POST":
+        summary = request.form["summary"]
+        description = request.form["description"]
+        opened_at = datetime.now()
+        ticket = TroubleTicket.create(team=g.team, summary=summary, description=description, opened_at=opened_at)
+        flash("Ticket #{} opened.".format(ticket.id))
+        return redirect(url_for("team_ticket_detail", ticket=ticket.id))
+
+@app.route('/tickets/<int:ticket>/')
+@decorators.login_required
+def team_ticket_detail(ticket):
+    try:
+        ticket = TroubleTicket.get(TroubleTicket.id == ticket)
+    except TroubleTicket.DoesNotExist:
+        flash("Couldn't find ticket #{}.".format(ticket))
+        return redirect(url_for("team_tickets"))
+
+    if ticket.team != g.team:
+        flash("That's not your ticket.")
+        return redirect(url_for("team_tickets"))
+
+    comments = TicketComment.select().where(TicketComment.ticket == ticket)
+    return render_template("ticket_detail.html", ticket=ticket, comments=comments)
+
+@app.route('/tickets/<int:ticket>/comment/', methods=["POST"])
+def team_ticket_comment(ticket):
+    try:
+        ticket = TroubleTicket.get(TroubleTicket.id == ticket)
+    except TroubleTicket.DoesNotExist:
+        flash("Couldn't find ticket #{}.".format(ticket))
+        return redirect(url_for("team_tickets"))
+
+    if ticket.team != g.team:
+        flash("That's not your ticket.")
+        return redirect(url_for("team_tickets"))
+
+    if request.form["comment"]:
+        TicketComment.create(ticket=ticket, comment_by=g.team.name, comment=request.form["comment"], time=datetime.now())
+        flash("Comment added.")
+
+    if ticket.active and "resolved" in request.form:
+        ticket.active = False
+        ticket.save()
+        flash("Ticket closed.")
+
+    elif not ticket.active and "resolved" not in request.form:
+        ticket.active = True
+        ticket.save()
+        flash("Ticket re-opened.")
+
+    return redirect(url_for("team_ticket_detail", ticket=ticket.id))
 
 # Manage Peewee database sessions and Redis
 

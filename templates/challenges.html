@@ -2,7 +2,7 @@
 {% block title %}Challenges{% endblock %}
 {% block head %}
 <script>
-var state = {{ solved.count() }};
+var state = !{{ solved.count() }};
 function openAll() {
     $(".collapsible-header").each(function(i, x){ $(x).hasClass("active") || $(x).click(); });
 }
@@ -14,6 +14,15 @@ function toggle() {
     else openAll();
     state = !state;
 }
+function filterCategories(t) {
+    var v = t.options[t.selectedIndex].value;
+    if(v == "*")
+        $(".challenge").show();
+    else {
+        $(".challenge[data-category=" + v + "]").show();
+        $(".challenge[data-category!=" + v + "]").hide();
+    }
+}
 </script>
 <style type="text/css">
     .collapsible-header {
@@ -24,10 +33,19 @@ function toggle() {
 {% block content %}
 <p>You are scoring on behalf of {{ team.name }}. If this is incorrect, you should
 <a href="{{ url_for('logout') }}">logout</a> and login with the correct team key.</p>
-<a href="javascript:toggle()">Toggle collapsed state</a>
+
+<select onchange="filterCategories(this);">
+    <option value="*">Show all</option>
+    {% for category in categories %}
+    <option>{{ category }}</option>
+    {% endfor %}
+</select>
+<span class="left"><a href="javascript:toggle()">Toggle collapsed state</a></span>
+<br />
+
 <ul class="collapsible" data-collapsible="expandable">
     {% for challenge in challenges %}
-    <li>
+    <li class="challenge" data-category="{{ challenge.category }}">
         <div id="header{{ challenge.id }}" class="collapsible-header{% if challenge not in solved %} active{% endif %}">
             <strong style="font-size: 110%;">{{ challenge.name }}</strong>
             <span class="left" style="margin-right: -5px;"><i id="check{{ challenge.id }}" style="display:{{ "block" if challenge in solved else "none" }}" class="material-icons">check</i></span>
@@ -56,6 +74,11 @@ function toggle() {
 </ul>
 {% endblock %}
 {% block postscript %}
+<script>
+    $(function() {
+        $("select").material_select();
+    });
+</script>
 {% if config.apisubmit %}
 <script>
     $("form").submit(function(e) {
