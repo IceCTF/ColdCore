@@ -3,7 +3,7 @@ from database import AdminUser, Team, Challenge, ChallengeSolve, ChallengeFailur
 import utils
 import utils.admin
 import utils.scoreboard
-from utils.decorators import admin_required
+from utils.decorators import admin_required, csrf_check
 from utils.notification import make_link
 from datetime import datetime
 admin = Blueprint("admin", "admin", url_prefix="/admin")
@@ -86,6 +86,23 @@ def admin_ticket_comment(ticket):
 def admin_show_team(tid):
     team = Team.get(Team.id == tid)
     return render_template("admin/team.html", team=team)
+
+@admin.route("/team/<int:tid>/<csrf>/impersonate/")
+@csrf_check
+@admin_required
+def admin_impersonate_team(tid):
+    session["team_id"] = tid
+    return redirect(url_for("scoreboard"))
+
+@admin.route("/team/<int:tid>/<csrf>/toggle_eligibility_lock/")
+@csrf_check
+@admin_required
+def admin_toggle_eligibility_lock(tid):
+    team = Team.get(Team.id == tid)
+    team.eligibility_locked = not team.eligibility_locked
+    team.save()
+    flash("Eligibility lock set to {}".format(team.eligibility_locked))
+    return redirect(url_for(".admin_show_team", tid=tid))
 
 @admin.route("/logout/")
 def admin_logout():

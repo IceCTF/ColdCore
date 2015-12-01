@@ -11,7 +11,7 @@ contain a "team key", which is used to log in.</p>
 team members.</strong></p>
 <form method="POST">
     <div class="input-field">
-        <input required id="team-name" name="team_name" type="text" />
+        <input required maxlength="50" id="team-name" name="team_name" type="text" />
         <label for="team-name">Team Name</label>
     </div>
     <div class="input-field">
@@ -19,7 +19,7 @@ team members.</strong></p>
         <label for="team-email">Team Email</label>
     </div>
     <div class="input-field">
-        <input required id="affiliation" name="affiliation" type="text" />
+        <input id="affiliation" name="affiliation" type="text" />
         <label for="affiliation">Affiliation</label>
     </div>
     <p>{{ config.eligibility }}</p>

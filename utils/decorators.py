@@ -1,5 +1,5 @@
 import config
-from flask import session, redirect, url_for, flash, g
+from flask import session, redirect, url_for, flash, g, abort
 from functools import wraps
 
 def login_required(f):
@@ -38,5 +38,21 @@ def admin_required(f):
         if "admin" not in session:
             flash("You must be an admin to access that page.")
             return redirect(url_for("admin.admin_login"))
+        return f(*args, **kwargs)
+    return decorated
+
+def csrf_check(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if "csrf" not in kwargs:
+            abort(403)
+            return
+
+        if kwargs["csrf"] != session["_csrf_token"]:
+            abort(403)
+            return
+
+        del kwargs["csrf"]
+
         return f(*args, **kwargs)
     return decorated

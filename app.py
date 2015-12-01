@@ -86,10 +86,22 @@ def register():
             flash(message)
             return render_template("register.html")
 
-        team_name = request.form["team_name"]
-        team_email = request.form["team_email"]
+        team_name = request.form["team_name"].strip()
+        team_email = request.form["team_email"].strip()
         team_elig = "team_eligibility" in request.form
-        affiliation = request.form["affiliation"]
+        affiliation = request.form["affiliation"].strip()
+
+        if len(team_name) > 50 or not team_name:
+            flash("You must have a team name!")
+            return render_template("register.html")
+
+        if not (team_email and "." in team_email and "@" in team_email):
+            flash("You must have a valid team email!")
+            return render_template("register.html")
+
+        if not affiliation:
+            affiliation = "No affiliation"
+
         team_key = misc.generate_team_key()
         confirmation_key = misc.generate_confirmation_key()
 
@@ -141,11 +153,21 @@ def dashboard():
             flash("You're changing your information too fast!")
             return redirect(url_for('dashboard'))
 
-        g.redis.set("ul{}".format(session["team_id"]), str(datetime.now()), 120)
-        team_name = request.form["team_name"]
-        team_email = request.form["team_email"]
-        affiliation = request.form["affiliation"]
+        team_name = request.form["team_name"].strip()
+        team_email = request.form["team_email"].strip()
+        affiliation = request.form["affiliation"].strip()
         team_elig = "team_eligibility" in request.form
+
+        if len(team_name) > 50 or not team_name:
+            flash("You must have a team name!")
+            return render_template("dashboard.html")
+
+        if not (team_email and "." in team_email and "@" in team_email):
+            flash("You must have a valid team email!")
+            return render_template("dashboard.html")
+
+        if not affiliation:
+            affiliation = "No affiliation"
 
         email_changed = (team_email != g.team.email)
 
@@ -154,6 +176,8 @@ def dashboard():
         g.team.affiliation = affiliation
         if not g.team.eligibility_locked:
             g.team.eligible = team_elig
+
+        g.redis.set("ul{}".format(session["team_id"]), str(datetime.now()), 120)
 
         if email_changed:
             g.team.email_confirmation_key = misc.generate_confirmation_key()
