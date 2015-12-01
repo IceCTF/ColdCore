@@ -37,3 +37,25 @@ database.
 
 Run `python app.py` and you have a server running. You probably want to deploy
 it with `gunicorn` or similar, long-term.
+
+## ctftool
+
+You can do some really fancy stuff with `ctftool`. If you have a directory structure
+like this:
+
+- ctf-platform
+- ctf-problems
+    - problem1
+        - problem.yml
+        - static.yml
+    - problem2
+        - problem.yml
+        - static.yml
+    - problem3
+        - problem.yml
+    - problem4
+
+You can run `./ctftool scan ../ctf-problems/` and get a fully populated database
+with information from all the problem.yml files, and automatically generated
+static file names, and automatic substitutions for static file links in
+problem.yml. More documentation on this to come soon.
