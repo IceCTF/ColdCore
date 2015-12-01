@@ -59,3 +59,26 @@ You can run `./ctftool scan ../ctf-problems/` and get a fully populated database
 with information from all the problem.yml files, and automatically generated
 static file names, and automatic substitutions for static file links in
 problem.yml. More documentation on this to come soon.
+
+## Contributing
+
+Flagbase is under really heavy development right now. That means
+
+- **Absolutely do** submit issues: bugs and feature requests are awesome.
+
+- **Don't** submit a pull request for:
+    - a major feature addition
+    - database model changes
+
+- **Do** submit pull requests for:
+    - documentation addition/edits
+    - minor bugfixes
+    - small changes to existing features
+
+If you're touching `database.py` or `config.py`, you're probably doing it wrong.
+
+If you decide to ignore my guidelines, **write detailed documentation** on what your
+pull request consists of, what problems it fixes, how it works, and what issues
+it could bring up.
+
+Of course, you are more than welcome to fork the repository.
