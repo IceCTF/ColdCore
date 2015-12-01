@@ -26,7 +26,7 @@ def confirmed_email_required(f):
 def competition_running_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if not config.competition_is_running:
+        if not config.competition_is_running():
             flash("The competition must be running in order for you to access that page.")
             return redirect(url_for('scoreboard'))
         return f(*args, **kwargs)

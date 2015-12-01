@@ -94,6 +94,16 @@ def admin_impersonate_team(tid):
     session["team_id"] = tid
     return redirect(url_for("scoreboard"))
 
+@admin.route("/team/<int:tid>/<csrf>/toggle_eligibility/")
+@csrf_check
+@admin_required
+def admin_toggle_eligibility(tid):
+    team = Team.get(Team.id == tid)
+    team.eligible = not team.eligible
+    team.save()
+    flash("Eligibility set to {}".format(team.eligible))
+    return redirect(url_for(".admin_show_team", tid=tid))
+
 @admin.route("/team/<int:tid>/<csrf>/toggle_eligibility_lock/")
 @csrf_check
 @admin_required
@@ -102,6 +112,19 @@ def admin_toggle_eligibility_lock(tid):
     team.eligibility_locked = not team.eligibility_locked
     team.save()
     flash("Eligibility lock set to {}".format(team.eligibility_locked))
+    return redirect(url_for(".admin_show_team", tid=tid))
+
+@admin.route("/team/<int:tid>/adjust_score/", methods=["POST"])
+@admin_required
+def admin_score_adjust(tid):
+    value = int(request.form["value"])
+    reason = request.form["reason"]
+
+    team = Team.get(Team.id == tid)
+
+    ScoreAdjustment.create(team=team, value=value, reason=reason)
+    flash("Score adjusted.")
+
     return redirect(url_for(".admin_show_team", tid=tid))
 
 @admin.route("/logout/")

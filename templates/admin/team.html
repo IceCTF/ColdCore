@@ -2,11 +2,66 @@
 {% block content %}
 <h2>{{ team.name }}</h2>
 <a href="{{ url_for('admin.admin_impersonate_team', tid=team.id, csrf=csrf_token()) }}">Impersonate team</a><br />
-<p>This team is <strong>{{ "eligible" if team.eligible else "not eligible" }}</strong>. Eligibility is <strong>{{ "locked" if team.eligibility_locked else "unlocked" }}</strong> (<a href="{{ url_for('admin.admin_toggle_eligibility_lock', tid=team.id, csrf=csrf_token()) }}">toggle</a>).</p>
+<p>
+This team is <strong>{{ "eligible" if team.eligible else "not eligible" }}</strong> (<a href="{{ url_for('admin.admin_toggle_eligibility', tid=team.id, csrf=csrf_token()) }}">toggle</a>).
+Eligibility is <strong>{{ "locked" if team.eligibility_locked else "unlocked" }}</strong> (<a href="{{ url_for('admin.admin_toggle_eligibility_lock', tid=team.id, csrf=csrf_token()) }}">toggle</a>).
+</p>
 <p>This team's affiliation is <strong>{{ team.affiliation }}</strong></p>
 <h3>Email</h3>
 <p>This team's email is <strong>{{ team.email }} ({{ "confirmed" if team.email_confirmed else "unconfirmed" }})</strong>.</p>
 {% if not team.email_confirmed %}
 <p>This team's confirmation key is <code>{{ team.email_confirmation_key }}</code>.
 {% endif %}
+<h3>Score adjustment</h3>
+<form action="{{ url_for('admin.admin_score_adjust', tid=team.id) }}" method="POST">
+    <div class="input-field">
+        <input required type="number" name="value" id="value" />
+        <label for="value">Value</label>
+    </div>
+    <div class="input-field">
+        <input required type="text" name="reason" id="reason" />
+        <label for="reason">Reason</label>
+    </div>
+    <button class="btn waves-effect waves-light" type="submit">Adjust score</button>
+</form>
+
+<h3>Score calculation</h3>
+{% if team.solves.count() %}
+<h4>Solved problems</h4>
+<table>
+    <thead>
+        <tr><th>Name</th><th>Category</th><th>Time</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        {% for solve in team.solves %}
+        <tr>
+            <td>{{ solve.challenge.name }}</td>
+            <td>{{ solve.challenge.category }}</td>
+            <td><abbr class="time" title="{{ solve.time }}">{{ solve.time }}</abbr></td>
+            <td>{{ solve.challenge.points }}</td>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No problems have been solved.</p>
+{% endif %}
+{% if team.adjustments.count() %}
+<h4>Score adjustments</h4>
+<table>
+    <thead>
+        <tr><th>Reason</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        {% for adj in team.adjustments %}
+        <tr>
+            <td>{{ adj.reason }}</td>
+            <td>{{ adj.value }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No score adjustments have been made.</p>
+{% endif %}
+
 {% endblock %}

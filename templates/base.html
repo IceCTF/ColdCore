@@ -18,7 +18,7 @@
                 <div class="container">
                     <div class="nav-wrapper">
                         <ul class="left">
-                            {% if config.competition_is_running %}
+                            {% if config.competition_is_running() %}
                             {% if logged_in %}
                             <li><a href="{{ url_for('challenges') }}">Challenges</a></li>
                             {% endif %}
