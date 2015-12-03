@@ -70,7 +70,7 @@
         <script>
             $("abbr.time").timeago();
             function dismissNotification(id) {
-                api.makeCall("/dismiss/" + id + ".json", {}, function() {
+                api.makeCall("/dismiss/" + id + ".json", {_csrf_token: "{{ csrf_token() }}"}, function() {
                     $("#notification" + id).slideUp();
                 });
             }

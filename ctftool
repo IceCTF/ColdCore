@@ -8,10 +8,11 @@ import os
 import os.path
 import shutil
 import sys
-import yaml
+import redis
 import random
 import utils
 import utils.admin
+import yaml
 
 tables = [Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, NewsItem, TroubleTicket, TicketComment, Notification, ScoreAdjustment, AdminUser]
 
@@ -51,11 +52,6 @@ elif operation == "gen-team":
         t.key = "autogen{}".format(t.id)
         t.save()
         print("Team added with id {}".format(t.id))
-
-    for i in range(n * 10):
-        chal = random.choice(chals)
-        ctz -= diff
-        ChallengeSolve.create(team=Team.get(Team.id == (i % n) + 1), challenge=chal, time=ctz)
 
 elif operation == "add-admin":
     username = input("Username: ")
@@ -103,5 +99,11 @@ elif operation == "scan":
                 Challenge.create(**data)
 
     print(n, "challenges loaded")
+
+elif operation == "recache-solves":
+    r = redis.StrictRedis()
+    for chal in Challenge.select():
+        r.hset("solves", chal.id, chal.solves.count())
+    print(r.hvals("solves"))
 
 # vim: syntax=python:ft=python

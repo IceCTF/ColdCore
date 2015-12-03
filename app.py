@@ -197,8 +197,17 @@ def dashboard():
 def challenges():
     chals = Challenge.select().order_by(Challenge.points)
     solved = Challenge.select().join(ChallengeSolve).where(ChallengeSolve.team == g.team)
+    solves = {i: int(g.redis.hget("solves", i).decode()) for i in [k.id for k in chals]}
     categories = sorted(list({chal.category for chal in chals}))
-    return render_template("challenges.html", challenges=chals, solved=solved, categories=categories)
+    return render_template("challenges.html", challenges=chals, solved=solved, categories=categories, solves=solves)
+
+@app.route('/challenges/<int:challenge>/solves/')
+@decorators.competition_running_required
+@decorators.confirmed_email_required
+def challenge_show_solves(challenge):
+    chal = Challenge.get(Challenge.id == challenge)
+    solves = ChallengeSolve.select(ChallengeSolve, Team).join(Team).order_by(ChallengeSolve.time).where(ChallengeSolve.challenge == chal)
+    return render_template("challenge_solves.html", challenge=chal, solves=solves)
 
 @app.route('/submit/<int:challenge>/', methods=["POST"])
 @decorators.competition_running_required
@@ -291,10 +300,8 @@ def teardown_request(exc):
 
 @app.before_request
 def csrf_protect():
-    if app.debug:
-        return
     if request.method == "POST":
-        token = session.pop('_csrf_token', None)
+        token = session.get('_csrf_token', None)
         if not token or token != request.form["_csrf_token"]:
             return "Invalid CSRF token!"
 

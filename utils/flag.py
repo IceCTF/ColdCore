@@ -10,10 +10,17 @@ def submit_flag(team, challenge, flag):
 
     if team.solved(challenge):
         return FLAG_SUBMITTED_ALREADY
+    elif not challenge.enabled:
+        return FLAG_CANNOT_SUBMIT_WHILE_DISABLED
     elif challenge.flag != flag:
         g.redis.set("rl{}".format(team.id), str(datetime.now()), config.flag_rl)
         ChallengeFailure.create(team=team, challenge=challenge, attempt=flag, time=datetime.now())
         return FLAG_INCORRECT
     else:
+        if int(g.redis.hget("solves", challenge.id).decode()) == 0:
+            if challenge.breakthrough_bonus:
+                ScoreAdjustment.create(team=team, value=challenge.breakthrough_bonus, reason="First solve for {}".format(challenge.name))
+
+        g.redis.hincrby("solves", challenge.id, 1)
         ChallengeSolve.create(team=team, challenge=challenge, time=datetime.now())
         return SUCCESS

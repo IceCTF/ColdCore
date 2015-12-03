@@ -36,6 +36,8 @@ class Challenge(BaseModel):
     author = CharField()
     description = TextField()
     points = IntegerField()
+    breakthrough_bonus = IntegerField(default=0)
+    enabled = BooleanField(default=True)
     flag = CharField()
 
 class ChallengeSolve(BaseModel):

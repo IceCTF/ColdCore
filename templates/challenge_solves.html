@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Solves for {{ challenge.name }}</h2>
+<a href="{{ url_for('challenges') }}">&lt;&lt; Back to challenges</a>
+<table>
+    <thead>
+        <tr>
+            <th>Team</th>
+            <th>Solve time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for solve in solves %}
+        <tr>
+            <td>{{ solve.team.name }}</td>
+            <td><abbr class="time" title="{{ solve.time }}">{{ solve.time }}</abbr></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
