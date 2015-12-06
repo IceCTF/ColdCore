@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 from database import *
 from datetime import datetime, timedelta
 import config
