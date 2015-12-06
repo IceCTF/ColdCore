@@ -57,6 +57,7 @@
                         <label for="confirmation-key" class="white-text">Confirmation key</label>
                         <input required id="confirmation-key" name="confirmation_key" type="text" />
                     </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}" />
                     <button class="btn waves-effect waves-light" type="submit">Confirm email</button>
                 </form>
             </div>
