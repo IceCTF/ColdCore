@@ -38,7 +38,7 @@ elif operation == "gen-challenge":
     n = int(sys.argv[2])
     for i in range(n):
         name = str(random.randint(0, 999999999))
-        chal = Challenge.create(name="Challenge".format(name), category="Generated", description="Lorem ipsum, dolor sit amet. The flag is {}".format(name), points=random.randint(50, 400), flag=name)
+        chal = Challenge.create(name="Challenge".format(name), category="Generated", description="Lorem ipsum, dolor sit amet. The flag is {}".format(name), points=random.randint(50, 400), flag=name, author="autogen")
         print("Challenge added with id {}".format(chal.id))
 
 elif operation == "gen-team":
