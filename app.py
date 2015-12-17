@@ -22,6 +22,7 @@ logging.basicConfig(level=logging.DEBUG)
 def make_info_available():
     if "team_id" in session:
         g.team = Team.get(Team.id == session["team_id"])
+        g.team_restricts = g.team.restricts.split(",")
 
 @app.context_processor
 def scoreboard_variables():
@@ -192,6 +193,7 @@ def dashboard():
         return redirect(url_for('dashboard'))
 
 @app.route('/challenges/')
+@decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
 @decorators.confirmed_email_required
 def challenges():
@@ -202,6 +204,8 @@ def challenges():
     return render_template("challenges.html", challenges=chals, solved=solved, categories=categories, solves=solves)
 
 @app.route('/challenges/<int:challenge>/solves/')
+@decorators.must_be_allowed_to("view challenge solves")
+@decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
 @decorators.confirmed_email_required
 def challenge_show_solves(challenge):
@@ -210,6 +214,8 @@ def challenge_show_solves(challenge):
     return render_template("challenge_solves.html", challenge=chal, solves=solves)
 
 @app.route('/submit/<int:challenge>/', methods=["POST"])
+@decorators.must_be_allowed_to("solve challenges")
+@decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
 @decorators.confirmed_email_required
 def submit(challenge):
@@ -223,11 +229,14 @@ def submit(challenge):
 # Trouble tickets
 
 @app.route('/tickets/')
+@decorators.must_be_allowed_to("view tickets")
 @decorators.login_required
 def team_tickets():
     return render_template("tickets.html", tickets=list(g.team.tickets))
 
 @app.route('/tickets/new/', methods=["GET", "POST"])
+@decorators.must_be_allowed_to("submit tickets")
+@decorators.must_be_allowed_to("view tickets")
 @decorators.login_required
 def open_ticket():
     if request.method == "GET":
@@ -241,6 +250,7 @@ def open_ticket():
         return redirect(url_for("team_ticket_detail", ticket=ticket.id))
 
 @app.route('/tickets/<int:ticket>/')
+@decorators.must_be_allowed_to("view tickets")
 @decorators.login_required
 def team_ticket_detail(ticket):
     try:
@@ -257,6 +267,8 @@ def team_ticket_detail(ticket):
     return render_template("ticket_detail.html", ticket=ticket, comments=comments)
 
 @app.route('/tickets/<int:ticket>/comment/', methods=["POST"])
+@decorators.must_be_allowed_to("comment on tickets")
+@decorators.must_be_allowed_to("view tickets")
 def team_ticket_comment(ticket):
     try:
         ticket = TroubleTicket.get(TroubleTicket.id == ticket)

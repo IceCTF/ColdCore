@@ -14,6 +14,7 @@ class Team(BaseModel):
     first_login = BooleanField(default=True)
     email_confirmed = BooleanField(default=False)
     email_confirmation_key = CharField()
+    restricts = TextField(default="")
     key = CharField()
 
     def solved(self, challenge):

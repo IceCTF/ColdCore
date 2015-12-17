@@ -11,6 +11,17 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated
 
+def must_be_allowed_to(thing):
+    def _must_be_allowed_to(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            if thing in g.team_restricts:
+                return "You are restricted from performing the {} action. Contact an organizer.".format(thing)
+
+            return f(*args, **kwargs)
+        return decorated
+    return _must_be_allowed_to
+
 def confirmed_email_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):

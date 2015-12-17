@@ -44,6 +44,14 @@
             </nav>
         </div>
         <div class="container">
+            {% if session.admin %}
+            <div class="card red darken-3">
+                <div class="card-content white-text">
+                    <span class="card-title">You are an admin.</span>
+                    Please note that team restrictions do not currently apply.
+                </div>
+            </div>
+            {% endif %}
             {% for notification in notifications %}
             <div class="card yellow darken-2" id="notification{{ notification.id }}" onclick="dismissNotification({{ notification.id }});" style="cursor: hand;">
                 <div class="card-content">

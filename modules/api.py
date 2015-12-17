@@ -5,6 +5,8 @@ from ctferror import *
 
 api = Blueprint("api", "api", url_prefix="/api")
 @api.route("/submit/<int:challenge>.json", methods=["POST"])
+@decorators.must_be_allowed_to("solve challenges")
+@decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
 @decorators.confirmed_email_required
 def submit_api(challenge):
