@@ -18,7 +18,7 @@ static_prefix = "http://127.0.0.1/tjctf-static/"
 static_dir = "/home/fwilson/web/tjctf-static/"
 
 competition_begin = datetime(1970, 1, 1, 0, 0)
-competition_end = datetime(2016, 1, 1, 0, 0)
+competition_end = datetime(2018, 1, 1, 0, 0)
 
 def competition_is_running():
     return competition_begin < datetime.now() < competition_end
