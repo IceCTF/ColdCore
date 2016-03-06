@@ -4,5 +4,4 @@ dev.db
 dump.rdb
 /problems
 __pycache__
-/static/*
 /secrets
