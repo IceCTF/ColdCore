@@ -11,6 +11,7 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vis.min.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename=config.custom_stylesheet) }}" />
         {% endif %}
+        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         {% block head %}{% endblock %}
     </head>
     <body>
@@ -27,6 +28,13 @@
                         <ul class="right">
                             <li><a href="{{ url_for('admin.admin_logout') }}">Logout ({{ session.admin }})</a></li>
                         </ul>
+                        <ul id="nav-mobile" class="side-nav">
+                            <li><a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a></li>
+                            <li><a href="{{ url_for('admin.admin_tickets') }}">Tickets</a></li>
+                            <hr />
+                            <li><a href="{{ url_for('admin.admin_logout') }}">Logout ({{ session.admin }})</a></li>
+                        </ul>
+                        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons white-text">menu</i></a>
                     </div>
                 </div>
             </nav>
@@ -47,7 +55,12 @@
         <script src="{{ url_for('static', filename='vis.min.js') }}"></script>
         {% endif %}
         <script src="{{ url_for('static', filename='api.js') }}"></script>
-        <script>$("abbr.time").timeago();</script>
+        <script>
+        $(function() {
+            $("abbr.time").timeago();
+            $('.button-collapse').sideNav();
+        });
+        </script>
         <script id="toasts" type="text/javascript">
             {% for message in get_flashed_messages() %}
                 Materialize.toast({{ message | tojson }}, 4000);
