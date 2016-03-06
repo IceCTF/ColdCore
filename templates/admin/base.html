@@ -9,23 +9,23 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='materialize.min.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='icons.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vis.min.css') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename=config.custom_stylesheet) }}" />
         {% endif %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename=config.custom_stylesheet) }}" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         {% block head %}{% endblock %}
     </head>
-    <body>
+    <body class="admin-page">
         {% if "admin" in session %}
         <div class="navbar-fixed">
             <nav class="red darken-3">
                 <div class="container">
                     <div class="nav-wrapper">
-                        <ul class="left">
+                        <ul class="left hide-on-med-and-down">
                             <li><a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a></li>
                             <li><a href="{{ url_for('admin.admin_tickets') }}">Tickets</a></li>
                         </ul>
                         <a href="#" class="center brand-logo">{{ config.ctf_name }} Admin</a>
-                        <ul class="right">
+                        <ul class="right hide-on-med-and-down">
                             <li><a href="{{ url_for('admin.admin_logout') }}">Logout ({{ session.admin }})</a></li>
                         </ul>
                         <ul id="nav-mobile" class="side-nav">
