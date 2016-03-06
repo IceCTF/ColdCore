@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='materialize.min.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='icons.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vis.min.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename=config.custom_stylesheet) }}" />
         {% endif %}
         {% block head %}{% endblock %}
     </head>
