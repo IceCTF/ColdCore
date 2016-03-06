@@ -19,7 +19,7 @@
             <nav class="blue darken-3">
                 <div class="container">
                     <div class="nav-wrapper">
-                        <ul class="left">
+                        <ul class="left hide-on-med-and-down">
                             {% if config.competition_is_running() %}
                             {% if logged_in %}
                             <li><a href="{{ url_for('challenges') }}">Challenges</a></li>
@@ -31,7 +31,7 @@
                             {% endif %}
                         </ul>
                         <a href="#" class="center brand-logo">{{ config.ctf_name }}</a>
-                        <ul class="right">
+                        <ul class="right hide-on-med-and-down">
                             {% if logged_in %}
                             <li><a href="{{ url_for('logout') }}">Logout</a></li>
                             <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
@@ -41,6 +41,27 @@
                             <li><a href="{{ url_for('login') }}">Login</a></li>
                             {% endif %}
                         </ul>
+                        <ul id="nav-mobile" class="side-nav">
+                            {% if config.competition_is_running() %}
+                            {% if logged_in %}
+                            <li><a href="{{ url_for('challenges') }}">Challenges</a></li>
+                            {% endif %}
+                            <li><a href="{{ url_for('scoreboard') }}">Scoreboard</a></li>
+                            {% endif %}
+                            {% if logged_in %}
+                            <li><a href="{{ url_for('team_tickets') }}">Tickets</a></li>
+                            {% endif %}
+                            <hr />
+                            {% if logged_in %}
+                            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                            <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
+                            {% endif %}
+                            {% if not logged_in %}
+                            <li><a href="{{ url_for('register') }}">Register</a></li>
+                            <li><a href="{{ url_for('login') }}">Login</a></li>
+                            {% endif %}
+                        </ul>
+                        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons white-text">menu</i></a>
                     </div>
                 </div>
             </nav>
@@ -78,12 +99,16 @@
         {% endif %}
         <script src="{{ url_for('static', filename='api.js') }}"></script>
         <script>
+        $(function() {
             $("abbr.time").timeago();
             function dismissNotification(id) {
                 api.makeCall("/dismiss/" + id + ".json", {_csrf_token: "{{ csrf_token() }}"}, function() {
                     $("#notification" + id).slideUp();
                 });
             }
+
+            $('.button-collapse').sideNav();
+        });
         </script>
         <script id="toasts" type="text/javascript">
             {% for message in get_flashed_messages() %}
