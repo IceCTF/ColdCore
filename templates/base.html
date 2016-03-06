@@ -103,6 +103,7 @@
         <script>
         $(function() {
             $("abbr.time").timeago();
+            $("abbr.time[title='1970-01-01 00:00:00']").attr("title", "").html("None");
             function dismissNotification(id) {
                 api.makeCall("/dismiss/" + id + ".json", {_csrf_token: "{{ csrf_token() }}"}, function() {
                     $("#notification" + id).slideUp();
