@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>{{ config.ctf_name }} :: {% block title %}Home{% endblock %}</title>
+        <title>{{ config.ctf_name }} &ndash;  {% block title %}Home{% endblock %}</title>
         {% if config.cdn %}
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.css" />
@@ -12,9 +12,11 @@
         {% endif %}
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename=config.custom_stylesheet) }}" />
+
+        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         {% block head %}{% endblock %}
     </head>
-    <body>
+    <body class="competition-page">
         <div class="navbar-fixed">
             <nav class="blue darken-3">
                 <div class="container">
@@ -30,7 +32,7 @@
                             <li><a href="{{ url_for('team_tickets') }}">Tickets</a></li>
                             {% endif %}
                         </ul>
-                        <a href="#" class="center brand-logo">{{ config.ctf_name }}</a>
+                        <a href="{{ config.ctf_home_url }}" class="center brand-logo">{{ config.ctf_name }}</a>
                         <ul class="right hide-on-med-and-down">
                             {% if logged_in %}
                             <li><a href="{{ url_for('logout') }}">Logout</a></li>
@@ -101,6 +103,7 @@
         <script>
         $(function() {
             $("abbr.time").timeago();
+            $("abbr.time[title='1970-01-01 00:00:00']").attr("title", "").html("None");
             function dismissNotification(id) {
                 api.makeCall("/dismiss/" + id + ".json", {_csrf_token: "{{ csrf_token() }}"}, function() {
                     $("#notification" + id).slideUp();
