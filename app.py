@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, request, g, flash
+from flask import Flask, render_template, session, redirect, url_for, request, g, flash, jsonify
 app = Flask(__name__)
 
 from database import Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, TroubleTicket, TicketComment, Notification, db
