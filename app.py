@@ -55,8 +55,8 @@ def scoreboard():
     if not data or not graphdata:
         data = utils.scoreboard.calculate_scores()
         graphdata = utils.scoreboard.calculate_graph(data)
-        utils.scoreboard.set_complex("scoreboard", data, 1)
-        utils.scoreboard.set_complex("graph", graphdata, 1)
+        utils.scoreboard.set_complex("scoreboard", data, 120)
+        utils.scoreboard.set_complex("graph", graphdata, 120)
 
     return render_template("scoreboard.html", data=data, graphdata=graphdata)
 
