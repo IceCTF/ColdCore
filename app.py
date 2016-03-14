@@ -12,6 +12,7 @@ import config
 import utils
 import redis
 import requests
+import socket
 
 app.secret_key = config.secret.key
 
@@ -295,6 +296,11 @@ def team_ticket_comment(ticket):
         flash("Ticket re-opened.")
 
     return redirect(url_for("team_ticket_detail", ticket=ticket.id))
+
+# Debug
+@app.route('/debug/')
+def debug_app():
+    return jsonify(hostname=socket.gethostname())
 
 # Manage Peewee database sessions and Redis
 
