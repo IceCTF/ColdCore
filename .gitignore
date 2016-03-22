@@ -5,3 +5,4 @@ dump.rdb
 /problems
 __pycache__
 /secrets
+venv
