@@ -38,6 +38,7 @@ def calculate_scores():
 
     most_recent_solve = {tid: max([i.time for i in team_solves[tid]]) for tid in team_solves if team_solves[tid]}
     scores = {i: j for i, j in scores.items() if i in most_recent_solve}
+    # eligible, teamid, teamname, affiliation, score
     return [(team_mapping[i[0]].eligible, i[0], team_mapping[i[0]].name, team_mapping[i[0]].affiliation, i[1]) for idx, i in enumerate(sorted(scores.items(), key=lambda k: (-k[1], most_recent_solve[k[0]])))]
 
 def calculate_graph(scoredata):

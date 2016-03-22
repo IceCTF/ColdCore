@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, g, request
-from database import Challenge, Notification
-from utils import decorators, flag
+from database import Challenge, Notification, Team, Challenge, ChallengeSolve
+from utils import decorators, flag, scoreboard
 from ctferror import *
 
 api = Blueprint("api", "api", url_prefix="/api")
@@ -26,3 +26,12 @@ def dismiss_notification(nid):
     Notification.delete().where(Notification.id == nid).execute()
     code, message = SUCCESS
     return jsonify(dict(code=code, message=message))
+
+@api.route("/_ctftime/")
+def ctftime_scoreboard_json():
+    scores = scoreboard.calculate_scores()
+    standings = [dict(team=i[2], score=i[5], outward=not i[0]) for i in scores]
+    for index, standing in enumerate(standings):
+        standings["pos"] = index + 1
+
+    return jsonify(standings=standings)
