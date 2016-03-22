@@ -30,8 +30,8 @@ def dismiss_notification(nid):
 @api.route("/_ctftime/")
 def ctftime_scoreboard_json():
     scores = scoreboard.calculate_scores()
-    standings = [dict(team=i[2], score=i[5], outward=not i[0]) for i in scores]
+    standings = [dict(team=i[2], score=i[4], outward=not i[0]) for i in scores]
     for index, standing in enumerate(standings):
-        standings["pos"] = index + 1
+        standing["pos"] = index + 1
 
     return jsonify(standings=standings)
