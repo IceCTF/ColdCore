@@ -24,8 +24,8 @@ def admin_login():
     elif request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        if "admin_username" in secret:
-            if username == secret["admin_username"] and password == secret["admin_password"]:
+        if getattr(secret, "admin_username", False):
+            if username == secret.admin_username and password == secret.admin_password:
                 session["admin"] = username
                 return redirect(url_for(".admin_dashboard"))
         else:
