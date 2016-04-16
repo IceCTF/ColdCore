@@ -6,7 +6,7 @@ import utils.scoreboard
 from utils.decorators import admin_required, csrf_check
 from utils.notification import make_link
 from datetime import datetime
-from config import secrets
+from config import secret
 admin = Blueprint("admin", "admin", url_prefix="/admin")
 
 @admin.route("/")
@@ -24,8 +24,8 @@ def admin_login():
     elif request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        if "admin_username" in secrets:
-            if username == secrets["admin_username"] and password == secrets["admin_password"]:
+        if "admin_username" in secret:
+            if username == secret["admin_username"] and password == secret["admin_password"]:
                 session["admin"] = username
                 return redirect(url_for(".admin_dashboard"))
         else:
