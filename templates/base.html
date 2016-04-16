@@ -12,6 +12,13 @@
         {% endif %}
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename=config.custom_stylesheet) }}" />
+        <script>
+            function dismissNotification(id) {
+                api.makeCall("/dismiss/" + id + ".json", {_csrf_token: "{{ csrf_token() }}"}, function() {
+                    $("#notification" + id).slideUp();
+                });
+            }
+        </script>
 
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         {% block head %}{% endblock %}
@@ -104,11 +111,6 @@
         $(function() {
             $("abbr.time").timeago();
             $("abbr.time[title='1970-01-01 00:00:00']").attr("title", "").html("None");
-            function dismissNotification(id) {
-                api.makeCall("/dismiss/" + id + ".json", {_csrf_token: "{{ csrf_token() }}"}, function() {
-                    $("#notification" + id).slideUp();
-                });
-            }
 
             $('.button-collapse').sideNav();
         });
