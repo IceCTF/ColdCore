@@ -49,6 +49,10 @@ app.register_blueprint(admin.admin)
 def root():
     return redirect(url_for('scoreboard'))
 
+@app.route('/chat/')
+def chat():
+    return render_template("chat.html")
+
 @app.route('/scoreboard/')
 def scoreboard():
     data = cache.get_complex("scoreboard")
