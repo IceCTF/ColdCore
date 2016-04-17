@@ -80,6 +80,9 @@ def login():
 
 @app.route('/register/', methods=["GET", "POST"])
 def register():
+    if not config.registration:
+        return "Registration is currently disabled."
+
     if request.method == "GET":
         return render_template("register.html")
     elif request.method == "POST":

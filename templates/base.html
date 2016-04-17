@@ -46,7 +46,9 @@
                             <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
                             {% endif %}
                             {% if not logged_in %}
+                            {% if config.registration %}
                             <li><a href="{{ url_for('register') }}">Register</a></li>
+                            {% endif %}
                             <li><a href="{{ url_for('login') }}">Login</a></li>
                             {% endif %}
                         </ul>
@@ -66,7 +68,9 @@
                             <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
                             {% endif %}
                             {% if not logged_in %}
+                            {% if config.registration %}
                             <li><a href="{{ url_for('register') }}">Register</a></li>
+                            {% endif %}
                             <li><a href="{{ url_for('login') }}">Login</a></li>
                             {% endif %}
                         </ul>
