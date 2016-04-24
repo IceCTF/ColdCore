@@ -96,7 +96,14 @@ elif operation == "scan":
                 for i in staticpaths:
                     print("looking for |{}|".format(i))
                     data["description"] = data["description"].replace("|{}|".format(i), "{}{}".format(config.static_prefix, staticpaths[i]))
-                Challenge.create(**data)
+
+                query = Challenge.select().where(Challenge.name == data["name"])
+                if query.exists():
+                    print("Updating " + str(data["name"]) + "...")
+                    q = Challenge.update(**data).where(Challenge.name == data["name"])
+                    q.execute()
+                else:
+                    Challenge.create(**data)
 
     print(n, "challenges loaded")
 
