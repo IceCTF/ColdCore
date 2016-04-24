@@ -39,7 +39,7 @@ class Challenge(BaseModel):
     points = IntegerField()
     breakthrough_bonus = IntegerField(default=0)
     enabled = BooleanField(default=True)
-    flag = CharField()
+    flag = TextField()
 
 class ChallengeSolve(BaseModel):
     team = ForeignKeyField(Team, related_name='solves')
