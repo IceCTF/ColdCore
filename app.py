@@ -205,7 +205,7 @@ def dashboard():
 @decorators.competition_running_required
 @decorators.confirmed_email_required
 def challenges():
-    chals = Challenge.select().order_by(Challenge.points)
+    chals = Challenge.select().order_by(Challenge.points, Challenge.name)
     solved = Challenge.select().join(ChallengeSolve).where(ChallengeSolve.team == g.team)
     solves = {i: int(g.redis.hget("solves", i).decode()) for i in [k.id for k in chals]}
     categories = sorted(list({chal.category for chal in chals}))
