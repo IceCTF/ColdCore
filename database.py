@@ -84,3 +84,4 @@ class ScoreAdjustment(BaseModel):
 class AdminUser(BaseModel):
     username = CharField()
     password = CharField()
+    secret = CharField()
