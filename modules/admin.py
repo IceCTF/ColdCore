@@ -24,6 +24,7 @@ def admin_login():
     elif request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        two = request.form["two"]
         if getattr(secret, "admin_username", False):
             if username == secret.admin_username and password == secret.admin_password:
                 session["admin"] = username
@@ -32,12 +33,13 @@ def admin_login():
             try:
                 user = AdminUser.get(AdminUser.username == username)
                 result = utils.admin.verify_password(user, password)
+                result = result and utils.admin.verify_otp(user, two)
                 if result:
                     session["admin"] = user.username
                     return redirect(url_for(".admin_dashboard"))
             except AdminUser.DoesNotExist:
                 pass
-        flash("Invalid username or password.")
+        flash("Y̸̤̗͍̘ͅo͙̠͈͎͎͙̟u̺ ̘̘̘̹̩̹h͔̟̟̗͠a̠͈v͍̻̮̗̬̬̣e̟̫̼̹̠͕ ̠̳͖͡ma͈̱͟d̙͍̀ͅe̵͕̙̯̟̟̞̳ ͉͚̙a̡̱̮̫̰̰ ̜̙̝̭͚t̜̙͚̗͇ͅͅe͉r҉r̸͎̝̞̙̦̹i͏̙b̶̜̟̭͕l̗̰̰̠̳̝̕e͎̥ ̸m̰̯̮̲̘̻͍̀is̜̲̮͍͔̘͕͟t̟͈̮a̙̤͎̠ķ̝̺͇̩e̷͍̤̠͖̣͈.̺̩̦̻.")
         return render_template("admin/login.html")
 
 @admin.route("/dashboard/")

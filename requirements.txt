@@ -4,3 +4,4 @@ flask
 bcrypt
 redis
 pyyaml
+oath

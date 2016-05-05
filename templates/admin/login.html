@@ -11,6 +11,10 @@
         <input id="password" name="password" type="password" />
         <label for="password">Password</label>
     </div>
+    <div class="input-field">
+        <input id="two" name="two" type="text" />
+        <label for="two">2FA</label>
+    </div>
     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
     <button class="btn waves-effect waves-light" type="submit">Login</button>
 </form>
