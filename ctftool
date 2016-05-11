@@ -59,7 +59,7 @@ elif operation == "add-admin":
     pwhash = utils.admin.create_password(password)
     secret = "".join([random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567") for i in range(16)])
     AdminUser.create(username=username, password=pwhash, secret=secret)
-    print("AdminUser created, totp key is {}".format(secret))
+    print("AdminUser created; Enter the following key into your favorite TOTP application (Google Authenticator Recommended): {}".format(secret))
 
 elif operation == "scan":
     path = sys.argv[2]

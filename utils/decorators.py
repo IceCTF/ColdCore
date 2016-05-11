@@ -29,7 +29,7 @@ def confirmed_email_required(f):
             flash("You need to be logged in to access that page.")
             return redirect(url_for('login'))
         if not g.team.email_confirmed:
-            flash("You need to confirm your email in order to access that page.")
+            flash("Please confirm your email in order to access that page.")
             return redirect(url_for('dashboard'))
         return f(*args, **kwargs)
     return decorated

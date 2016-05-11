@@ -2,27 +2,29 @@
 {% block title %}Challenges{% endblock %}
 {% block head %}
 <script>
-var state = !{{ solved.count() }};
-function openAll() {
-    $(".collapsible-header").each(function(i, x){ $(x).hasClass("active") || $(x).click(); });
-}
-function closeAll() {
-    $(".collapsible-header").each(function(i, x){ $(x).hasClass("active") && $(x).click(); });
-}
-function toggle() {
-    if(state) closeAll();
-    else openAll();
-    state = !state;
-}
-function filterCategories(t) {
-    var v = t.options[t.selectedIndex].value;
-    if(v == "*")
-        $(".challenge").show();
-    else {
-        $(".challenge[data-category=" + v + "]").show();
-        $(".challenge[data-category!=" + v + "]").hide();
+    var state = !{{ solved.count() }};
+    function openAll() {
+        $(".collapsible-header").each(function(i, x){ $(x).hasClass("active") || $(x).click(); });
+        $("#toggleState").html("Collapse all challenges.");
     }
-}
+    function closeAll() {
+        $(".collapsible-header").each(function(i, x){ $(x).hasClass("active") && $(x).click(); });
+        $("#toggleState").html("Expand all challenges.");
+    }
+    function toggle() {
+        if(state) closeAll();
+        else openAll();
+        state = !state;
+    }
+    function filterCategories(t) {
+        var v = t.options[t.selectedIndex].value;
+        if(v == "*")
+        $(".challenge").show();
+        else {
+            $(".challenge[data-category=" + v + "]").show();
+            $(".challenge[data-category!=" + v + "]").hide();
+        }
+    }
 </script>
 <style type="text/css">
     .collapsible-header {
@@ -31,7 +33,7 @@ function filterCategories(t) {
 </style>
 {% endblock %}
 {% block content %}
-<p>You are scoring on behalf of {{ team.name }}. If this is incorrect, you should
+<p>You are playing on behalf of {{ team.name }}. If this is incorrect, you should
 <a href="{{ url_for('logout') }}">logout</a> and login with the correct team key.</p>
 
 <select onchange="filterCategories(this);">
@@ -40,40 +42,40 @@ function filterCategories(t) {
     <option>{{ category }}</option>
     {% endfor %}
 </select>
-<span class="left"><a href="javascript:toggle()">Toggle collapsed state</a></span>
+<span class="left"><a href="javascript:toggle()" id="toggleState">{% if solved.count() %}Expand all challenges.{% else %}Collapse all challenges.{% endif %}</a></span>
 <br />
 
 <ul class="collapsible" data-collapsible="expandable">
     {% for challenge in challenges %}
     <li class="challenge" data-category="{{ challenge.category }}">
-        <div id="header{{ challenge.id }}" class="collapsible-header{% if challenge not in solved %} active{% endif %}">
-            <strong style="font-size: 110%;">{{ challenge.name }}</strong>
-            <span class="left" style="margin-right: -5px;"><i id="check{{ challenge.id }}" style="display:{{ "block" if challenge in solved else "none" }}" class="material-icons">check</i></span>
-            <span class="right"><span id="solves{{ challenge.id }}">{{ solves[challenge.id] }}</span> solve(s) <b>&middot;</b> {{ challenge.category }} <b>&middot;</b> {{ challenge.points }} pt</span>
-        </div>
-        <div class="collapsible-body">
-            <p>{{ challenge.description | safe }}<br />
-            The challenge author is {{ challenge.author }}; talk to them for hints if you're stuck.
-            {% if challenge in solved %}
-            <br /><br /><strong>You've solved this challenge!</strong><br />
-            <a href="{{ url_for('challenge_show_solves', challenge=challenge.id) }}">View solves</a>
-            </p>
-            {% else %}
-            <br /><br />
-            <a href="{{ url_for('challenge_show_solves', challenge=challenge.id) }}">View solves</a>
-            </p>
-            <form action="{{ url_for('submit', challenge=challenge.id) }}" data-challengeid="{{ challenge.id }}" method="POST">
-                <div class="container">
-                    <div class="input-field">
-                        <input required id="flag{{ challenge.id }}" name="flag" type="text" />
-                        <label for="flag{{ challenge.id }}">Flag</label>
-                    </div>
-                    <button class="btn waves-effect waves-light" type="submit">Submit</button>
+    <div id="header{{ challenge.id }}" class="collapsible-header{% if challenge not in solved %} active{% endif %}">
+        <strong style="font-size: 110%;">{{ challenge.name }}</strong>
+        <span class="left" style="margin-right: -5px;"><i id="check{{ challenge.id }}" style="display:{{ "block" if challenge in solved else "none" }}" class="material-icons">check</i></span>
+        <span class="right"><span id="solves{{ challenge.id }}">{{ solves[challenge.id] }}</span> solve(s) <b>&middot;</b> {{ challenge.category }} <b>&middot;</b> {{ challenge.points }} pt</span>
+    </div>
+    <div class="collapsible-body">
+        <p>{{ challenge.description | safe }}<br />
+        The challenge author is {{ challenge.author }} &mdash; talk to them for hints if you're stuck.
+        {% if challenge in solved %}
+        <br /><br /><strong>You've solved this challenge!</strong><br />
+        <a href="{{ url_for('challenge_show_solves', challenge=challenge.id) }}">View solves</a>
+        </p>
+        {% else %}
+        <br /><br />
+        <a href="{{ url_for('challenge_show_solves', challenge=challenge.id) }}">View solves</a>
+        </p>
+        <form action="{{ url_for('submit', challenge=challenge.id) }}" data-challengeid="{{ challenge.id }}" method="POST">
+            <div class="container">
+                <div class="input-field">
+                    <input required id="flag{{ challenge.id }}" name="flag" type="text" />
+                    <label for="flag{{ challenge.id }}">Flag</label>
                 </div>
-                <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
-            </form><br />
-            {% endif %}
-        </div>
+                <button class="btn waves-effect waves-light" type="submit">Submit</button>
+            </div>
+            <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+        </form><br />
+        {% endif %}
+    </div>
     </li>
     {% endfor %}
 </ul>
