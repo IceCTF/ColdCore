@@ -76,7 +76,7 @@ def login():
             team = Team.get(Team.key == team_key)
             TeamAccess.create(team=team, ip=misc.get_ip(), time=datetime.now())
             session["team_id"] = team.id
-            flash("Login success.")
+            flash("Login successful.")
             return redirect(url_for('dashboard'))
         except Team.DoesNotExist:
             flash("Couldn't find your team. Check your team key.", "error")
