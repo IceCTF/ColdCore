@@ -149,6 +149,25 @@
 <p>No score adjustments have been made.</p>
 {% endif %}
 </section>
+
+{% if config.resumes and team.eligible %}
+<section>
+<h4>Resume Submissions</h4>
+<p>Sponsors will have access to resumes submitted to our database. They may contact competitors about internship opportunities.</p>
+
+<p>Feel free to submit up to 5 resume PDFs per team. These will be associated with your team by your team name and a representation of your team key, so keep it professional.</p>
+
+<form method="POST" action="{{ config.resume_server }}">
+    <input name="team_name" type="hidden" value="{{ team.name }}"/>
+    <input name="team_key" type="hidden" value="{{ team.key.split("_")[1][:12] }}"/>
+    <button class="btn waves-effect waves-light" type="submit">Add Resume</button>
+</form>
+
+</section>
+{% endif %}
+
+
+<br><br>
 <div id="firstlogin" class="modal">
     <div class="modal-content">
         <h4>Welcome to {{ config.ctf_name }}!</h4>
@@ -158,7 +177,7 @@
          
         <p>Your Team Key will be under Login Information. It was also sent to your team email. This is the only way to log in, so distribute it to your team members.</p>
          
-        <p>Once that's done, we recommend you read the Rules and FAQ. Then, do some Practice to warm up for the competition, or join the Chat to meet your fellow competitors and ask questions. The competition will begin soon enough, but in the meanwhile, explore the site!</p>
+        <p>Once that's done, we recommend you read the Rules and FAQ. Then, do some Practice to warm up for the competition, submit team members' resumes to the Resume Database for sponsors to contact about resume opportunities, or join the Chat to meet your fellow competitors and ask questions. The competition will begin soon enough, but in the meanwhile, explore the site!</p>
     </div>
     <div class="modal-footer">
         <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Dismiss</a>

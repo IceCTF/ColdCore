@@ -17,12 +17,22 @@ teams_on_graph = 10
 
 mail_from = "tjctf@sandbox1431.mailgun.org"
 
+# IPs that are allowed to confirm teams by posting to /teamconfirm/
+# Useful for verifying resumes and use with resume server.
+confirm_ip = []
+
 static_prefix = "http://127.0.0.1/tjctf-static/"
 static_dir = "{}/static/".format(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 custom_stylesheet = "tjctf.css"
 
 competition_begin = datetime(1970, 1, 1, 0, 0)
 competition_end = datetime(2018, 1, 1, 0, 0)
+
+# Are you using a resume server?
+resumes = True
+# If yes, where's it hosted? Otherwise, just put None.
+resume_server = "https://resumes.tjctf.org"
+
 
 def competition_is_running():
     return competition_begin < datetime.now() < competition_end
