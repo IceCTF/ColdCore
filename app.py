@@ -200,6 +200,22 @@ def dashboard():
 
         return redirect(url_for('dashboard'))
 
+@app.route('/teamconfirm/', methods=["POST"])
+def teamconfirm():
+    if request.remote_addr in config.confirm_ip:
+        team_name = request.form["team_name"].strip()
+        team_key = request.form["team_key"].strip()
+        try:
+            team = Team.get(Team.name == team_name)
+        except Team.DoesNotExist:
+            return "invalid", 403
+        if team.key == team_key:
+            return "ok", 200
+        else:
+            return "invalid", 403
+    else:
+        return "unauthorized", 401
+
 @app.route('/challenges/')
 @decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
