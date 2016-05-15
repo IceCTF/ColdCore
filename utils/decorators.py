@@ -15,6 +15,8 @@ def must_be_allowed_to(thing):
     def _must_be_allowed_to(f):
         @wraps(f)
         def decorated(*args, **kwargs):
+            if getattr(g, 'team_restricts', None) is None:
+                return redirect(url_for('login'))
             if thing in g.team_restricts:
                 return "You are restricted from performing the {} action. Contact an organizer.".format(thing)
 
