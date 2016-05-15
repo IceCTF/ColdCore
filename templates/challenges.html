@@ -50,14 +50,24 @@
     <li class="challenge" data-category="{{ challenge.category }}">
         <div id="header{{ challenge.id }}" class="collapsible-header{% if challenge not in solved %} active{% endif %}">
             <strong style="font-size: 110%;">{{ challenge.name }}</strong>
-            <span class="left" style="margin-right: -5px;"><i id="check{{ challenge.id }}" style="display:{{ "block" if challenge in solved else "none" }}" class="material-icons">check</i></span>
-            <span class="right"><span>{{ challenge.author }}</span> <b>&middot;</b> <span id="solves{{ challenge.id }}">{{ solves[challenge.id] }}</span> solve(s) <b>&middot;</b> {{ challenge.category }} <b>&middot;</b> {{ challenge.points }} pt</span>
+            <span class="left" style="margin-right: -5px;">
+                <i id="check{{ challenge.id }}" style="display:{{ "block" if challenge in solved else "none" }}" class="material-icons">check</i>
+            </span>
+            <span class="right">
+                <span>{{ challenge.author }}</span>
+                <b>&middot;</b>
+                <span id="solves{{ challenge.id }}">{{ solves[challenge.id] }}</span> solve(s)
+                <b>&middot;</b>
+                {{ challenge.category }}
+                <b>&middot;</b>
+                {{ challenge.points }} pt
+            </span>
         </div>
         <div class="collapsible-body">
             <p>{{ challenge.description | safe }}
-            {% if challenge in solved %}
-            <br /><br /><strong>You've solved this challenge!</strong><br />
-            <a href="{{ url_for('challenge_show_solves', challenge=challenge.id) }}">View solves</a>
+                {% if challenge in solved %}
+                <br /><br /><strong>You've solved this challenge!</strong><br />
+                <a href="{{ url_for('challenge_show_solves', challenge=challenge.id) }}">View solves</a>
             </p>
             {% else %}
             <br /><br />
@@ -71,9 +81,8 @@
                     </div>
                     <button class="btn waves-effect waves-light" type="submit">Submit</button>
                 </div>
-            </div>
-            <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
-        </form><br />
+                <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+            </form><br />
         {% endif %}
     </li>
     {% endfor %}
