@@ -108,7 +108,7 @@ def register():
             flash("You must have a valid team email!")
             return render_template("register.html")
 
-        if not affiliation:
+        if not affiliation or len(affiliation) > 100:
             affiliation = "No affiliation"
 
         team_key = misc.generate_team_key()
@@ -175,7 +175,7 @@ def dashboard():
             flash("You must have a valid team email!")
             return render_template("dashboard.html")
 
-        if not affiliation:
+        if not affiliation or len(affiliation) > 100:
             affiliation = "No affiliation"
 
         email_changed = (team_email != g.team.email)

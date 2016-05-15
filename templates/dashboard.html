@@ -84,7 +84,7 @@
     </div>
     <div class="input-field">
         <label for="affiliation">Affiliation</label>
-        <input required id="affiliation" name="affiliation" type="text" value="{{ team.affiliation }}" />
+        <input required maxlength="100" id="affiliation" name="affiliation" type="text" value="{{ team.affiliation }}" />
     </div>
     {% if not team.eligibility_locked %}
         <p>{{ config.eligibility }}</p>
