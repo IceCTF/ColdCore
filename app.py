@@ -202,7 +202,7 @@ def dashboard():
 
 @app.route('/teamconfirm/', methods=["POST"])
 def teamconfirm():
-    if request.remote_addr in config.confirm_ip:
+    if utils.misc.get_ip() in config.confirm_ip:
         team_name = request.form["team_name"].strip()
         team_key = request.form["team_key"].strip()
         try:
