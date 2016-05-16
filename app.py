@@ -345,7 +345,7 @@ def csrf_protect():
 
     if request.method == "POST":
         token = session.get('_csrf_token', None)
-        if not token or token != request.form["_csrf_token"] and not request.path in csrf_exempt:
+        if (not token or token != request.form["_csrf_token"]) and not request.path in csrf_exempt:
             return "Invalid CSRF token!"
 
 def generate_csrf_token():
