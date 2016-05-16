@@ -341,9 +341,11 @@ def teardown_request(exc):
 
 @app.before_request
 def csrf_protect():
+    csrf_exempt = ['/teamconfirm/']
+
     if request.method == "POST":
         token = session.get('_csrf_token', None)
-        if not token or token != request.form["_csrf_token"]:
+        if not token or token != request.form["_csrf_token"] and not request.path in csrf_exempt:
             return "Invalid CSRF token!"
 
 def generate_csrf_token():
