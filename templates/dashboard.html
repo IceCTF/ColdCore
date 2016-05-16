@@ -159,7 +159,7 @@
 
 <form method="POST" action="{{ config.resume_server }}">
     <input name="team_name" type="hidden" value="{{ team.name }}"/>
-    <input name="team_key" type="hidden" value="{{ team.key.split("_")[1][:12] }}"/>
+    <input name="team_key" type="hidden" value="{{ team.key[:12] }}"/>
     <button class="btn waves-effect waves-light" type="submit">Add Resume</button>
 </form>
 
