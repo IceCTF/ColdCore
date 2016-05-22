@@ -173,11 +173,11 @@ def dashboard():
 
         if len(team_name) > 50 or not team_name:
             flash("You must have a team name!")
-            return render_template("dashboard.html")
+            return redirect(url_for('dashboard'))
 
         if not (team_email and "." in team_email and "@" in team_email):
             flash("You must have a valid team email!")
-            return render_template("dashboard.html")
+            return redirect(url_for('dashboard'))
 
         if not affiliation or len(affiliation) > 100:
             affiliation = "No affiliation"
@@ -195,7 +195,7 @@ def dashboard():
         if email_changed:
             if not email.is_valid_email(team_email):
                 flash("You're lying")
-                return render_template("dashboard.html")
+                return redirect(url_for('dashboard'))
 
             g.team.email_confirmation_key = misc.generate_confirmation_key()
             g.team.email_confirmed = False

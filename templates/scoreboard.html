@@ -73,6 +73,6 @@
         groupn++;
     });
     var dataset = new vis.DataSet(items);
-    var graph = new vis.Graph2d(document.getElementById('chart'), dataset, groups, {legend: true, dataAxis: {left: {range: {min: 0}}}});
+    var graph = new vis.Graph2d(document.getElementById('chart'), dataset, groups, {legend: true, dataAxis: {left: {range: {min: 0}}}, showCurrentTime: false});
 </script>
 {% endblock %}
