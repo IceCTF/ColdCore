@@ -111,6 +111,10 @@ def register():
         if not affiliation or len(affiliation) > 100:
             affiliation = "No affiliation"
 
+        if not email.is_valid_email(team_email):
+            flash("You're lying")
+            return render_template("register.html")
+
         team_key = misc.generate_team_key()
         confirmation_key = misc.generate_confirmation_key()
 
@@ -189,8 +193,13 @@ def dashboard():
         g.redis.set("ul{}".format(session["team_id"]), str(datetime.now()), 120)
 
         if email_changed:
+            if not email.is_valid_email(team_email):
+                flash("You're lying")
+                return render_template("dashboard.html")
+
             g.team.email_confirmation_key = misc.generate_confirmation_key()
             g.team.email_confirmed = False
+
             email.send_confirmation_email(team_email, g.team.email_confirmation_key, g.team.key)
             flash("Changes saved. Please check your email for a new confirmation key.")
         else:

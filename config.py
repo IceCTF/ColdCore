@@ -35,6 +35,8 @@ resumes = True
 # If yes, where's it hosted? Otherwise, just put None.
 resume_server = "https://resumes.tjctf.org"
 
+disallowed_domain = "tjctf.org"
+
 
 def competition_is_running():
     return competition_begin < datetime.now() < competition_end

@@ -17,3 +17,6 @@ the challenges. If you have any trouble, feel free to contact an organizer!
 If you didn't register an account, then you can disregard this email.
 
 In case you lose it, your team key is: {}""".format(config.ctf_name, confirmation_key, team_key))
+
+def is_valid_email(email):
+    return not email.strip().lower().endswith(config.disallowed_domain)
