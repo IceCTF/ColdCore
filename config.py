@@ -14,7 +14,7 @@ registration = True
 
 proxied_ip_header = "X-Forwarded-For"
 
-flag_rl = 10
+flag_rl = 5
 teams_on_graph = 10
 
 mail_from = "tjctf@sandbox1431.mailgun.org"
