@@ -6,7 +6,9 @@ import config
 
 def submit_flag(team, challenge, flag):
     if g.redis.get("rl{}".format(team.id)):
-        return FLAG_SUBMISSION_TOO_FAST
+        delta = config.competition_end - datetime.now()
+        if delta.days > 0 or delta.seconds > (config.flag_rl * 6):
+            return FLAG_SUBMISSION_TOO_FAST
 
     if team.solved(challenge):
         return FLAG_SUBMITTED_ALREADY

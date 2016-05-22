@@ -191,7 +191,7 @@ def dashboard():
         if email_changed:
             g.team.email_confirmation_key = misc.generate_confirmation_key()
             g.team.email_confirmed = False
-            misc.send_confirmation_email(team_email, g.team.email_confirmation_key, g.team.key)
+            email.send_confirmation_email(team_email, g.team.email_confirmation_key, g.team.key)
             flash("Changes saved. Please check your email for a new confirmation key.")
         else:
             flash("Changes saved.")
