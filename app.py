@@ -296,7 +296,7 @@ def team_ticket_detail(ticket):
         flash("That's not your ticket.")
         return redirect(url_for("team_tickets"))
 
-    comments = TicketComment.select().where(TicketComment.ticket == ticket)
+    comments = TicketComment.select().where(TicketComment.ticket == ticket).order_by(TicketComment.time.desc())
     return render_template("ticket_detail.html", ticket=ticket, comments=comments)
 
 @app.route('/tickets/<int:ticket>/comment/', methods=["POST"])
