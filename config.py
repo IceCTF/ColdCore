@@ -19,6 +19,8 @@ teams_on_graph = 10
 
 mail_from = "tjctf@sandbox1431.mailgun.org"
 
+immediate_scoreboard = False
+
 # IPs that are allowed to confirm teams by posting to /teamconfirm/
 # Useful for verifying resumes and use with resume server.
 confirm_ip = []

@@ -24,7 +24,8 @@ def submit_flag(team, challenge, flag):
                 ScoreAdjustment.create(team=team, value=challenge.breakthrough_bonus, reason="First solve for {}".format(challenge.name))
 
         g.redis.hincrby("solves", challenge.id, 1)
-        g.redis.delete("scoreboard")
-        g.redis.delete("graph")
+        if config.immediate_scoreboard:
+            g.redis.delete("scoreboard")
+            g.redis.delete("graph")
         ChallengeSolve.create(team=team, challenge=challenge, time=datetime.now())
         return SUCCESS

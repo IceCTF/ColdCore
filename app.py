@@ -58,10 +58,13 @@ def scoreboard():
     data = cache.get_complex("scoreboard")
     graphdata = cache.get_complex("graph")
     if not data or not graphdata:
-        data = utils.scoreboard.calculate_scores()
-        graphdata = utils.scoreboard.calculate_graph(data)
-        utils.scoreboard.set_complex("scoreboard", data, 120)
-        utils.scoreboard.set_complex("graph", graphdata, 120)
+        if config.immediate_scoreboard:
+            data = utils.scoreboard.calculate_scores()
+            graphdata = utils.scoreboard.calculate_graph(data)
+            utils.scoreboard.set_complex("scoreboard", data, 120)
+            utils.scoreboard.set_complex("graph", graphdata, 120)
+        else:
+            return "No scoreboard data available. Please contact an organizer."
 
     return render_template("scoreboard.html", data=data, graphdata=graphdata)
 

@@ -29,6 +29,9 @@ def dismiss_notification(nid):
 
 @api.route("/_ctftime/")
 def ctftime_scoreboard_json():
+    if config.immediate_scoreboard:
+        return "unavailable", 503
+
     scores = scoreboard.calculate_scores()
     standings = [dict(team=i[2], score=i[4], outward=not i[0]) for i in scores]
     for index, standing in enumerate(standings):
