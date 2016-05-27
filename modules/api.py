@@ -24,9 +24,9 @@ def dismiss_notification(nid):
     n = Notification.get(Notification.id == nid)
     if g.team != n.team:
         code, message = NOTIFICATION_NOT_YOURS
-
-    Notification.delete().where(Notification.id == nid).execute()
-    code, message = SUCCESS
+    else:
+        Notification.delete().where(Notification.id == nid).execute()
+        code, message = SUCCESS
     return jsonify(dict(code=code, message=message))
 
 @api.route("/_ctftime/")
