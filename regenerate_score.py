@@ -2,8 +2,8 @@ import redis
 r = redis.StrictRedis()
 import json
 
-def set_complex(key, val, ex):
-    r.set(key, json.dumps(val), ex)
+def set_complex(key, val):
+    r.set(key, json.dumps(val))
 
 import utils
 import utils.scoreboard
