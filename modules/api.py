@@ -31,7 +31,7 @@ def dismiss_notification(nid):
 
 @api.route("/_ctftime/")
 def ctftime_scoreboard_json():
-    if config.immediate_scoreboard and datetime.now() < config.competition_end:
+    if not config.immediate_scoreboard and datetime.now() < config.competition_end:
         return "unavailable", 503
 
     scores = scoreboard.calculate_scores()
