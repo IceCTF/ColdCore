@@ -1,8 +1,6 @@
 from database import Team, Challenge, ChallengeSolve, ScoreAdjustment
 from datetime import datetime
 
-from .cache import get_complex, set_complex
-
 import config
 
 def get_all_scores(teams, solves, adjustments):
