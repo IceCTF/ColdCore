@@ -5,10 +5,11 @@ from functools import wraps
 def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if "team_id" not in session:
+        if "team_id" in session and session["team_id"]:
+            return f(*args, **kwargs)
+        else:
             flash("You need to be logged in to access that page.")
             return redirect(url_for('login'))
-        return f(*args, **kwargs)
     return decorated
 
 def must_be_allowed_to(thing):
@@ -17,7 +18,7 @@ def must_be_allowed_to(thing):
         def decorated(*args, **kwargs):
             if getattr(g, 'team_restricts', None) is None:
                 return redirect(url_for('login'))
-            if thing in g.team_restricts:
+            if g.team_restricts and thing in g.team_restricts:
                 return "You are restricted from performing the {} action. Contact an organizer.".format(thing)
 
             return f(*args, **kwargs)
@@ -27,13 +28,15 @@ def must_be_allowed_to(thing):
 def confirmed_email_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if "team_id" not in session:
+        if "team_id" in session and session["team_id"]:
+            if not g.team.email_confirmed:
+                flash("Please confirm your email in order to access that page.")
+                return redirect(url_for('dashboard'))
+            else:
+                return f(*args, **kwargs)
+        else:
             flash("You need to be logged in to access that page.")
             return redirect(url_for('login'))
-        if not g.team.email_confirmed:
-            flash("Please confirm your email in order to access that page.")
-            return redirect(url_for('dashboard'))
-        return f(*args, **kwargs)
     return decorated
 
 def competition_running_required(f):
@@ -48,16 +51,16 @@ def competition_running_required(f):
 def admin_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if "admin" not in session:
-            flash("You must be an admin to access that page.")
-            return redirect(url_for("admin.admin_login"))
-        return f(*args, **kwargs)
+        if "admin" in session and session["admin"]:
+            return f(*args, **kwargs)
+        flash("You must be an admin to access that page.")
+        return redirect(url_for("admin.admin_login"))
     return decorated
 
 def csrf_check(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if "csrf" not in kwargs:
+        if "csrf" not in kwargs or "_csrf_session" not in session or not kwargs["csrf"] or not session["_csrf_session"]:
             abort(403)
             return
 
