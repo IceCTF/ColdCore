@@ -57,7 +57,8 @@ elif operation == "add-admin":
     username = input("Username: ")
     password = getpass.getpass().encode()
     pwhash = utils.admin.create_password(password)
-    secret = "".join([random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567") for i in range(16)])
+    r = random.SystemRandom()
+    secret = "".join([r.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567") for i in range(16)])
     AdminUser.create(username=username, password=pwhash, secret=secret)
     print("AdminUser created; Enter the following key into your favorite TOTP application (Google Authenticator Recommended): {}".format(secret))
 
