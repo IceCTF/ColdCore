@@ -57,7 +57,7 @@ def chat():
 def scoreboard():
     data = cache.get_complex("scoreboard")
     graphdata = cache.get_complex("graph")
-    if not data or not graphdata:
+    if data is None or graphdata is None:
         if config.immediate_scoreboard:
             data = utils.scoreboard.calculate_scores()
             graphdata = utils.scoreboard.calculate_graph(data)
