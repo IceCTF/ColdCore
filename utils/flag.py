@@ -19,10 +19,6 @@ def submit_flag(team, challenge, flag):
         ChallengeFailure.create(team=team, challenge=challenge, attempt=flag, time=datetime.now())
         return FLAG_INCORRECT
     else:
-        if int(g.redis.hget("solves", challenge.id).decode()) == 0:
-            if challenge.breakthrough_bonus:
-                ScoreAdjustment.create(team=team, value=challenge.breakthrough_bonus, reason="First solve for {}".format(challenge.name))
-
         g.redis.hincrby("solves", challenge.id, 1)
         if config.immediate_scoreboard:
             g.redis.delete("scoreboard")
