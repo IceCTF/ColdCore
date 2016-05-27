@@ -60,10 +60,6 @@ def admin_required(f):
 def csrf_check(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if "csrf" not in kwargs or "_csrf_session" not in session or not kwargs["csrf"] or not session["_csrf_session"]:
-            abort(403)
-            return
-
         if kwargs["csrf"] != session["_csrf_token"]:
             abort(403)
             return
