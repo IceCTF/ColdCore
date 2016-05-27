@@ -9,5 +9,5 @@ import utils
 import utils.scoreboard
 data = utils.scoreboard.calculate_scores()
 graphdata = utils.scoreboard.calculate_graph(data)
-set_complex("scoreboard", data, 120)
-set_complex("graph", graphdata, 120)
+set_complex("scoreboard", data)
+set_complex("graph", graphdata)
