@@ -51,7 +51,7 @@ def calculate_graph(scoredata):
         for i in sorted(our_solves, key=lambda k: k.time):
             team_data.append((str(i.time), s))
             s += i.challenge.points
-            team_data.append((str(i.time), s))
+            team_data.append((str(i.time + timedelta(microseconds=1)), s))
         team_data.append((str(datetime.now()), score))
         graph_data.append((name, team_data))
     return graph_data
