@@ -278,6 +278,9 @@ def open_ticket():
     if request.method == "GET":
         return render_template("open_ticket.html")
     elif request.method == "POST":
+        if g.redis.get("ticketl{}".format(session["team_id"])):
+            return "You're doing that too fast."
+        g.redis.set("ticketl{}".format(g.team.id), "1", 30)
         summary = request.form["summary"]
         description = request.form["description"]
         opened_at = datetime.now()
@@ -306,6 +309,9 @@ def team_ticket_detail(ticket):
 @decorators.must_be_allowed_to("comment on tickets")
 @decorators.must_be_allowed_to("view tickets")
 def team_ticket_comment(ticket):
+    if g.redis.get("ticketl{}".format(session["team_id"])):
+        return "You're doing that too fast."
+    g.redis.set("ticketl{}".format(g.team.id), "1", 30)
     try:
         ticket = TroubleTicket.get(TroubleTicket.id == ticket)
     except TroubleTicket.DoesNotExist:
