@@ -88,7 +88,7 @@ def login():
 @app.route('/register/', methods=["GET", "POST"])
 def register():
     if not config.registration:
-        return "Registration is currently disabled."
+        return "Registration is currently disabled. Email ctf@tjhsst.edu to create an account."
 
     if request.method == "GET":
         return render_template("register.html")
