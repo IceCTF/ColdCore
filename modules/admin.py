@@ -56,7 +56,7 @@ def admin_dashboard():
 @admin.route("/tickets/")
 @admin_required
 def admin_tickets():
-    tickets = list(TroubleTicket.select(TroubleTicket, Team).join(Team))
+    tickets = list(TroubleTicket.select(TroubleTicket, Team).join(Team).order_by(TroubleTicket.id.desc()))
     return render_template("admin/tickets.html", tickets=tickets)
 
 @admin.route("/tickets/<int:ticket>/")
