@@ -66,7 +66,7 @@
     graphData.forEach(function(team) {
         var teamName = team[0];
         var scoreEvents = team[1];
-        groups.add({ id: groupn, content: teamName, options: { drawPoints: false, interpolation: false } });
+        groups.add({ id: groupn, content: teamName.replace("<", "&lt;").replace(">", "&gt;"), options: { drawPoints: false, interpolation: false } });
         scoreEvents.forEach(function(evt) {
             items.push({ x: evt[0], y: evt[1], group: groupn });
         });
