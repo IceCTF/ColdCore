@@ -1,5 +1,5 @@
 from database import Team, Challenge, ChallengeSolve, ScoreAdjustment
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import config
 
