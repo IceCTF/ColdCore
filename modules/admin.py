@@ -63,7 +63,7 @@ def admin_tickets():
 @admin_required
 def admin_ticket_detail(ticket):
     ticket = TroubleTicket.get(TroubleTicket.id == ticket)
-    comments = list(TicketComment.select().where(TicketComment.ticket == ticket))
+    comments = list(TicketComment.select().where(TicketComment.ticket == ticket).order_by(TicketComment.time))
     return render_template("admin/ticket_detail.html", ticket=ticket, comments=comments)
 
 @admin.route("/tickets/<int:ticket>/comment/", methods=["POST"])
