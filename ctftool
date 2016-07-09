@@ -13,36 +13,27 @@ import random
 import utils
 import utils.admin
 import yaml
+import argparse
+import logging
 
 tables = [Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, NewsItem, TroubleTicket, TicketComment, Notification, ScoreAdjustment, AdminUser]
 
-operation = sys.argv[1]
-if operation == "create-tables":
+def create_tables(args):
     [i.create_table() for i in tables]
     print("Tables created")
 
-elif operation == "drop-tables":
+def drop_tables(args):
     if input("Are you sure? Type yes to continue: ") == "yes":
         [i.drop_table() for i in tables]
         print("Done")
     else:
         print("Okay, nothing happened.")
 
-elif operation == "add-challenge":
-    challengefile = sys.argv[2]
-    with open(challengefile) as f:
-        chal = Challenge.create(**yaml.load(f))
-        print("Challenge added with id {}".format(chal.id))
 
-elif operation == "gen-challenge":
-    n = int(sys.argv[2])
-    for i in range(n):
-        name = str(random.randint(0, 999999999))
-        chal = Challenge.create(name="Challenge {}".format(name), category="Generated", description="Lorem ipsum, dolor sit amet. The flag is {}".format(name), points=random.randint(50, 400), flag=name, author="autogen")
-        print("Challenge added with id {}".format(chal.id))
 
-elif operation == "gen-team":
-    n = int(sys.argv[2])
+
+def gen_team(args):
+    n = args.team_count
     chals = list(Challenge.select())
     ctz = datetime.now()
     diff = timedelta(minutes=5)
@@ -53,7 +44,7 @@ elif operation == "gen-team":
         t.save()
         print("Team added with id {}".format(t.id))
 
-elif operation == "add-admin":
+def add_admin(args):
     username = input("Username: ")
     password = getpass.getpass().encode()
     pwhash = utils.admin.create_password(password)
@@ -62,8 +53,8 @@ elif operation == "add-admin":
     AdminUser.create(username=username, password=pwhash, secret=secret)
     print("AdminUser created; Enter the following key into your favorite TOTP application (Google Authenticator Recommended): {}".format(secret))
 
-elif operation == "scan":
-    path = sys.argv[2]
+def scan_challenges(args):
+    path = args.path
     dirs = [j for j in [os.path.join(path, i) for i in os.listdir(path)] if os.path.isdir(j)]
     print(dirs)
     n = 0
@@ -109,21 +100,108 @@ elif operation == "scan":
 
     print(n, "challenges loaded")
 
-elif operation == "recache-solves":
+def add_challenge(args):
+    challengefile = args.file
+    with open(challengefile) as f:
+        chal = Challenge.create(**yaml.load(f))
+        print("Challenge added with id {}".format(chal.id))
+
+def gen_challenges(args):
+    n = args.challenge_count
+    for i in range(n):
+        name = str(random.randint(0, 999999999))
+        chal = Challenge.create(name="Challenge {}".format(name), category="Generated", description="Lorem ipsum, dolor sit amet. The flag is {}".format(name), points=random.randint(50, 400), flag=name, author="autogen")
+        print("Challenge added with id {}".format(chal.id))
+
+
+
+def list_challenges(args):
+    for chal in Challenge.select():
+        print("{}  {}".format(str(chal.id).rjust(3), chal.name))
+
+
+def del_challenge(args):
+    id = args.id
+    c = Challenge.get(id=id)
+    ChallengeFailure.delete().where(ChallengeFailure.challenge == c).execute()
+    ChallengeSolve.delete().where(ChallengeSolve.challenge == c).execute()
+    c.delete_instance()
+
+
+def recache_solves(args):
     r = redis.StrictRedis()
     for chal in Challenge.select():
         r.hset("solves", chal.id, chal.solves.count())
     print(r.hvals("solves"))
 
-elif operation == "list-challenges":
-    for chal in Challenge.select():
-        print("{}  {}".format(str(chal.id).rjust(3), chal.name))
+def main():
+    parser = argparse.ArgumentParser(description="{} problem manager".format(config.ctf_name))
+    debug_level = parser.add_mutually_exclusive_group()
+    debug_level.add_argument('-v', '--verbose', help="Print intermediate results", action="store_true")
+    debug_level.add_argument('-s', '--silent', help="Print out very little", action="store_true")
+    subparser = parser.add_subparsers(help='Select one of the following actions')
 
-elif operation == "del-challenge":
-    id = sys.argv[2]
-    c = Challenge.get(id=id)
-    ChallengeFailure.delete().where(ChallengeFailure.challenge == c).execute()
-    ChallengeSolve.delete().where(ChallengeSolve.challenge == c).execute()
-    c.delete_instance()
+    # Problems
+    parser_problems = subparser.add_parser('challenges', help='Deal with challenges')
+    subparser_problems = parser_problems.add_subparsers(help='Select one of the following actions')
+
+    parser_problems_scan = subparser_problems.add_parser('scan', help='Scan a path for problems')
+    parser_problems_scan.add_argument("path", nargs=1, help="Directory for the path")
+    parser_problems_scan.set_defaults(func=scan_challenges)
+
+    parser_problems_generate = subparser_problems.add_parser('generate', help='Generate some dummy problems')
+    parser_problems_generate.add_argument("challenge_count", nargs=1, type=int, help="number of problems to generate")
+    parser_problems_generate.set_defaults(func=gen_challenges)
+
+    parser_problems_add = subparser_problems.add_parser('add', help='add a problem')
+    parser_problems_add.add_argument("file", nargs=1, help="file to use")
+    parser_problems_add.set_defaults(func=add_challenge)
+
+    parser_problems_list = subparser_problems.add_parser('list', help='List problems in the database')
+    parser_problems_list.set_defaults(func=list_challenges)
+
+    parser_problems_del = subparser_problems.add_parser('del', help='Delete a problem')
+    parser_problems_del.add_argument('id', help="ID of problem to remove")
+    parser_problems_del.set_defaults(func=del_challenge)
+
+
+    # Database
+    parser_database = subparser.add_parser("database", help="Deal with database")
+    subparser_database = parser_database.add_subparsers(help="Select one of the following actions")
+
+    parser_database_drop = subparser_database.add_parser("create-tables", help="create tables")
+    parser_database_drop.set_defaults(func=create_tables)
+
+    parser_database_clear = subparser_database.add_parser("drop-tables", help="drop tables")
+    parser_database_clear.set_defaults(func=drop_tables)
+
+    parser_database_recache_solves = subparser_database.add_parser("recache-solves", help="recache solves")
+    parser_database_recache_solves.set_defaults(func=recache_solves)
+
+    # Users
+    parser_user = subparser.add_parser("users", help="Deal with users")
+    subparser_users = parser_user.add_subparsers(help="Select one of the following actions")
+
+    parser_users_generate = subparser_users.add_parser('generate', help='Generate some dummy teams')
+    parser_users_generate.add_argument("team_count", nargs=1, type=int, help="number of teams to generate")
+    parser_users_generate.set_defaults(func=gen_team)
+
+    parser_users_admin = subparser_users.add_parser('add-admin', help='Create a new administrator')
+    parser_users_admin.set_defaults(func=add_admin)
+
+    args = parser.parse_args()
+    if args.silent:
+        logging.basicConfig(level=logging.CRITICAL, stream=sys.stdout)
+    elif args.verbose:
+        logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+    else:
+        logging.basicConfig(level=logging.WARNING, stream=sys.stdout)
+
+    if 'func' in args:
+        args.func(args)
+    else:
+        parser.print_help()
+
+main()
 
 # vim: syntax=python:ft=python
