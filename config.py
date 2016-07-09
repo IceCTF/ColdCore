@@ -37,7 +37,7 @@ resumes = False
 # If yes, where's it hosted? Otherwise, just put None.
 resume_server = None
 
-disallowed_domain = "tjctf.org"
+disallowed_domain = "icec.tf"
 
 
 def competition_is_running():
