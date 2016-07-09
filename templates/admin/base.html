@@ -24,7 +24,7 @@
                             <li><a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a></li>
                             <li><a href="{{ url_for('admin.admin_tickets') }}">Tickets</a></li>
                         </ul>
-                        <a href="#" class="center brand-logo">{{ config.ctf_name }} Admin</a>
+                        <a href="{{ config.ctf_home_url }}" class="center"><img class="brand-logo" src={{ url_for('static', filename='logo.png') }}></img></a>
                         <ul class="right hide-on-med-and-down">
                             <li><a href="{{ url_for('admin.admin_logout') }}">Logout ({{ session.admin }})</a></li>
                         </ul>
