@@ -4,7 +4,7 @@ from datetime import datetime
 ctf_name = "IceCTF"
 #IRC Channel
 ctf_chat_channel = "#IceCTF"
-ctf_home_url = "http://tjctf.org"
+ctf_home_url = "https://icec.tf"
 eligibility = "In order to be eligible for prizes, all members of your team must be in high school, and you must not have more than four team members."
 tagline = "a cybersecurity competition created by TJHSST students"
 
@@ -33,9 +33,9 @@ competition_begin = datetime(1970, 1, 1, 0, 0)
 competition_end = datetime(2018, 1, 1, 0, 0)
 
 # Are you using a resume server?
-resumes = True
+resumes = False
 # If yes, where's it hosted? Otherwise, just put None.
-resume_server = "https://resumes.tjctf.org"
+resume_server = None
 
 disallowed_domain = "tjctf.org"
 
