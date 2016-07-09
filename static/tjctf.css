@@ -15,11 +15,9 @@
 }
 
 .brand-logo {
-    background-image: url(https://www.tjctf.org/static/logo-thin-white-header.png?1);
     width: 150px;
     height: 50px;
     line-height: 0;
-    text-indent: -9999px;
     position: absolute;
     top: 50%;
     margin-top: -25px;

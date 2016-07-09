@@ -91,7 +91,7 @@ def register():
         if "admin" in session and session["admin"]:
             pass
         else:
-            return "Registration is currently disabled. Email ctf@tjhsst.edu to create an account."
+            return "Registration is currently disabled. Email icectf@icec.tf to create an account."
 
     if request.method == "GET":
         return render_template("register.html")
