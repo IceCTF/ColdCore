@@ -30,6 +30,16 @@
 
                     <div><a href="#" data-activates="nav-mobile" class="button-collapse top-nav full"><i class="material-icons">menu</i></div>
                     <ul class="right hide-on-med-and-down">
+                        {% if logged_in %}
+                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                        <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
+                        {% endif %}
+                        {% if not logged_in %}
+                        {% if config.registration %}
+                        <li><a href="{{ url_for('register') }}">Register</a></li>
+                        {% endif %}
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        {% endif %}
                     </ul>
                 </div>
 
