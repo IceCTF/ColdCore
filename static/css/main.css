@@ -6,6 +6,10 @@ body {
     display: inline-block;
 }
 
+.side-nav.fixed {
+  top: 64px;
+}
+
 .collapsible-body {
   background: white;
 }
