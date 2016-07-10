@@ -13,7 +13,6 @@ body {
 
 .side-nav.fixed {
   top: 64px;
-  z-index: -1;
 }
 
 .collapsible-body {
