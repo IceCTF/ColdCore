@@ -48,13 +48,13 @@
 
                     {% if config.competition_is_running() %}
                     {% if logged_in %}
-                    <li><a href="{{ url_for('challenges') }}"><i class="material-icons">flag</i>Challenges</a></li>
+                    <li><a href="{{ url_for('challenges') }}"><i class="material-icons blue-text">flag</i>Challenges</a></li>
                     {% endif %}
                     <li><a href="{{ url_for('scoreboard') }}"><i class="material-icons">flag</i>Scoreboard</a></li>
-                    <li><a href="{{ url_for('chat') }}"><i class="material-icons">flag</i>Chat</a></li>
+                    <li><a href="{{ url_for('chat') }}"><i class="material-icons green-text">chat</i>Chat</a></li>
                     {% endif %}
                     {% if logged_in %}
-                    <li><a href="{{ url_for('team_tickets') }}"><i class="material-icons">flag</i>Tickets</a></li>
+                    <li><a href="{{ url_for('team_tickets') }}"><i class="material-icons amber-text">report_problem</i>Tickets</a></li>
                     {% endif %}
                     <hr />
                     {% if logged_in %}
