@@ -19,7 +19,7 @@ body {
   top: 69px;
 }
 
-.nav-mobile i {
+#nav-mobile i {
     position: absolute;
     margin-top: 19px;
     margin-left: -15px;
