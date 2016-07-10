@@ -26,11 +26,6 @@
         }
     }
 </script>
-<style type="text/css">
-    .collapsible-header {
-        background-color: #eee;
-    }
-</style>
 {% endblock %}
 {% block content %}
 <p>You are playing on behalf of {{ team.name }}. If this is incorrect, you should
@@ -45,23 +40,26 @@
 <span class="left"><a href="javascript:toggle()" id="toggleState">{% if solved.count() %}Expand all challenges.{% else %}Collapse all challenges.{% endif %}</a></span>
 <br />
 
-<ul class="collapsible" data-collapsible="expandable">
+<ul class="collapsible popout" data-collapsible="accordion">
     {% for challenge in challenges %}
     <li class="challenge" data-category="{{ challenge.category }}">
-        <div id="header{{ challenge.id }}" class="collapsible-header{% if challenge not in solved %} active{% endif %}">
+        <div id="header{{ challenge.id }}" class="collapsible-header">
+            <div class="status-dot green circle"></div>
             <strong style="font-size: 110%;">{{ challenge.name }}</strong>
-            <span class="left" style="margin-right: -5px;">
-                <i id="check{{ challenge.id }}" style="display:{{ "block" if challenge in solved else "none" }}" class="material-icons">check</i>
-            </span>
             <span class="right">
                 <span>{{ challenge.author }}</span>
                 <b>&middot;</b>
-                <span id="solves{{ challenge.id }}">{{ solves[challenge.id] }}</span> solve(s)
+                <span id="solves{{ challenge.id }}">{{ solves[challenge.id] }}</span> {% if solves[challenge.id] == 1 %}solve{% else %}solves{% endif %}
                 <b>&middot;</b>
                 {{ challenge.category }}
                 <b>&middot;</b>
                 {{ challenge.points }} pt
             </span>
+            {% if challenge in solved %}
+                <span class="right">
+                    <i id="check{{ challenge.id }}" class="material-icons green">done</i>
+                </span>
+            {% endif %}
         </div>
         <div class="collapsible-body">
             <p>{{ challenge.description | safe }}

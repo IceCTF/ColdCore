@@ -5,8 +5,8 @@ ctf_name = "IceCTF"
 #IRC Channel
 ctf_chat_channel = "#IceCTF"
 ctf_home_url = "https://icec.tf"
-eligibility = "In order to be eligible for prizes, all members of your team must be in high school, and you must not have more than four team members."
-tagline = "a cybersecurity competition created by TJHSST students"
+eligibility = "In order to be eligible for prizes, all members of your team must be Icelandic residents, and you must not have more than three team members."
+tagline = "The Icelandic Hacking Competition"
 
 cdn = True
 apisubmit = True
@@ -25,9 +25,9 @@ immediate_scoreboard = False
 # Useful for verifying resumes and use with resume server.
 confirm_ip = []
 
-static_prefix = "http://127.0.0.1/tjctf-static/"
+static_prefix = "http://127.0.0.1/static/"
 static_dir = "{}/static/".format(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-custom_stylesheet = "tjctf.css"
+custom_stylesheet = "css/main.css"
 
 competition_begin = datetime(1970, 1, 1, 0, 0)
 competition_end = datetime(2018, 1, 1, 0, 0)
