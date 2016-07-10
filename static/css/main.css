@@ -20,6 +20,8 @@ body {
 .status-dot {
     height: 28px;
     width: 28px;
+    position: absolute;
+    margin-top: 7px;
 }
 
 .challenge-text {
