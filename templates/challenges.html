@@ -44,7 +44,7 @@
     {% for challenge in challenges %}
     <li class="challenge" data-category="{{ challenge.category }}">
         <div id="header{{ challenge.id }}" class="collapsible-header">
-            <div class="status-dot green circle"></div>
+            <div class="status-dot green circle tooltipped" data-position="right" data-tooltip="This challenge is Online"></div>
             <div class="challenge-text truncate">{{ challenge.name }}</div>
             <span class="right">
                 <span>{{ challenge.author }}</span>
