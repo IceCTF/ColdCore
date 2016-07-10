@@ -6,6 +6,11 @@ body {
     display: inline-block;
 }
 
+.side-nav {
+    background: #f2f2f2;
+    box-shadow: none;
+}
+
 .side-nav.fixed {
   top: 64px;
 }
