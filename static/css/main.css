@@ -76,6 +76,11 @@ body {
     width: 100%;
 }
 
+.flag-form {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 @media only screen and (max-width : 992px) {
     .cont {
         padding-left: 40px;
