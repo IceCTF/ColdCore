@@ -59,7 +59,7 @@
                 </ul>
             </nav>
         </header>
-        <div class="container">
+        <div class="cont">
             {% if session.admin %}
             <div class="card red darken-3">
                 <div class="card-content white-text">
@@ -76,7 +76,7 @@
             </div>
             {% endfor %}
         </div>
-        <div class="container">
+        <div class="cont">
             {% block content %}{% endblock %}
         </div>
         {% if config.cdn %}
