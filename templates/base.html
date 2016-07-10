@@ -24,63 +24,20 @@
         {% block head %}{% endblock %}
     </head>
     <body class="competition-page">
-        <div class="navbar-fixed">
-            <nav class="blue">
-                <div class="container">
-                    <div class="nav-wrapper">
-                        <ul class="left hide-on-med-and-down">
-                            {% if config.competition_is_running() %}
-                            {% if logged_in %}
-                            <li><a href="{{ url_for('challenges') }}">Challenges</a></li>
-                            {% endif %}
-                            <li><a href="{{ url_for('scoreboard') }}">Scoreboard</a></li>
-                            <li><a href="{{ url_for('chat') }}">Chat</a></li>
-                            {% endif %}
-                            {% if logged_in %}
-                            <li><a href="{{ url_for('team_tickets') }}">Tickets</a></li>
-                            {% endif %}
-                        </ul>
-                        <a href="{{ config.ctf_home_url }}" class="center"><img class="brand-logo" src={{ url_for('static', filename='img/logo.png') }}></img></a>
-                        <ul class="right hide-on-med-and-down">
-                            {% if logged_in %}
-                            <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                            <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
-                            {% endif %}
-                            {% if not logged_in %}
-                            {% if config.registration %}
-                            <li><a href="{{ url_for('register') }}">Register</a></li>
-                            {% endif %}
-                            <li><a href="{{ url_for('login') }}">Login</a></li>
-                            {% endif %}
-                        </ul>
-                        <ul id="nav-mobile" class="side-nav">
-                            {% if config.competition_is_running() %}
-                            {% if logged_in %}
-                            <li><a href="{{ url_for('challenges') }}">Challenges</a></li>
-                            {% endif %}
-                            <li><a href="{{ url_for('scoreboard') }}">Scoreboard</a></li>
-                            <li><a href="{{ url_for('chat') }}">Chat</a></li>
-                            {% endif %}
-                            {% if logged_in %}
-                            <li><a href="{{ url_for('team_tickets') }}">Tickets</a></li>
-                            {% endif %}
-                            <hr />
-                            {% if logged_in %}
-                            <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                            <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
-                            {% endif %}
-                            {% if not logged_in %}
-                            {% if config.registration %}
-                            <li><a href="{{ url_for('register') }}">Register</a></li>
-                            {% endif %}
-                            <li><a href="{{ url_for('login') }}">Login</a></li>
-                            {% endif %}
-                        </ul>
-                        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons white-text">menu</i></a>
-                    </div>
+        <header>
+            <nav class="top-nav blue">
+                <div class="nav-wrapper">
+
+                    <div><a href="#" data-activates="nav-mobile" class="button-collapse top-nav full"><i class="material-icons">menu</i></div>
+                    <ul class="right hide-on-med-and-down">
+                    </ul>
                 </div>
+
+                <ul id="nav-mobile" class="side-nav fixed">
+                    <li class="bold"><a href="#!" class="waves-effect waves-teal"><i class="material-icons left blue-text">home</i>Home</a></li>
+                </ul>
             </nav>
-        </div>
+        </header>
         <div class="container">
             {% if session.admin %}
             <div class="card red darken-3">
