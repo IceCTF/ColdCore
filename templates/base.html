@@ -40,7 +40,7 @@
                             <li><a href="{{ url_for('team_tickets') }}">Tickets</a></li>
                             {% endif %}
                         </ul>
-                        <a href="{{ config.ctf_home_url }}" class="center"><img class="brand-logo" src={{ url_for('static', filename='logo.png') }}></img></a>
+                        <a href="{{ config.ctf_home_url }}" class="center"><img class="brand-logo" src={{ url_for('static', filename='img/logo.png') }}></img></a>
                         <ul class="right hide-on-med-and-down">
                             {% if logged_in %}
                             <li><a href="{{ url_for('logout') }}">Logout</a></li>
