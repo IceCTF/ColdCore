@@ -34,7 +34,9 @@ body {
     }
 
     .top-logo {
-        margin: 0 auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto
     }
 }
 
