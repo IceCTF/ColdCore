@@ -48,24 +48,24 @@
 
                     {% if config.competition_is_running() %}
                     {% if logged_in %}
-                    <li><a href="{{ url_for('challenges') }}">Challenges</a></li>
+                    <li><a href="{{ url_for('challenges') }}"><i class="material-icons">flag</i>Challenges</a></li>
                     {% endif %}
-                    <li><a href="{{ url_for('scoreboard') }}">Scoreboard</a></li>
-                    <li><a href="{{ url_for('chat') }}">Chat</a></li>
+                    <li><a href="{{ url_for('scoreboard') }}"><i class="material-icons">flag</i>Scoreboard</a></li>
+                    <li><a href="{{ url_for('chat') }}"><i class="material-icons">flag</i>Chat</a></li>
                     {% endif %}
                     {% if logged_in %}
-                    <li><a href="{{ url_for('team_tickets') }}">Tickets</a></li>
+                    <li><a href="{{ url_for('team_tickets') }}"><i class="material-icons">flag</i>Tickets</a></li>
                     {% endif %}
                     <hr />
                     {% if logged_in %}
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="material-icons">flag</i>Logout</a></li>
                     <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
                     {% endif %}
                     {% if not logged_in %}
                     {% if config.registration %}
-                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                    <li><a href="{{ url_for('register') }}"><i class="material-icons">flag</i>Register</a></li>
                     {% endif %}
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('login') }}"><i class="material-icons">flag</i>Login</a></li>
                     {% endif %}
                 </ul>
             </nav>
