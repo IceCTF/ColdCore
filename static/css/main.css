@@ -7,7 +7,7 @@ body {
 }
 
 .collabsible-body {
-  background: white;
+  background: white !important;
 }
 
 .light-blue {
