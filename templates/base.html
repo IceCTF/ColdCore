@@ -56,9 +56,10 @@
                     {% if logged_in %}
                     <li><a href="{{ url_for('team_tickets') }}"><i class="material-icons amber-text">report_problem</i>Tickets</a></li>
                     {% endif %}
+                    <li><a href="{{ url_for('chat') }}"><i class="material-icons green-text">build</i>Status</a></li>
                     <hr />
                     {% if logged_in %}
-                    <li><a href="{{ url_for('logout') }}"><i class="material-icons">flag</i>Logout</a></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="material-icons purple-text">flag</i>Logout</a></li>
                     <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
                     {% endif %}
                     {% if not logged_in %}
