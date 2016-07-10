@@ -11,6 +11,10 @@ body {
     box-shadow: none;
 }
 
+.side-nav a {
+    cursor: pointer;
+}
+
 .side-nav.fixed {
   top: 69px;
 }
