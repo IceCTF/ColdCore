@@ -57,6 +57,8 @@
 
                 {% if challenge in solved %}
                     <i id="check{{ challenge.id }}" class="material-icons green-text right">done</i>
+                {% else %}
+                    <div class="check-pad"></div>
                 {% endif %}
             </span>
         </div>
