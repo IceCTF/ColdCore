@@ -26,6 +26,7 @@ body {
 
 .challenge-text {
     margin-left: 32px;
+    display: inline-block;
 }
 
 .side-nav.fixed {
