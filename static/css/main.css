@@ -6,6 +6,10 @@ body {
     display: inline-block;
 }
 
+.collabsible-body {
+  background: white;
+}
+
 .light-blue {
     background-color: rgb(0, 138, 255) !important;
 }
