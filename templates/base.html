@@ -74,14 +74,20 @@
                         </a></li>
                     <div class="divider" /></div>
                     {% if logged_in %}
-                    <li><a href="{{ url_for('logout') }}"><i class="material-icons">flag</i>Logout</a></li>
+                    <li><a href="{{ url_for('logout') }}">
+                            <div class="side-icon"><i class="material-icons red-text">block</i></div>
+                            <div class="side-text">Logout</div>
+                        </a></li>
                     <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
                     {% endif %}
                     {% if not logged_in %}
                     {% if config.registration %}
                     <li><a href="{{ url_for('register') }}"><i class="material-icons">flag</i>Register</a></li>
                     {% endif %}
-                    <li><a href="{{ url_for('login') }}"><i class="material-icons">flag</i>Login</a></li>
+                    <li><a href="{{ url_for('login') }}">
+                            <div class="side-icon"><i class="material-icons green-text">lock</i></div>
+                            <div class="side-text">Login</div>
+                        </a></li>
                     {% endif %}
                 </ul>
             </nav>
