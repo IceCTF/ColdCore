@@ -60,10 +60,11 @@ body {
 
 .check-icon {
     margin-right: 0 !important;
+    margin-left: 8px;
 }
 
 .check-pad {
-    width: 40px;
+    width: 33px;
     display: inline-block;
 }
 
