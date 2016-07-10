@@ -59,7 +59,7 @@ body {
 }
 
 .check-icon {
-    margin-right: 0;
+    margin-right: 0 !important;
 }
 
 @media only screen and (max-width : 992px) {
