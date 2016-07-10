@@ -13,6 +13,8 @@ body {
 
 .side-nav a {
     cursor: pointer;
+    height: 50px;
+    line-height: 50px;
 }
 
 .side-nav.fixed {
