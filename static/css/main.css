@@ -55,7 +55,7 @@ body {
 .top-logo {
     height: 50px;
     margin-left: 18px;
-    margin-top: 8px;
+    padding-top: 8px;
 }
 
 .check-icon {
@@ -77,11 +77,6 @@ body {
         display: block;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 8px;
-    }
-
-    nav .nav-wrapper {
-        margin-top: -8px;
     }
 }
 
