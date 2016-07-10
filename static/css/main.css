@@ -22,6 +22,10 @@ body {
     width: 28px;
 }
 
+.challenge-text {
+    margin-left: 32px;
+}
+
 .side-nav.fixed {
   top: 69px;
 }
