@@ -38,6 +38,11 @@ body {
     }
 }
 
+@media only screen and (min-width: 993px)
+nav a.button-collapse {
+    display: block !important;
+}
+
 
 /* V -- DELETE MAYBE -- V */
 
