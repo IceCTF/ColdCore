@@ -17,6 +17,11 @@ body {
     line-height: 50px;
 }
 
+.status-dot {
+    height: 28px;
+    width: 28px;
+}
+
 .side-nav.fixed {
   top: 69px;
 }
