@@ -60,7 +60,11 @@ body {
 
 .check-icon {
     margin-right: 0 !important;
+}
+
+.check-pad {
     width: 42px;
+    display: inline-block;
 }
 
 @media only screen and (max-width : 992px) {
