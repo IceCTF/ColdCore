@@ -34,7 +34,7 @@ body {
     }
 
     nav a.button-collapse {
-        display: block;
+        display: block !important;
     }
 }
 
