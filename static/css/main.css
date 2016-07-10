@@ -68,6 +68,14 @@ body {
     display: inline-block;
 }
 
+.no-bot {
+    margin-bottom: 0;
+}
+
+.flag-submit {
+    width: 100%;
+}
+
 @media only screen and (max-width : 992px) {
     .cont {
         padding-left: 40px;

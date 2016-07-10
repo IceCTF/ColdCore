@@ -73,14 +73,18 @@
             <a href="{{ url_for('challenge_show_solves', challenge=challenge.id) }}">View solves</a>
             </p>
             <form action="{{ url_for('submit', challenge=challenge.id) }}" data-challengeid="{{ challenge.id }}" method="POST">
-                <div class="container">
-                    <div class="input-field">
-                        <input required id="flag{{ challenge.id }}" name="flag" type="text" />
-                        <label for="flag{{ challenge.id }}">Flag</label>
+                <div class="row no-bot">
+                    <div class="col s12 m10">
+                        <div class="input-field">
+                            <input required id="flag{{ challenge.id }}" name="flag" type="text" />
+                            <label for="flag{{ challenge.id }}">Flag</label>
+                        </div>
                     </div>
-                    <button class="btn waves-effect waves-light" type="submit">Submit</button>
+                    <div class="col s12 m2">
+                    <button class="btn waves-effect waves-light flag-submit" type="submit">Submit</button>
+                    </div>
+                    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
                 </div>
-                <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
             </form><br />
         {% endif %}
     </li>
