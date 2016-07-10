@@ -54,12 +54,11 @@
                 {{ challenge.category }}
                 <b>&middot;</b>
                 {{ challenge.points }} pt
-            </span>
-            {% if challenge in solved %}
-                <span class="right">
+
+                {% if challenge in solved %}
                     <i id="check{{ challenge.id }}" class="material-icons green-text">done</i>
-                </span>
-            {% endif %}
+                {% endif %}
+            </span>
         </div>
         <div class="collapsible-body">
             <p>{{ challenge.description | safe }}
