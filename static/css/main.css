@@ -24,6 +24,10 @@ body {
     padding-left: 280px;
 }
 
+.top-logo {
+    height: 50px;
+}
+
 @media only screen and (max-width : 992px) {
     .cont {
         padding-left: 0;
