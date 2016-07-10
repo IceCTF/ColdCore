@@ -6,8 +6,8 @@ body {
     display: inline-block;
 }
 
-.collabsible-body {
-  background: white !important;
+.collapsible-body {
+  background: white;
 }
 
 .light-blue {
