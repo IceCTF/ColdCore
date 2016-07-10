@@ -76,7 +76,12 @@ body {
     .top-logo {
         display: block;
         margin-left: auto;
-        margin-right: auto
+        margin-right: auto;
+        margin-top: 8px;
+    }
+
+    nav .nav-wrapper {
+        margin-top: -8px;
     }
 }
 
