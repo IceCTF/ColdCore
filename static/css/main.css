@@ -28,6 +28,10 @@ body {
     .cont {
         padding-left: 0;
     }
+
+    nav a.button-collapse {
+        display: block;
+    }
 }
 
 
