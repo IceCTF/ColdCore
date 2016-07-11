@@ -22,8 +22,11 @@ logging.basicConfig(level=logging.DEBUG)
 @app.before_request
 def make_info_available():
     if "user_id" in session:
-        g.user = User.get(User.id == session["user_id"])
-        g.user_restricts = g.user.restricts.split(",")
+        try:
+            g.user = User.get(User.id == session["user_id"])
+            g.user_restricts = g.user.restricts.split(",")
+        except User.DoesNotExist:
+            return render_template("login.html")
 
 @app.context_processor
 def scoreboard_variables():
@@ -31,7 +34,9 @@ def scoreboard_variables():
     if "user_id" in session:
         var["logged_in"] = True
         var["user"] = g.user
-        var["notifications"] = Notification.select().where(Notification.user == g.user)
+        # TODO should this apply to users or teams?
+        # var["notifications"] = Notification.select().where(Notification.user == g.user)
+        var["notifications"] = []
     else:
         var["logged_in"] = False
         var["notifications"] = []
@@ -137,6 +142,8 @@ def register():
 
         user = User.create(username=username, email=user_email,
                 eligible=eligible, affiliation=affiliation,
+                country=country, tshirt_size=tshirt_size,
+                gender=gender,
                 email_confirmation_key=confirmation_key)
         user.setPassword(password)
 
@@ -165,19 +172,20 @@ def confirm_email():
         flash("Incorrect confirmation key.")
     return redirect(url_for('dashboard'))
 
-@app.route('/team/', methods=["GET", "POST"])
+@app.route('/user/', methods=["GET", "POST"])
 @decorators.login_required
 def dashboard():
     if request.method == "GET":
-        team_solves = ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge).where(ChallengeSolve.team == g.team)
-        team_adjustments = ScoreAdjustment.select().where(ScoreAdjustment.team == g.team)
-        team_score = sum([i.challenge.points for i in team_solves] + [i.value for i in team_adjustments])
+        # team_solves = ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge).where(ChallengeSolve.team == g.team)
+        # team_adjustments = ScoreAdjustment.select().where(ScoreAdjustment.team == g.team)
+        # team_score = sum([i.challenge.points for i in team_solves] + [i.value for i in team_adjustments])
         first_login = False
-        if g.team.first_login:
+        if g.user.first_login:
             first_login = True
-            g.team.first_login = False
-            g.team.save()
-        return render_template("dashboard.html", team_solves=team_solves, team_adjustments=team_adjustments, team_score=team_score, first_login=first_login)
+            g.user.first_login = False
+            g.user.save()
+        # return render_template("dashboard.html", team_solves=team_solves, team_adjustments=team_adjustments, team_score=team_score, first_login=first_login)
+        return render_template("dashboard.html", first_login=first_login)
 
     elif request.method == "POST":
         if g.redis.get("ul{}".format(session["user_id"])):
