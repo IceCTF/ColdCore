@@ -96,6 +96,7 @@ body {
     margin-top: 35px;
 }
 
+/* MEDIUM */
 @media only screen and (max-width : 992px) {
     .cont {
         padding-left: 40px;
@@ -109,6 +110,7 @@ body {
     }
 }
 
+/* SMALL */
 @media only screen and (max-width : 600px) {
     .register-submit {
         margin-top: 0;
