@@ -30,14 +30,18 @@
             <label for="affiliation">Affiliation</label>
         </div>
         <div class="input-field">
-            <select class="icons">
+            <select required name="country" id="country" class="icons">
                 <option value="" disabled selected>Choose your option</option>
                 <option value="" data-icon="" class="flag-icon flag-icon-is left circle">Iceland</option>
                 <option value="" data-icon="" class="left circle">example 2</option>
                 <option value="" data-icon="" class="left circle">example 3</option>
             </select>
-            <label>Images in select</label>
+            <label>Country</label>
         </div>
+        <input name="gender" type="radio" id="male" />
+        <label for="male">Male</label>
+        <input name="gender" type="radio" id="female" />
+        <label for="female">Female</label>
         <p>{{ config.eligibility }}</p>
         <p>If you do not meet these requirements, you are still welcome to play, but you
         will not be eligible for prizes.</p>
