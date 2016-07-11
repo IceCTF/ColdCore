@@ -120,30 +120,6 @@ body {
 
 /* V -- DELETE MAYBE -- V */
 
-.light-blue {
-    background-color: rgb(0, 138, 255) !important;
-}
-
-.light-blue-text {
-    color: rgb(0, 138, 255) !important;
-}
-
-.dark-blue {
-    background-color: rgb(49, 78, 97) !important;
-}
-
-.dark-blue-text {
-    color: rgb(49, 78, 97) !important;
-}
-
-.brand-logo {
-    width: 150px;
-    height: 50px;
-    line-height: 0;
-    position: absolute;
-    top: 50%;
-    margin-top: -25px;
-}
 
 .competition-page .navbar-fixed > nav {
     background-color: rgb(0, 138, 255) !important;
