@@ -5,6 +5,18 @@ class BaseModel(Model):
     class Meta:
         database = db
 
+class User(BaseModel):
+    username = CharField()
+    email = CharField()
+    email_confirmed = BooleanField(default=False)
+    email_confirmation_key = CharField()
+    password = CharField()
+    affiliation = CharField()
+    country = CharField()
+    eligible = BooleanField()
+    tshirt_size = CharField()
+    gender = CharField()
+
 class Team(BaseModel):
     name = CharField()
     email = CharField()
