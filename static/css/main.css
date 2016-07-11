@@ -93,7 +93,7 @@ body {
 }
 
 .register-submit {
-    margin-top: 2rem;
+    margin-top: 35px;
 }
 
 @media only screen and (max-width : 992px) {
@@ -107,7 +107,9 @@ body {
         margin-right: auto;
         margin-top: 0;
     }
+}
 
+@media only screen and (max-width : 600px) {
     .register-submit {
         margin-top: 0;
     }
