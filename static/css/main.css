@@ -88,6 +88,14 @@ body {
     font-size: 2rem;
 }
 
+.panel {
+    padding: 1rem;
+}
+
+.register-submit {
+    margin-top: 2rem;
+}
+
 @media only screen and (max-width : 992px) {
     .cont {
         padding-left: 40px;
@@ -97,6 +105,10 @@ body {
         display: block;
         margin-left: auto;
         margin-right: auto;
+        margin-top: 0;
+    }
+
+    .register-submit {
         margin-top: 0;
     }
 }
