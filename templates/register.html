@@ -38,14 +38,27 @@
             <input class="validation" maxlength="100" id="affiliation" name="affiliation" type="text" />
             <label for="affiliation">Affiliation</label>
         </div>
-        <div class="input-field">
-            <select required name="country" id="country" class="icons">
-                <option value="" disabled selected>Choose your option</option>
-                <option value="" data-icon="" class="flag-icon flag-icon-is left circle">Iceland</option>
-                <option value="" data-icon="" class="left circle">example 2</option>
-                <option value="" data-icon="" class="left circle">example 3</option>
-            </select>
-            <label>Country</label>
+        <div class="row no-bot">
+            <div class="input-field col s6">
+                <select required name="country" id="country" class="icons">
+                    <option value="" disabled selected>Choose your option</option>
+                    <option value="" data-icon="" class="flag-icon flag-icon-is left circle">Iceland</option>
+                    <option value="" data-icon="" class="left circle">example 2</option>
+                    <option value="" data-icon="" class="left circle">example 3</option>
+                </select>
+                <label>Country</label>
+            </div>
+            <div class="input-field col s6">
+                <select required name="tshirt_size" id="tshirt_size">
+                    <option value="" disabled selected>Choose your option</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                </select>
+                <label>Shirt Size</label>
+            </div>
         </div>
         <div class="row">
             <input name="gender" type="radio" id="male" />
