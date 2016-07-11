@@ -108,6 +108,10 @@ body {
   margin-top: 35px;
 }
 
+.login-panel {
+  margin: 30px;
+}
+
 /* MEDIUM */
 @media only screen and (max-width : 992px) {
   .cont {

@@ -1,4 +1,5 @@
 from peewee import *
+import bcrypt
 db = SqliteDatabase("dev.db")
 
 class BaseModel(Model):
@@ -16,6 +17,13 @@ class User(BaseModel):
     eligible = BooleanField()
     tshirt_size = CharField()
     gender = CharField()
+
+    def setPassword(self, pw):
+        self.password = bcrypt.hashpw(pw, bcrypt.gensalt())
+        return
+
+    def checkPassword(self, pw):
+        return bcrypt.checkpw(pw, self.password)
 
 class Team(BaseModel):
     name = CharField()

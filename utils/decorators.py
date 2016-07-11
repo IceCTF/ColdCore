@@ -5,10 +5,10 @@ from functools import wraps
 def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if "team_id" in session and session["team_id"]:
+        if "user_id" in session and session["user_id"]:
             return f(*args, **kwargs)
         else:
-            flash("You need to be logged in to access that page.")
+            flash("You need to be logged in")
             return redirect(url_for('login'))
     return decorated
 
@@ -16,9 +16,9 @@ def must_be_allowed_to(thing):
     def _must_be_allowed_to(f):
         @wraps(f)
         def decorated(*args, **kwargs):
-            if getattr(g, 'team_restricts', None) is None:
+            if getattr(g, 'user_restricts', None) is None:
                 return redirect(url_for('login'))
-            if g.team_restricts and thing in g.team_restricts:
+            if g.user_restricts and thing in g.user_restricts:
                 return "You are restricted from performing the {} action. Contact an organizer.".format(thing)
 
             return f(*args, **kwargs)
@@ -28,9 +28,9 @@ def must_be_allowed_to(thing):
 def confirmed_email_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if "team_id" in session and session["team_id"]:
-            if not g.team.email_confirmed:
-                flash("Please confirm your email in order to access that page.")
+        if "user_id" in session and session["user_id"]:
+            if not g.user.email_confirmed:
+                flash("Please confirm your email")
                 return redirect(url_for('dashboard'))
             else:
                 return f(*args, **kwargs)
@@ -43,7 +43,7 @@ def competition_running_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if not config.competition_is_running():
-            flash("The competition must be running in order for you to access that page.")
+            flash("The competition hasn't started")
             return redirect(url_for('scoreboard'))
         return f(*args, **kwargs)
     return decorated
