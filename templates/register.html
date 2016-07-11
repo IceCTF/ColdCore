@@ -48,14 +48,21 @@
                 </select>
                 <label>Country</label>
             </div>
-            <input name="gender" type="radio" id="male" />
-            <label for="male">Male</label>
-            <input name="gender" type="radio" id="female" />
-            <label for="female">Female</label>
-            <br /><br />
-            <div class="g-recaptcha" data-sitekey="{{ config.secret.recaptcha_key }}"></div>
+            <div class="row">
+                <input name="gender" type="radio" id="male" />
+                <label for="male">Male</label>
+                <input name="gender" type="radio" id="female" />
+                <label for="female">Female</label>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                <div class="g-recaptcha" data-sitekey="{{ config.secret.recaptcha_key }}"></div>
+                </div>
+                <div class="col s12 m6">
+                <button class="btn waves-effect waves-light right" type="submit">Create team</button>
+                </div>
+            </div>
             <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
-            <button class="btn waves-effect waves-light" type="submit">Create team</button>
     </div>
         </form>
 </div>
