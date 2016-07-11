@@ -4,51 +4,59 @@
 <script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}
 {% block content %}
-<h2>Register</h2>
-<div class="panel z-depth-2">
-    <form method="POST">
-        <div class="input-field">
-            <input class="validate" required maxlength="50" id="username" name="username" type="text" />
-            <label for="team-name">Username</label>
-        </div>
-        <div class="input-field">
-            <input class="validate" required id="email" name="email" type="email" />
-            <label for="email">Email</label>
-        </div>
-        <div class="row no-bot">
-            <div class="input-field col s6">
-                <input class="validate" required id="password" name="password" type="password" />
-                <label for="password">Password</label>
-            </div>
-            <div class="input-field col s6">
-                <input class="validate" required id="confirm_password" name="confirm_password" type="password" />
-                <label for="confirm_password">Confirm Password</label>
-            </div>
-        </div>
-        <div class="input-field">
-            <input class="validation" maxlength="100" id="affiliation" name="affiliation" type="text" />
-            <label for="affiliation">Affiliation</label>
-        </div>
-        <div class="input-field">
-            <select required name="country" id="country" class="icons">
-                <option value="" disabled selected>Choose your option</option>
-                <option value="" data-icon="" class="flag-icon flag-icon-is left circle">Iceland</option>
-                <option value="" data-icon="" class="left circle">example 2</option>
-                <option value="" data-icon="" class="left circle">example 3</option>
-            </select>
-            <label>Country</label>
-        </div>
-        <input name="gender" type="radio" id="male" />
-        <label for="male">Male</label>
-        <input name="gender" type="radio" id="female" />
-        <label for="female">Female</label>
+
+<div class="row">
+    <div class="panel blue lighten-2 white-text z-depth-2">
         <p>{{ config.eligibility }}</p>
         <p>If you do not meet these requirements, you are still welcome to play, but you
         will not be eligible for prizes.</p>
-        <br /><br />
-        <div class="g-recaptcha" data-sitekey="{{ config.secret.recaptcha_key }}"></div>
-        <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
-        <button class="btn waves-effect waves-light" type="submit">Create team</button>
-    </form>
+    </div>
+</div>
+
+<div class="panel z-depth-2">
+    <div class="container">
+        <div class="form-title blue-text">Register</div>
+        <form method="POST">
+            <div class="input-field">
+                <input class="validate" required maxlength="50" id="username" name="username" type="text" />
+                <label for="team-name">Username</label>
+            </div>
+            <div class="input-field">
+                <input class="validate" required id="email" name="email" type="email" />
+                <label for="email">Email</label>
+            </div>
+            <div class="row no-bot">
+                <div class="input-field col s6">
+                    <input class="validate" required id="password" name="password" type="password" />
+                    <label for="password">Password</label>
+                </div>
+                <div class="input-field col s6">
+                    <input class="validate" required id="confirm_password" name="confirm_password" type="password" />
+                    <label for="confirm_password">Confirm Password</label>
+                </div>
+            </div>
+            <div class="input-field">
+                <input class="validation" maxlength="100" id="affiliation" name="affiliation" type="text" />
+                <label for="affiliation">Affiliation</label>
+            </div>
+            <div class="input-field">
+                <select required name="country" id="country" class="icons">
+                    <option value="" disabled selected>Choose your option</option>
+                    <option value="" data-icon="" class="flag-icon flag-icon-is left circle">Iceland</option>
+                    <option value="" data-icon="" class="left circle">example 2</option>
+                    <option value="" data-icon="" class="left circle">example 3</option>
+                </select>
+                <label>Country</label>
+            </div>
+            <input name="gender" type="radio" id="male" />
+            <label for="male">Male</label>
+            <input name="gender" type="radio" id="female" />
+            <label for="female">Female</label>
+            <br /><br />
+            <div class="g-recaptcha" data-sitekey="{{ config.secret.recaptcha_key }}"></div>
+            <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+            <button class="btn waves-effect waves-light" type="submit">Create team</button>
+    </div>
+        </form>
 </div>
 {% endblock %}

@@ -82,6 +82,12 @@ body {
     padding-right: 14px;
 }
 
+.form-title
+{
+    font-weight: 300;
+    font-size: 2rem;
+}
+
 @media only screen and (max-width : 992px) {
     .cont {
         padding-left: 40px;
