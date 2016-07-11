@@ -6,7 +6,7 @@
 {% block content %}
 
 <div class="row">
-    <div class="panel light-blue lighten-2 white-text z-depth-2">
+    <div class="panel light-blue lighten-1 white-text z-depth-2">
         <p>{{ config.eligibility }} If you do not meet these requirements, you are still welcome to play, but you will not be eligible for prizes.</p>
     </div>
 </div>
@@ -69,7 +69,7 @@
                 <div class="g-recaptcha" data-sitekey="{{ config.secret.recaptcha_key }}"></div>
             </div>
             <div class="col s12 m6">
-                <button class="btn waves-effect waves-light right register-submit" type="submit">Create team</button>
+                <button class="btn waves-effect waves-light right register-submit" type="submit">Submit</button>
             </div>
         </div>
         <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
