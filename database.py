@@ -26,7 +26,7 @@ class Team(BaseModel):
 
 class User(BaseModel):
     username = CharField(unique=True, index=True)
-    email = CharField(unique=True, index=True)
+    email = CharField(index=True)
     email_confirmed = BooleanField(default=False)
     email_confirmation_key = CharField()
     password = CharField(null = True)
@@ -37,6 +37,8 @@ class User(BaseModel):
     first_login = BooleanField(default=True)
     restricts = TextField(default="")
     team = ForeignKeyField(Team, related_name="members")
+    banned = BooleanField(default=False)
+    password_reset_token = CharField(null = True)
 
     def setPassword(self, pw):
         self.password = bcrypt.hashpw(pw.encode("utf-8"), bcrypt.gensalt())
