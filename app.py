@@ -170,6 +170,10 @@ def register():
             flash("Invalid Background")
             return render_template("register.html")
 
+        if (not gender == "") and (not gender in ["M", "F"]):
+            flash("Invalid gender")
+            return render_template("register.html")
+
         confirmation_key = misc.generate_confirmation_key()
 
         team=None
@@ -249,8 +253,12 @@ def user_dashboard():
         background = request.form["background"].strip()
         country = request.form["country"].strip()
 
-        tshirt_size = request.form["tshirt_size"].strip()
-        gender = request.form["gender"].strip()
+        tshirt_size = ""
+        gender = ""
+        if "tshirt_size" in request.form.keys():
+            tshirt_size = request.form["tshirt_size"].strip()
+        if "gender" in request.form.keys():
+            gender = request.form["gender"].strip()
 
         if len(username) > 50 or not username:
             flash("You must have a username!")
@@ -271,7 +279,7 @@ def user_dashboard():
             flash("You're lying")
             return redirect(url_for('user_dashboard'))
 
-        if not tshirt_size in select.TShirts:
+        if (not tshirt_size == "") and (not tshirt_size in select.TShirts):
             flash("Invalid T-shirt size")
             return redirect(url_for('user_dashboard'))
 
@@ -281,6 +289,10 @@ def user_dashboard():
 
         if not country in select.CountryKeys:
             flash("Invalid Background")
+            return redirect(url_for('user_dashboard'))
+
+        if (not gender == "") and (not gender in ["M", "F"]):
+            flash("Invalid gender")
             return redirect(url_for('user_dashboard'))
 
         email_changed = (user_email != g.user.email)

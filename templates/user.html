@@ -135,4 +135,19 @@
 {% if first_login %}
 <script>$("#firstlogin").openModal();</script>
 {% endif %}
+<script>
+$(function(){
+  $("#country").change(function(e) {
+    if($("#country").val() == "ISL"){
+      $("#prize-info").show("slow");
+      $("#tshirt_size").prop('required', true);
+      $("#male").prop('required', true);
+    } else {
+      $("#prize-info").hide("slow");
+      $("#tshirt_size").prop('required', false);
+      $("#male").prop('required', false);
+    }
+  });
+});
+</script>
 {% endblock %}
