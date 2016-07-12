@@ -99,6 +99,22 @@ body {
   padding-right: 14px;
 }
 
+.page-title
+{
+  font-weight: 300;
+  font-size: 3.2rem;
+  display: inline-block;
+  margin-left: -3px;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.page-title-tag
+{
+  font-size: 3.2rem;
+  display: inline-block;
+}
+
 .form-title
 {
   font-weight: 300;
@@ -129,6 +145,15 @@ body {
 
 .login-panel {
   margin: 30px;
+}
+
+.card-header {
+  color: white;
+  padding: 1rem;
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 300;
 }
 
 /* MEDIUM */

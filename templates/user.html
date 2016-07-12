@@ -30,7 +30,11 @@
 </style>
 {% endblock %}
 {% block content %}
-<h2>{{ user.username }}</h2>
+<div class="page-title-wrapper">
+    <div class="page-title-tag teal teal-text">_</div>
+    <div class="page-title white">{{ user.username }}</div>
+</div>
+
 {% if not user.email_confirmed %}
   <div class="row">
       <div class="col s12">
@@ -52,74 +56,74 @@
       </div>
   </div>
 {% endif %}
-<section>
-  <h4>Edit information</h4>
-  <form method="POST">
-      <div class="row no-bot">
-        <div class="input-field col s12">
-            <input class="validate" required maxlength="50" id="username" name="username" type="text" value="{{ user.username }}" />
-            <label for="team-name">Username</label>
-        </div>
-      </div>
-      <div class="row no-bot">
-        <div class="input-field col s12">
-            <input class="validate" required id="email" name="email" type="email" value="{{ user.email }}" />
-            <label for="email">Email</label>
-        </div>
-      </div>
-      <div class="row no-bot">
-          <div class="input-field col s6">
-              <input class="validate" id="password" name="password" type="password" />
-              <label for="password">Password</label>
-          </div>
-          <div class="input-field col s6">
-              <input class="validate" id="confirm_password" name="confirm_password" type="password" />
-              <label for="confirm_password">Confirm Password</label>
-          </div>
-      </div>
-      <div class="row no-bot">
-        <div class="input-field col s6">
-            <select required id="background" name="background">
-              {{select.genoption(select.Backgrounds, selected=user.background)|safe}}
-            </select>
-            <label for="background">Background</label>
-        </div>
-        <div class="input-field col s6">
-            <select required name="country" id="country">
-                {{select.genoption(select.Countries, selected=user.country)|safe}}
-            </select>
-            <label>Country</label>
-        </div>
-      </div>
-      <div class="row no-bot">
-          <div class="input-field col s6">
-              <select required name="tshirt_size" id="tshirt_size">
-                  {{select.genoption(select.TShirts, selected=user.tshirt_size)|safe}}
-              </select>
-              <label>Shirt Size</label>
-          </div>
-          <div class="input-field col s6">
-            {% if user.gender == 'M' %}
-              <input name="gender" type="radio" id="male" value="M" checked="checked" />
-              <label for="male">Male</label>
-              <input name="gender" type="radio" id="female" value="F" />
-              <label for="female" style="margin-left: 1rem;">Female</label>
-            {% elif user.gender == 'F' %}
-              <input name="gender" type="radio" id="male" value="M" />
-              <label for="male">Male</label>
-              <input name="gender" type="radio" id="female" value="F" checked="checked" />
-              <label for="female" style="margin-left: 1rem;">Female</label>
-            {% endif %}
-          </div>
-      </div>
-      <div class="row no-bot">
-          <div class="col s12 m6">
-              <button class="btn waves-effect waves-light right register-submit" type="submit">Update information</button>
-          </div>
-      </div>
-      <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
-  </form>
-</section>
+<div class="card">
+    <div class="card-header purple">Edit Information</div>
+    <div class="card-content">
+        <form method="POST">
+            <div class="row no-bot">
+                <div class="input-field col s12">
+                    <input class="validate" required maxlength="50" id="username" name="username" type="text" value="{{ user.username }}" />
+                    <label for="team-name">Username</label>
+                </div>
+            </div>
+            <div class="row no-bot">
+                <div class="input-field col s12">
+                    <input class="validate" required id="email" name="email" type="email" value="{{ user.email }}" />
+                    <label for="email">Email</label>
+                </div>
+            </div>
+            <div class="row no-bot">
+                <div class="input-field col s6">
+                    <input class="validate" id="password" name="password" type="password" />
+                    <label for="password">Password</label>
+                </div>
+                <div class="input-field col s6">
+                    <input class="validate" id="confirm_password" name="confirm_password" type="password" />
+                    <label for="confirm_password">Confirm Password</label>
+                </div>
+            </div>
+            <div class="row no-bot">
+                <div class="input-field col s6">
+                    <select required id="background" name="background">
+                        {{select.genoption(select.Backgrounds, selected=user.background)|safe}}
+                    </select>
+                    <label for="background">Background</label>
+                </div>
+                <div class="input-field col s6">
+                    <select required name="country" id="country">
+                        {{select.genoption(select.Countries, selected=user.country)|safe}}
+                    </select>
+                    <label>Country</label>
+                </div>
+            </div>
+            <div class="row no-bot">
+                <div class="input-field col s6">
+                    <select required name="tshirt_size" id="tshirt_size">
+                        {{select.genoption(select.TShirts, selected=user.tshirt_size)|safe}}
+                    </select>
+                    <label>Shirt Size</label>
+                </div>
+                <div class="input-field col s6">
+                    {% if user.gender == 'M' %}
+                    <input name="gender" type="radio" id="male" value="M" checked="checked" />
+                    <label for="male">Male</label>
+                    <input name="gender" type="radio" id="female" value="F" />
+                    <label for="female" style="margin-left: 1rem;">Female</label>
+                    {% elif user.gender == 'F' %}
+                    <input name="gender" type="radio" id="male" value="M" />
+                    <label for="male">Male</label>
+                    <input name="gender" type="radio" id="female" value="F" checked="checked" />
+                    <label for="female" style="margin-left: 1rem;">Female</label>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row no-bot">
+                <button class="btn waves-effect waves-light right register-submit" type="submit">Update</button>
+            </div>
+            <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+        </form>
+    </div>
+</div>
 <div id="firstlogin" class="modal">
     <div class="modal-content">
         <h4>Welcome to {{ config.ctf_name }}!</h4>
