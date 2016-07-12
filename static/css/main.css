@@ -109,6 +109,10 @@ body {
     background: #eeeeee;
 }
 
+.team-wrapper .col {
+  padding: 0;
+}
+
 .register-submit {
   margin-top: 35px;
 }
