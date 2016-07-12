@@ -43,7 +43,7 @@ class User(BaseModel):
         return
 
     def checkPassword(self, pw):
-        return bcrypt.checkpw(pw.encode("utf-8"), self.password)
+        return bcrypt.checkpw(pw.encode("utf-8"), self.password.encode("utf-8"))
 
     def eligible(self):
         return self.country == "ISL"
