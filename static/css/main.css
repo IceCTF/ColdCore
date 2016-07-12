@@ -105,6 +105,10 @@ body {
   background: white;
 }
 
+.team-wrapper {
+    background: #eeeeee;
+}
+
 .register-submit {
   margin-top: 35px;
 }
