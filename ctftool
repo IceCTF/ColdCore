@@ -149,15 +149,15 @@ def main():
     subparser_problems = parser_problems.add_subparsers(help='Select one of the following actions')
 
     parser_problems_scan = subparser_problems.add_parser('scan', help='Scan a path for problems')
-    parser_problems_scan.add_argument("path", nargs=1, help="Directory for the path")
+    parser_problems_scan.add_argument("path", help="Directory for the path")
     parser_problems_scan.set_defaults(func=scan_challenges)
 
     parser_problems_generate = subparser_problems.add_parser('generate', help='Generate some dummy problems')
-    parser_problems_generate.add_argument("challenge_count", nargs=1, type=int, help="number of problems to generate")
+    parser_problems_generate.add_argument("challenge_count", type=int, help="number of problems to generate")
     parser_problems_generate.set_defaults(func=gen_challenges)
 
     parser_problems_add = subparser_problems.add_parser('add', help='add a problem')
-    parser_problems_add.add_argument("file", nargs=1, help="file to use")
+    parser_problems_add.add_argument("file", help="file to use")
     parser_problems_add.set_defaults(func=add_challenge)
 
     parser_problems_list = subparser_problems.add_parser('list', help='List problems in the database')
@@ -187,7 +187,7 @@ def main():
     subparser_users = parser_user.add_subparsers(help="Select one of the following actions")
 
     parser_users_generate = subparser_users.add_parser('generate', help='Generate some dummy teams')
-    parser_users_generate.add_argument("team_count", nargs=1, type=int, help="number of teams to generate")
+    parser_users_generate.add_argument("team_count", type=int, help="number of teams to generate")
     parser_users_generate.set_defaults(func=gen_team)
 
     parser_users_admin = subparser_users.add_parser('add-admin', help='Create a new administrator')

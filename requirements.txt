@@ -5,3 +5,4 @@ bcrypt
 redis
 pyyaml
 oath
+pycountry
