@@ -5,7 +5,7 @@ from database import User, Team, TeamAccess, Challenge, ChallengeSolve, Challeng
 from datetime import datetime
 from peewee import fn
 
-from utils import decorators, flag, cache, misc, captcha, email
+from utils import decorators, flag, cache, misc, captcha, email, select
 import utils.scoreboard
 
 import config
@@ -28,11 +28,12 @@ def make_info_available():
             g.team = g.user.team
             g.team_restricts = g.team.restricts.split(",")
         except User.DoesNotExist:
+            session.pop("user_id")
             return render_template("login.html")
 
 @app.context_processor
 def scoreboard_variables():
-    var = dict(config=config)
+    var = dict(config=config, select=select)
     if "user_id" in session:
         var["logged_in"] = True
         var["user"] = g.user
@@ -141,12 +142,28 @@ def register():
         except User.DoesNotExist:
             pass
 
+        if password != confirm_password:
+            flash("Password does not match confirmation")
+            return render_template("register.html")
+
         if not (user_email and "." in user_email and "@" in user_email):
             flash("You must have a valid email!")
             return render_template("register.html")
 
         if not email.is_valid_email(user_email):
             flash("You're lying")
+            return render_template("register.html")
+
+        if not tshirt_size in select.TShirts:
+            flash("Invalid T-shirt size")
+            return render_template("register.html")
+
+        if not background in select.BackgroundKeys:
+            flash("Invalid Background")
+            return render_template("register.html")
+
+        if not country in select.CountryKeys:
+            flash("Invalid Background")
             return render_template("register.html")
 
         confirmation_key = misc.generate_confirmation_key()
@@ -177,6 +194,7 @@ def register():
                 email_confirmation_key=confirmation_key,
                 team=team)
         user.setPassword(password)
+        user.save()
 
         print(confirmation_key)
 
@@ -184,7 +202,7 @@ def register():
 
         session["user_id"] = user.id
         flash("Registration finished")
-        return redirect(url_for('team_dashboard'))
+        return redirect(url_for('user_dashboard'))
 
 @app.route('/logout/')
 def logout():
@@ -220,45 +238,73 @@ def user_dashboard():
             flash("You're changing your information too fast!")
             return redirect(url_for('user_dashboard'))
 
-        team_name = request.form["team_name"].strip()
-        team_email = request.form["team_email"].strip()
-        affiliation = request.form["affiliation"].strip()
-        team_elig = "team_eligibility" in request.form
+        username = request.form["username"].strip()
+        user_email = request.form["email"].strip()
+        password = request.form["password"].strip()
+        confirm_password = request.form["confirm_password"].strip()
+        background = request.form["background"].strip()
+        country = request.form["country"].strip()
 
-        if len(team_name) > 50 or not team_name:
-            flash("You must have a team name!")
+        tshirt_size = request.form["tshirt_size"].strip()
+        gender = request.form["gender"].strip()
+
+        if len(username) > 50 or not username:
+            flash("You must have a username!")
+            return redirect(url_for('user_dashboard'))
+        if g.user.username != username:
+            try:
+                user = User.get(User.username == username)
+                flash("This username is already in use!")
+                return redirect(url_for('user_dashboard'))
+            except User.DoesNotExist:
+                pass
+
+        if not (user_email and "." in user_email and "@" in user_email):
+            flash("You must have a valid email!")
             return redirect(url_for('user_dashboard'))
 
-        if not (team_email and "." in team_email and "@" in team_email):
-            flash("You must have a valid team email!")
+        if not email.is_valid_email(user_email):
+            flash("You're lying")
             return redirect(url_for('user_dashboard'))
 
-        if not affiliation or len(affiliation) > 100:
-            affiliation = "No affiliation"
+        if not tshirt_size in select.TShirts:
+            flash("Invalid T-shirt size")
+            return redirect(url_for('user_dashboard'))
 
-        email_changed = (team_email != g.team.email)
+        if not background in select.BackgroundKeys:
+            flash("Invalid Background")
+            return redirect(url_for('user_dashboard'))
 
-        g.team.name = team_name
-        g.team.email = team_email
-        g.team.affiliation = affiliation
-        if not g.team.eligibility_locked:
-            g.team.eligible = team_elig
+        if not country in select.CountryKeys:
+            flash("Invalid Background")
+            return redirect(url_for('user_dashboard'))
+
+        email_changed = (user_email != g.user.email)
+
+        g.user.username = username
+        g.user.email = user_email
+        g.user.background = background
+        g.user.country = country
+        g.user.gender = gender
+        g.user.tshirt_size = tshirt_size
 
         g.redis.set("ul{}".format(session["user_id"]), str(datetime.now()), 120)
 
-        if email_changed:
-            if not email.is_valid_email(team_email):
-                flash("You're lying")
+        if password != "":
+            if password != confirm_password:
+                flash("Password does not match confirmation")
                 return redirect(url_for('user_dashboard'))
+            g.user.setPassword(password)
 
-            g.team.email_confirmation_key = misc.generate_confirmation_key()
-            g.team.email_confirmed = False
+        if email_changed:
+            g.user.email_confirmation_key = misc.generate_confirmation_key()
+            g.user.email_confirmed = False
 
-            email.send_confirmation_email(team_email, g.team.email_confirmation_key, g.team.key)
+            email.send_confirmation_email(user_email, g.user.email_confirmation_key)
             flash("Changes saved. Please check your email for a new confirmation key.")
         else:
             flash("Changes saved.")
-        g.team.save()
+        g.user.save()
 
 
         return redirect(url_for('user_dashboard'))
@@ -276,7 +322,7 @@ def team_dashboard():
             return redirect(url_for('team_dashboard'))
 
         team_name = request.form["team_name"].strip()
-        affiliation = request.form["affiliation"].strip()
+        affiliation = request.form["team_affiliation"].strip()
 
         if len(team_name) > 50 or not team_name:
             flash("You must have a team name!")
@@ -285,7 +331,13 @@ def team_dashboard():
         if not affiliation or len(affiliation) > 100:
             affiliation = "No affiliation"
 
-        email_changed = (team_email != g.team.email)
+        if g.team_name != team_name:
+            try:
+                team = Team.get(Team.name == team_name)
+                flash("This team name is already in use!")
+                return redirect(url_for('team_dashboard'))
+            except Team.DoesNotExist:
+                pass
 
         g.team.name = team_name
         g.team.affiliation = affiliation

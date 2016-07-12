@@ -39,20 +39,13 @@
         <div class="row no-bot">
           <div class="input-field col s6">
               <select required id="background" name="background">
-                <option val="elementary">Elementary School Student</option>
-                <option val="high">High School Student</option>
-                <option val="university" selected>University Student</option>
-                <option val="teacher">Teacher</option>
-                <option val="professional">Security Professional</option>
-                <option val="hobbyist">CTF Hobbyist(non-student)</option>
-                <option val="other">Other</option>
+                {{select.genoption(select.Backgrounds, selected="university")|safe}}
               </select>
               <label for="background">Background</label>
           </div>
           <div class="input-field col s6">
               <select required name="country" id="country">
-                  <option value="" disabled selected>Choose your option</option>
-                  <option value="Iceland">Iceland</option>
+                  {{select.genoption(select.Countries, header='<option value="" disabled selected>Select country</option>')|safe}}
               </select>
               <label>Country</label>
           </div>
@@ -60,19 +53,14 @@
         <div class="row no-bot">
             <div class="input-field col s6">
                 <select required name="tshirt_size" id="tshirt_size">
-                    <option value="" disabled selected>Choose your option</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                    <option value="XXL">XXL</option>
+                    {{select.genoption(select.TShirts, header='<option value="" disabled selected>Select country</option>')|safe}}
                 </select>
                 <label>Shirt Size</label>
             </div>
             <div class="input-field col s6">
-              <input name="gender" type="radio" id="male" />
+              <input name="gender" type="radio" id="male" value="M" />
               <label for="male">Male</label>
-              <input name="gender" type="radio" id="female" />
+              <input name="gender" type="radio" id="female" value="F" />
               <label for="female" style="margin-left: 1rem;">Female</label>
             </div>
         </div>

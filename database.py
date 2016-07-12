@@ -30,6 +30,7 @@ class User(BaseModel):
     email_confirmed = BooleanField(default=False)
     email_confirmation_key = CharField()
     password = CharField(null = True)
+    background = CharField()
     country = CharField()
     tshirt_size = CharField(null = True)
     gender = CharField(null = True)
@@ -45,7 +46,7 @@ class User(BaseModel):
         return bcrypt.checkpw(pw.encode("utf-8"), self.password)
 
     def eligible(self):
-        return self.country == "Iceland"
+        return self.country == "ISL"
 
 class TeamAccess(BaseModel):
     team = ForeignKeyField(Team, related_name='accesses')
