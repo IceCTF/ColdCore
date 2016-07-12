@@ -45,64 +45,64 @@
                     </ul>
                 </div>
 
-                <ul id="nav-mobile" class="side-nav fixed">
-
-                    {% if config.competition_is_running() %}
-                    {% if logged_in %}
-                    <li><a href="{{ url_for('challenges') }}">
-                            <div class="side-icon"><i class="material-icons blue-text">flag</i></div>
-                            <div class="side-text">Challenges</div>
-                        </a></li>
-                    {% endif %}
-                    <li><a href="{{ url_for('scoreboard') }}">
-                            <div class="side-icon"><i class="material-icons red-text">timeline</i></div>
-                            <div class="side-text">Scoreboard</div>
-                        </a></li>
-                    <li><a href="{{ url_for('chat') }}">
-                            <div class="side-icon"><i class="material-icons green-text">chat</i></div>
-                            <div class="side-text">Chat</div>
-                        </a></li>
-                    {% endif %}
-                    {% if logged_in %}
-                    <li><a href="{{ url_for('team_tickets') }}">
-                            <div class="side-icon"><i class="material-icons amber-text">report_problem</i></div>
-                            <div class="side-text">Tickets</div>
-                        </a></li>
-                    {% endif %}
-                    <li><a href="{{ url_for('chat') }}">
-                            <div class="side-icon"><i class="material-icons purple-text">build</i></div>
-                            <div class="side-text">Status</div>
-                        </a></li>
-                    <div class="divider" /></div>
-                    {% if logged_in %}
-
-                    <li><a href="{{ url_for('team_dashboard') }}">
-                            <div class="side-icon"><i class="material-icons indigo-text">track_changes</i></div>
-                            <div class="side-text">My Team</div>
-                        </a></li>
-                    <li><a href="{{ url_for('user_dashboard') }}">
-                            <div class="side-icon"><i class="material-icons teal-text">account_circle</i></div>
-                            <div class="side-text">{{ user.username }}</div>
-                        </a></li>
-                    <li><a href="{{ url_for('logout') }}">
-                            <div class="side-icon"><i class="material-icons red-text">block</i></div>
-                            <div class="side-text">Logout</div>
-                        </a></li>
-                    {% endif %}
-                    {% if not logged_in %}
-                    {% if config.registration %}
-                    <li><a href="{{ url_for('register') }}">
-                            <div class="side-icon"><i class="material-icons indigo-text">person_add</i></div>
-                            <div class="side-text">Register</div>
-                        </a></li>
-                    {% endif %}
-                    <li><a href="{{ url_for('login') }}">
-                            <div class="side-icon"><i class="material-icons amber-text">lock</i></div>
-                            <div class="side-text">Login</div>
-                        </a></li>
-                    {% endif %}
-                </ul>
             </nav>
+            <ul id="nav-mobile" class="side-nav fixed">
+
+                {% if config.competition_is_running() %}
+                {% if logged_in %}
+                <li><a href="{{ url_for('challenges') }}">
+                        <div class="side-icon"><i class="material-icons blue-text">flag</i></div>
+                        <div class="side-text">Challenges</div>
+                    </a></li>
+                {% endif %}
+                <li><a href="{{ url_for('scoreboard') }}">
+                        <div class="side-icon"><i class="material-icons red-text">timeline</i></div>
+                        <div class="side-text">Scoreboard</div>
+                    </a></li>
+                <li><a href="{{ url_for('chat') }}">
+                        <div class="side-icon"><i class="material-icons green-text">chat</i></div>
+                        <div class="side-text">Chat</div>
+                    </a></li>
+                {% endif %}
+                {% if logged_in %}
+                <li><a href="{{ url_for('team_tickets') }}">
+                        <div class="side-icon"><i class="material-icons amber-text">report_problem</i></div>
+                        <div class="side-text">Tickets</div>
+                    </a></li>
+                {% endif %}
+                <li><a href="{{ url_for('chat') }}">
+                        <div class="side-icon"><i class="material-icons purple-text">build</i></div>
+                        <div class="side-text">Status</div>
+                    </a></li>
+                <div class="divider" /></div>
+                {% if logged_in %}
+
+                <li><a href="{{ url_for('team_dashboard') }}">
+                        <div class="side-icon"><i class="material-icons indigo-text">track_changes</i></div>
+                        <div class="side-text">My Team</div>
+                    </a></li>
+                <li><a href="{{ url_for('user_dashboard') }}">
+                        <div class="side-icon"><i class="material-icons teal-text">account_circle</i></div>
+                        <div class="side-text">{{ user.username }}</div>
+                    </a></li>
+                <li><a href="{{ url_for('logout') }}">
+                        <div class="side-icon"><i class="material-icons red-text">block</i></div>
+                        <div class="side-text">Logout</div>
+                    </a></li>
+                {% endif %}
+                {% if not logged_in %}
+                {% if config.registration %}
+                <li><a href="{{ url_for('register') }}">
+                        <div class="side-icon"><i class="material-icons indigo-text">person_add</i></div>
+                        <div class="side-text">Register</div>
+                    </a></li>
+                {% endif %}
+                <li><a href="{{ url_for('login') }}">
+                        <div class="side-icon"><i class="material-icons amber-text">lock</i></div>
+                        <div class="side-text">Login</div>
+                    </a></li>
+                {% endif %}
+            </ul>
         </header>
         <div class="cont">
             {% if session.admin %}

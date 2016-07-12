@@ -28,8 +28,6 @@
 </script>
 {% endblock %}
 {% block content %}
-<p>You are playing on behalf of {{ team.name }}. If this is incorrect, you should
-<a href="{{ url_for('logout') }}">logout</a> and login with the correct team key.</p>
 
 <select onchange="filterCategories(this);">
     <option value="*">Show all</option>
