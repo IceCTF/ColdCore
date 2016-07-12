@@ -1,32 +1,44 @@
 body {
-    background: #f2f2f2;
+  background: #f2f2f2;
+  padding-top: 64px;
+}
+
+.nav-fixed{
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+.nav-fixed {
+  top: 0;
 }
 
 .status-dot {
-    display: inline-block;
+  display: inline-block;
 }
 
 .side-nav {
-    background: #f2f2f2;
-    box-shadow: none;
+  background: #f2f2f2;
+  box-shadow: none;
 }
 
 .side-nav a {
-    cursor: pointer;
-    height: 50px;
-    line-height: 50px;
+  cursor: pointer;
+  height: 50px;
+  line-height: 50px;
 }
 
 .status-dot {
-    height: 28px;
-    width: 28px;
-    position: absolute;
-    margin-top: 7px;
+  height: 28px;
+  width: 28px;
+  position: absolute;
+  margin-top: 7px;
 }
 
 .challenge-text {
-    margin-left: 50px;
-    display: inline-block;
+  margin-left: 50px;
+  display: inline-block;
 }
 
 .side-nav.fixed {
@@ -34,9 +46,9 @@ body {
 }
 
 .side-icon {
-    position: absolute;
-    margin-top: 13px;
-    margin-left: -15px;
+  position: absolute;
+  margin-top: 13px;
+  margin-left: -15px;
 }
 
 .side-text {
@@ -48,73 +60,79 @@ body {
 }
 
 .cont {
-    padding-left: 280px;
-    padding-right: 40px;
+  padding-left: 280px;
+  padding-right: 40px;
 }
 
 .top-logo {
-    height: 50px;
-    margin-left: 18px;
-    margin-top: 8px;
+  height: 50px;
+  margin-left: 18px;
+  margin-top: 8px;
 }
 
 .check-icon {
-    margin-right: 0 !important;
-    margin-left: 8px !important;
+  margin-right: 0 !important;
+  margin-left: 8px !important;
 }
 
 .check-pad {
-    width: 33px;
-    display: inline-block;
+  width: 33px;
+  display: inline-block;
 }
 
 .no-bot {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .flag-submit {
-    width: 100%;
-    margin-top: 20px;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .flag-form {
-    padding-left: 14px;
-    padding-right: 14px;
+  padding-left: 14px;
+  padding-right: 14px;
 }
 
 .form-title
 {
-    font-weight: 300;
-    font-size: 2rem;
+  font-weight: 300;
+  font-size: 2rem;
 }
 
 .panel {
-    padding: 2rem;
+  padding: 2rem;
 }
 
 .register-submit {
-    margin-top: 35px;
+  margin-top: 35px;
+}
+
+.login-panel {
+  margin: 30px;
 }
 
 /* MEDIUM */
 @media only screen and (max-width : 992px) {
-    .cont {
-        padding-left: 40px;
-    }
+  .cont {
+    padding-left: 40px;
+  }
 
-    .top-logo {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 0;
-    }
+  .top-logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    position: relative;
+    top: 7px;
+  }
 }
 
 /* SMALL */
 @media only screen and (max-width : 600px) {
-    .register-submit {
-        margin-top: 0;
-    }
+  .register-submit {
+    margin-top: 0;
+  }
 }
 
 
@@ -122,12 +140,17 @@ body {
 
 
 .competition-page .navbar-fixed > nav {
-    background-color: rgb(0, 138, 255) !important;
+  background-color: rgb(0, 138, 255) !important;
 }
 
 @media (max-width: 450px) {
-    nav ul a {
-        font-size: 0.9rem;
-        padding: 0 10px;
-    }
+  nav ul a {
+    font-size: 0.9rem;
+    padding: 0 10px;
+  }
+}
+
+@media (min-width: 768px)
+.nav-fixed{
+  border-radius: 0;
 }

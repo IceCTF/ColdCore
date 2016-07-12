@@ -1,31 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 {% block head %}
-<style>
-    body {
-        background-color: rgb(49, 78, 97)
-    }
-    nav {
-        box-shadow: none;
-    }
-</style>
 {% endblock %}
 {% block content %}
-<div class="row" style="margin-top: 30px;">
-    <div class="col s8 offset-s2">
-        <div class="card">
-            <div class="card-content center">
-                <span class="card-title black-text">Login</span>
-                <form method="POST">
-                    <div class="input-field">
-                        <input id="team-key" name="team_key" type="text" />
-                        <label for="team-key">Team Key</label>
-                        <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
-                    </div>
-                    <button class="btn waves-effect waves-light" type="submit">Login</button>
-                </form>
-            </div>
+<div class="panel login-panel z-depth-2">
+    <div class="form-title blue-text">Login</div>
+    <form method="POST">
+        <div class="input-field">
+            <input id="username" name="username" type="text" />
+            <label for="username">Username</label>
         </div>
-    </div>
+        <div class="input-field">
+            <input id="password" name="password" type="password" />
+            <label for="password">Password</label>
+            <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+        </div>
+        <button class="btn waves-effect waves-light right" type="submit">Login</button>
+    </form>
 </div>
 {% endblock %}

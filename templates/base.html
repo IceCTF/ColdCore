@@ -26,7 +26,7 @@
     </head>
     <body class="competition-page">
         <header>
-            <nav class="top-nav blue navbar-fixed">
+            <nav class="top-nav blue nav-fixed">
                 <div class="nav-wrapper">
 
                     <div><a href="#" data-activates="nav-mobile" class="button-collapse top-nav full"><i class="material-icons">menu</i></a></div>
@@ -34,7 +34,7 @@
                     <ul class="right hide-on-med-and-down">
                         {% if logged_in %}
                         <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                        <li><a href="{{ url_for('dashboard') }}">{{ team.name }}</a></li>
+                        <li><a href="{{ url_for('dashboard') }}">{{ user.username }}</a></li>
                         {% endif %}
                         {% if not logged_in %}
                         {% if config.registration %}
@@ -81,7 +81,7 @@
                         </a></li>
                     <li><a href="{{ url_for('dashboard') }}">
                             <div class="side-icon"><i class="material-icons teal-text">account_circle</i></div>
-                            <div class="side-text">{{ team.name }}</div>
+                            <div class="side-text">{{ user.username }}</div>
                         </a></li>
                     {% endif %}
                     {% if not logged_in %}
