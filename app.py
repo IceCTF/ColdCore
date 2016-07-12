@@ -121,8 +121,12 @@ def register():
         background = request.form["background"].strip()
         country = request.form["country"].strip()
 
-        tshirt_size = request.form["tshirt_size"].strip()
-        gender = request.form["gender"].strip()
+        tshirt_size = ""
+        gender = ""
+        if "tshirt_size" in request.form.keys():
+            tshirt_size = request.form["tshirt_size"].strip()
+        if "gender" in request.form.keys():
+            gender = request.form["gender"].strip()
 
         join_team = bool(int(request.form["join_team"].strip()))
         if join_team:
@@ -154,7 +158,7 @@ def register():
             flash("You're lying")
             return render_template("register.html")
 
-        if not tshirt_size in select.TShirts:
+        if (not tshirt_size == "") and (not tshirt_size in select.TShirts):
             flash("Invalid T-shirt size")
             return render_template("register.html")
 
