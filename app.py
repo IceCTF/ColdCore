@@ -109,10 +109,10 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     elif request.method == "POST":
-        # error, message = captcha.verify_captcha()
-        # if error:
-        #     flash(message)
-        #     return render_template("register.html")
+        error, message = captcha.verify_captcha()
+        if error:
+            flash(message)
+            return render_template("register.html")
 
         username = request.form["username"].strip()
         user_email = request.form["email"].strip()
@@ -196,9 +196,9 @@ def register():
         user.setPassword(password)
         user.save()
 
-        print(confirmation_key)
+        # print(confirmation_key)
 
-        # email.send_confirmation_email(user_email, confirmation_key)
+        email.send_confirmation_email(user_email, confirmation_key)
 
         session["user_id"] = user.id
         flash("Registration finished")
