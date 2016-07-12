@@ -88,7 +88,7 @@
                     <label>Country</label>
                 </div>
             </div>
-            <div class="row no-bot">
+            <div id="prize-info" class="row no-bot" {% if not user.eligible() %} style="display: none;"{% endif %}>
                 <div class="input-field col s6">
                     <select required name="tshirt_size" id="tshirt_size">
                         {{select.genoption(select.TShirts, selected=user.tshirt_size)|safe}}
