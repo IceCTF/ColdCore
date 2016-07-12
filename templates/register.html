@@ -77,6 +77,7 @@
             </div>
         </div>
         <div class="row">
+          <input id="join_team" name="join_team" type="hidden" value="0"/>
           <div class="col s12">
             <ul class="tabs">
               <li class="tab col s6"><a class="active" href="#create-team" id="create-team-btn">Create new Team</a></li>
@@ -121,11 +122,13 @@ $(function(){
     $("#create-team #team_name").prop('required', true);
     $("#create-team #team_affiliation").prop('required', true);
     $("#join-team #team_key").prop('required', false);
+    $("#join-team #join_team").attr('val', "0");
   });
   $("#join-team-btn").on('click', function(){
     $("#create-team #team_name").prop('required', false);
     $("#create-team #team_affiliation").prop('required', false);
     $("#join-team #team_key").prop('required', true);
+    $("#join-team #join_team").attr('val', "1");
   });
 });
 </script>
