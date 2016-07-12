@@ -485,13 +485,15 @@ def debug_app():
 
 @app.before_request
 def before_request():
+    g.connected = True
     db.connect()
     g.redis = redis.StrictRedis()
 
 @app.teardown_request
 def teardown_request(exc):
-    db.close()
-    g.redis.connection_pool.disconnect()
+    if getattr(g, 'connected', False):
+        db.close()
+        g.redis.connection_pool.disconnect()
 
 # CSRF things
 
