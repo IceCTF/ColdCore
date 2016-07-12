@@ -102,6 +102,7 @@ body {
 
 .panel {
   padding: 2rem;
+  background: white;
 }
 
 .register-submit {
