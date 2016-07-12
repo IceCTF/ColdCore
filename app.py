@@ -216,10 +216,10 @@ def logout():
 
 # Things that require a team
 
-@app.route('/confirm_email/', methods=["POST"])
+@app.route('/confirm_email/<confirmation_key>', methods=["GET"])
 @decorators.login_required
-def confirm_email():
-    if request.form["confirmation_key"] == g.user.email_confirmation_key:
+def confirm_email(confirmation_key):
+    if confirmation_key == g.user.email_confirmation_key:
         flash("Email confirmed!")
         g.user.email_confirmed = True
         g.user.save()

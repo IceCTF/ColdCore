@@ -9,9 +9,8 @@ def send_email(to, subject, text):
 def send_confirmation_email(team_email, confirmation_key):
     send_email(team_email, "Welcome to {}!".format(config.ctf_name),
 """Hello, and thanks for registering for {}! Before you can start solving problems,
-you must confirm your email by entering this code into the team dashboard:
-
-{}
+you must confirm your email by clicking the link below:
+http://098f6bcd46.icec.tf/confirm_email/{}
 
 Once you've done that, your account will be enabled, and you will be able to access
 the challenges. If you have any trouble, feel free to contact an organizer!

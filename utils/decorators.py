@@ -31,7 +31,7 @@ def confirmed_email_required(f):
         if "user_id" in session and session["user_id"]:
             if not g.user.email_confirmed:
                 flash("Please confirm your email")
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('user_dashboard'))
             else:
                 return f(*args, **kwargs)
         else:

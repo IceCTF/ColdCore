@@ -99,6 +99,10 @@ body {
   padding-right: 14px;
 }
 
+.page-title-wrapper {
+  margin-bottom: 2rem;
+}
+
 .page-title
 {
   font-weight: 300;
