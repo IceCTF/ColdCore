@@ -8,7 +8,7 @@ class BaseModel(Model):
 
 class Team(BaseModel):
     name = CharField(unique=True)
-    affiliation = CharField()
+    affiliation = CharField(null = True)
     restricts = TextField(default="")
     key = CharField(unique=True, index=True)
 
