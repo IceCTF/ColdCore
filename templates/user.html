@@ -88,7 +88,7 @@
                     <label>Country</label>
                 </div>
             </div>
-            <div class="row no-bot">
+            <div id="prize-info" class="row no-bot" {% if not user.eligible() %} style="display: none;"{% endif %}>
                 <div class="input-field col s6">
                     <select required name="tshirt_size" id="tshirt_size">
                         {{select.genoption(select.TShirts, selected=user.tshirt_size)|safe}}
@@ -135,4 +135,19 @@
 {% if first_login %}
 <script>$("#firstlogin").openModal();</script>
 {% endif %}
+<script>
+$(function(){
+  $("#country").change(function(e) {
+    if($("#country").val() == "ISL"){
+      $("#prize-info").show("slow");
+      $("#tshirt_size").prop('required', true);
+      $("#male").prop('required', true);
+    } else {
+      $("#prize-info").hide("slow");
+      $("#tshirt_size").prop('required', false);
+      $("#male").prop('required', false);
+    }
+  });
+});
+</script>
 {% endblock %}

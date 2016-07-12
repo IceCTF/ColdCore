@@ -118,6 +118,19 @@ $(function(){
     $("#join-team #team_key").prop('required', true);
     $("#join-team #join_team").attr('val', "1");
   });
+
+  $("#country").change(function(e) {
+    if($("#country").val() == "ISL"){
+      $("#prize-info").show("slow");
+      $("#tshirt_size").prop('required', true);
+      $("#male").prop('required', true);
+    } else {
+      $("#prize-info").hide("slow");
+      $("#tshirt_size").prop('required', false);
+      $("#male").prop('required', false);
+    }
+  });
+
 });
 </script>
 {% endblock %}

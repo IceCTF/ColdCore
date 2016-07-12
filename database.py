@@ -16,7 +16,7 @@ class Team(BaseModel):
         return ChallengeSolve.select().where(ChallengeSolve.team == self, ChallengeSolve.challenge == challenge).count()
 
     def eligible(self):
-        return all([member.eligible() for member in self.members])
+        return all([member.eligible() for member in self.members]) and self.members.count() <= 3
 
     @property
     def score(self):
