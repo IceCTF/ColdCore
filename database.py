@@ -12,7 +12,6 @@ class User(BaseModel):
     email_confirmed = BooleanField(default=False)
     email_confirmation_key = CharField()
     password = CharField(null = True)
-    affiliation = CharField()
     country = CharField()
     eligible = BooleanField()
     tshirt_size = CharField(null = True)
@@ -29,13 +28,9 @@ class User(BaseModel):
 
 class Team(BaseModel):
     name = CharField()
-    email = CharField()
     affiliation = CharField()
     eligible = BooleanField()
     eligibility_locked = BooleanField(default=False)
-    first_login = BooleanField(default=True)
-    email_confirmed = BooleanField(default=False)
-    email_confirmation_key = CharField()
     restricts = TextField(default="")
     key = CharField()
 
