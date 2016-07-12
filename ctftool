@@ -50,7 +50,7 @@ def gen_team(args):
                            background="university", country="ISL",
                            tshirt_size="XL", gender="M",
                            email_confirmation_key="autogen", email_confirmed=True,
-                           team=team)
+                           team=t)
         t.save()
         user.setPassword("password{}".format(user.id))
         user.save()
