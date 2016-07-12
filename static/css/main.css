@@ -102,6 +102,11 @@ body {
 
 .panel {
   padding: 2rem;
+  background: white;
+}
+
+.team-wrapper {
+    background: #eeeeee;
 }
 
 .register-submit {

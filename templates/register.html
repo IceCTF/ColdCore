@@ -64,32 +64,32 @@
               <label for="female" style="margin-left: 1rem;">Female</label>
             </div>
         </div>
-        <div class="row">
-          <input id="join_team" name="join_team" type="hidden" value="0"/>
-          <div class="col s12">
-            <ul class="tabs">
-              <li class="tab col s6"><a class="active" href="#create-team" id="create-team-btn">Create new Team</a></li>
-              <li class="tab col s6"><a href="#join-team" id="join-team-btn">Join existing team</a></li>
-            </ul>
-          </div>
-          <div id="create-team" class="col s12">
-            <div class="row no-bot">
-              <div class="input-field col s6">
-                  <input class="validate" required id="team_name" name="team_name" type="text" />
-                  <label for="team_name">Team Name</label>
-              </div>
-              <div class="input-field col s6">
-                  <input class="validate" required id="team_affiliation" name="team_affiliation" type="text" />
-                  <label for="team_affiliation">Affiliation (e.g school, company, etc)</label>
-              </div>
+        <div class="row team-wrapper z-depth-1">
+            <input id="join_team" name="join_team" type="hidden" value="0"/>
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s6"><a class="active" href="#create-team" id="create-team-btn">Create new Team</a></li>
+                    <li class="tab col s6"><a href="#join-team" id="join-team-btn">Join existing team</a></li>
+                </ul>
             </div>
-          </div>
-          <div id="join-team" class="col s12">
-            <div class="input-field">
-                <input class="validate" id="team_key" name="team_key" type="text" />
-                <label for="team_key">Team Key</label>
+            <div id="create-team" class="col s12">
+                <div class="row no-bot">
+                    <div class="input-field col s6">
+                        <input class="validate" required id="team_name" name="team_name" type="text" />
+                        <label for="team_name">Team Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input class="validate" required id="team_affiliation" name="team_affiliation" type="text" />
+                        <label for="team_affiliation">Affiliation (e.g school, company, etc)</label>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div id="join-team" class="col s12">
+                <div class="input-field">
+                    <input class="validate" id="team_key" name="team_key" type="text" />
+                    <label for="team_key">Team Key</label>
+                </div>
+            </div>
         </div>
         <div class="row no-bot">
             <div class="col s12 m6">
