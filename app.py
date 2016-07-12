@@ -25,6 +25,8 @@ def make_info_available():
         try:
             g.user = User.get(User.id == session["user_id"])
             g.user_restricts = g.user.restricts.split(",")
+            g.team = g.user.team
+            g.team_restricts = g.team.restricts.split(",")
         except User.DoesNotExist:
             return render_template("login.html")
 
@@ -34,6 +36,7 @@ def scoreboard_variables():
     if "user_id" in session:
         var["logged_in"] = True
         var["user"] = g.user
+        var["team"] = g.team
         # TODO should this apply to users or teams?
         # var["notifications"] = Notification.select().where(Notification.user == g.user)
         var["notifications"] = []
@@ -86,7 +89,7 @@ def login():
             if(user.checkPassword(password)):
                 session["user_id"] = user.id
                 flash("Login successful.")
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('team_dashboard'))
             else:
                 flash("Incorrect username or password", "error")
                 return render_template("login.html")
@@ -105,30 +108,42 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     elif request.method == "POST":
-        error, message = captcha.verify_captcha()
-        if error:
-            flash(message)
-            return render_template("register.html")
+        # error, message = captcha.verify_captcha()
+        # if error:
+        #     flash(message)
+        #     return render_template("register.html")
 
         username = request.form["username"].strip()
         user_email = request.form["email"].strip()
         password = request.form["password"].strip()
         confirm_password = request.form["confirm_password"].strip()
-        affiliation = request.form["affiliation"].strip()
+        background = request.form["background"].strip()
         country = request.form["country"].strip()
+
         tshirt_size = request.form["tshirt_size"].strip()
         gender = request.form["gender"].strip()
+
+        join_team = bool(int(request.form["join_team"].strip()))
+        if join_team:
+            team_key = request.form["team_key"].strip()
+        else:
+            team_name = request.form["team_name"].strip()
+            team_affiliation = request.form["team_affiliation"].strip()
 
         if len(username) > 50 or not username:
             flash("You must have a username!")
             return render_template("register.html")
 
+        try:
+            user = User.get(User.username == username)
+            flash("This username is already in use!")
+            return render_template("register.html")
+        except User.DoesNotExist:
+            pass
+
         if not (user_email and "." in user_email and "@" in user_email):
             flash("You must have a valid email!")
             return render_template("register.html")
-
-        if not affiliation or len(affiliation) > 100:
-            affiliation = "No affiliation"
 
         if not email.is_valid_email(user_email):
             flash("You're lying")
@@ -136,22 +151,40 @@ def register():
 
         confirmation_key = misc.generate_confirmation_key()
 
-        eligible = False
-        if country == "Iceland":
-            eligible = True
+        team=None
+        if join_team:
+            try:
+                team = Team.get(Team.key == team_key)
+            except Team.DoesNotExist:
+                flash("Couldn't find this team, check your team key.")
+                return rener_template("register.html")
+        else:
+            if not team_affiliation or len(team_affiliation) > 100:
+                team_affiliation = "No affiliation"
+            try:
+                team = Team.get(Team.name == team_name)
+                flash("This team name is already in use!")
+                return render_template("register.html")
+            except Team.DoesNotExist:
+                pass
+            team_key = misc.generate_team_key()
+            team = Team.create(name=team_name, affiliation=team_affiliation, key=team_key)
+
 
         user = User.create(username=username, email=user_email,
-                eligible=eligible, affiliation=affiliation,
-                country=country, tshirt_size=tshirt_size,
-                gender=gender,
-                email_confirmation_key=confirmation_key)
+                background=background, country=country,
+                tshirt_size=tshirt_size, gender=gender,
+                email_confirmation_key=confirmation_key,
+                team=team)
         user.setPassword(password)
 
-        email.send_confirmation_email(user_email, confirmation_key)
+        print(confirmation_key)
+
+        # email.send_confirmation_email(user_email, confirmation_key)
 
         session["user_id"] = user.id
         flash("Registration finished")
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('team_dashboard'))
 
 @app.route('/logout/')
 def logout():
@@ -170,27 +203,22 @@ def confirm_email():
         g.user.save()
     else:
         flash("Incorrect confirmation key.")
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('user_dashboard'))
 
 @app.route('/user/', methods=["GET", "POST"])
 @decorators.login_required
-def dashboard():
+def user_dashboard():
     if request.method == "GET":
-        # team_solves = ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge).where(ChallengeSolve.team == g.team)
-        # team_adjustments = ScoreAdjustment.select().where(ScoreAdjustment.team == g.team)
-        # team_score = sum([i.challenge.points for i in team_solves] + [i.value for i in team_adjustments])
         first_login = False
         if g.user.first_login:
             first_login = True
             g.user.first_login = False
             g.user.save()
-        # return render_template("dashboard.html", team_solves=team_solves, team_adjustments=team_adjustments, team_score=team_score, first_login=first_login)
-        return render_template("dashboard.html", first_login=first_login)
-
+        return render_template("user.html", first_login=first_login)
     elif request.method == "POST":
         if g.redis.get("ul{}".format(session["user_id"])):
             flash("You're changing your information too fast!")
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('user_dashboard'))
 
         team_name = request.form["team_name"].strip()
         team_email = request.form["team_email"].strip()
@@ -199,11 +227,11 @@ def dashboard():
 
         if len(team_name) > 50 or not team_name:
             flash("You must have a team name!")
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('user_dashboard'))
 
         if not (team_email and "." in team_email and "@" in team_email):
             flash("You must have a valid team email!")
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('user_dashboard'))
 
         if not affiliation or len(affiliation) > 100:
             affiliation = "No affiliation"
@@ -221,7 +249,7 @@ def dashboard():
         if email_changed:
             if not email.is_valid_email(team_email):
                 flash("You're lying")
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('user_dashboard'))
 
             g.team.email_confirmation_key = misc.generate_confirmation_key()
             g.team.email_confirmed = False
@@ -233,7 +261,42 @@ def dashboard():
         g.team.save()
 
 
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('user_dashboard'))
+@app.route('/team/', methods=["GET", "POST"])
+@decorators.login_required
+def team_dashboard():
+    if request.method == "GET":
+        team_solves = ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge).where(ChallengeSolve.team == g.team)
+        team_adjustments = ScoreAdjustment.select().where(ScoreAdjustment.team == g.team)
+        team_score = sum([i.challenge.points for i in team_solves] + [i.value for i in team_adjustments])
+        return render_template("team.html", team_solves=team_solves, team_adjustments=team_adjustments, team_score=team_score)
+    elif request.method == "POST":
+        if g.redis.get("ul{}".format(session["user_id"])):
+            flash("You're changing your information too fast!")
+            return redirect(url_for('team_dashboard'))
+
+        team_name = request.form["team_name"].strip()
+        affiliation = request.form["affiliation"].strip()
+
+        if len(team_name) > 50 or not team_name:
+            flash("You must have a team name!")
+            return redirect(url_for('team_dashboard'))
+
+        if not affiliation or len(affiliation) > 100:
+            affiliation = "No affiliation"
+
+        email_changed = (team_email != g.team.email)
+
+        g.team.name = team_name
+        g.team.affiliation = affiliation
+
+        g.redis.set("ul{}".format(session["user_id"]), str(datetime.now()), 120)
+
+        flash("Changes saved.")
+        g.team.save()
+
+
+        return redirect(url_for('team_dashboard'))
 
 @app.route('/teamconfirm/', methods=["POST"])
 def teamconfirm():

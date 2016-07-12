@@ -6,19 +6,36 @@ class BaseModel(Model):
     class Meta:
         database = db
 
+class Team(BaseModel):
+    name = CharField(unique=True)
+    affiliation = CharField()
+    restricts = TextField(default="")
+    key = CharField(unique=True, index=True)
+
+    def solved(self, challenge):
+        return ChallengeSolve.select().where(ChallengeSolve.team == self, ChallengeSolve.challenge == challenge).count()
+
+    def eligible(self):
+        return all([member.eligible() for member in self.members])
+
+    @property
+    def score(self):
+        challenge_points = sum([i.challenge.points for i in self.solves])
+        adjust_points = sum([i.value for i in self.adjustments])
+        return challenge_points + adjust_points
+
 class User(BaseModel):
-    username = CharField()
-    email = CharField()
+    username = CharField(unique=True, index=True)
+    email = CharField(unique=True, index=True)
     email_confirmed = BooleanField(default=False)
     email_confirmation_key = CharField()
     password = CharField(null = True)
-    affiliation = CharField()
     country = CharField()
-    eligible = BooleanField()
     tshirt_size = CharField(null = True)
     gender = CharField(null = True)
     first_login = BooleanField(default=True)
     restricts = TextField(default="")
+    team = ForeignKeyField(Team, related_name="members")
 
     def setPassword(self, pw):
         self.password = bcrypt.hashpw(pw.encode("utf-8"), bcrypt.gensalt())
@@ -27,26 +44,8 @@ class User(BaseModel):
     def checkPassword(self, pw):
         return bcrypt.checkpw(pw.encode("utf-8"), self.password)
 
-class Team(BaseModel):
-    name = CharField()
-    email = CharField()
-    affiliation = CharField()
-    eligible = BooleanField()
-    eligibility_locked = BooleanField(default=False)
-    first_login = BooleanField(default=True)
-    email_confirmed = BooleanField(default=False)
-    email_confirmation_key = CharField()
-    restricts = TextField(default="")
-    key = CharField()
-
-    def solved(self, challenge):
-        return ChallengeSolve.select().where(ChallengeSolve.team == self, ChallengeSolve.challenge == challenge).count()
-
-    @property
-    def score(self):
-        challenge_points = sum([i.challenge.points for i in self.solves])
-        adjust_points = sum([i.value for i in self.adjustments])
-        return challenge_points + adjust_points
+    def eligible(self):
+        return self.country == "Iceland"
 
 class TeamAccess(BaseModel):
     team = ForeignKeyField(Team, related_name='accesses')

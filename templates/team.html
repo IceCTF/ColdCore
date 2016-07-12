@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block head %}
+<style type="text/css">
+    section:not(first-child) {
+        margin-top: 15px;
+    }
+    section:last-child {
+        margin-bottom: 30px;
+    }
+    td:last-child, th:last-child {
+        text-align: right;
+    }
+    form {
+        margin-top: 30px;
+        margin-bottom: 25px;
+    }
+    .bigger {
+        font-size: medium;
+    }
+    h4 {
+        font-weight: 400;
+    }
+    th {
+        font-weight: normal;
+    }
+    td, h5 {
+        font-weight: 300;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<h2>{{ team.name }}</h2>
+
+<h4>Team information</h4>
+<p>Your score is currently {{ team_score }}. <a href="{{ url_for('challenges') }}">Go solve more challenges!</a></p>
+<p>Your team email is <code>{{ team.email }}</code>, and you are affiliated with
+{{ team.affiliation }}.</p>
+<p>Your team is currently marked {{ "eligible" if team.eligible else "ineligible" }}.</p>
+</section>
+<section>
+<h4>Edit information</h4>
+<form method="POST">
+    <div class="input-field">
+        <label for="team-name">Team Name</label>
+        <input required maxlength="50" id="team-name" name="team_name" type="text" value="{{ team.name }}" />
+    </div>
+    <div class="input-field">
+        <label for="affiliation">Affiliation</label>
+        <input required maxlength="100" id="affiliation" name="affiliation" type="text" value="{{ team.affiliation }}" />
+    </div>
+    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+    <br /><br />
+    <button class="btn waves-effect waves-light" type="submit">Update team</button>
+</form>
+</section>
+<section>
+<h4>Score calculation</h4>
+{% if team_solves.count() %}
+<h5>Solved problems</h5>
+<div class="row">
+    <div class="col s10 offset-s1">
+        <table>
+            <thead>
+                <tr><th>Name</th><th>Category</th><th>Time</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+                {% for solve in team_solves %}
+                <tr>
+                    <td>{{ solve.challenge.name }}</td>
+                    <td>{{ solve.challenge.category }}</td>
+                    <td><abbr class="time" title="{{ solve.time }}">{{ solve.time }}</abbr></td>
+                    <td>{{ solve.challenge.points }}</td>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<p>No problems have been solved.</p>
+{% endif %}
+{% if team_adjustments.count() %}
+<h5>Score adjustments</h5>
+<div class="row">
+    <div class="col s10 offset-s1">
+        <table>
+            <thead>
+                <tr><th>Reason</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+                {% for adj in team_adjustments %}
+                <tr>
+                    <td>{{ adj.reason }}</td>
+                    <td>{{ adj.value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<p>No score adjustments have been made.</p>
+{% endif %}
+</section>
+{% endblock %}
