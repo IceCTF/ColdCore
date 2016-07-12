@@ -148,7 +148,9 @@ body {
 }
 
 .login-panel {
-  margin: 30px;
+  margin-top: 50px;
+  margin-right: 25%;
+  margin-left: 25%;
 }
 
 .card-header {
@@ -174,12 +176,22 @@ body {
     position: relative;
     top: 7px;
   }
+
+  .login-panel {
+    margin-right: 15%;
+    margin-left: 15%;
+  }
 }
 
 /* SMALL */
 @media only screen and (max-width : 600px) {
   .register-submit {
     margin-top: 0;
+  }
+
+  .login-panel {
+    margin-right: 10%;
+    margin-left: 10%;
   }
 }
 
