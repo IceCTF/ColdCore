@@ -56,7 +56,7 @@ app.register_blueprint(admin.admin)
 
 @app.route('/')
 def root():
-    return redirect(url_for('scoreboard'))
+    return redirect(url_for('register'))
 
 @app.route('/chat/')
 def chat():

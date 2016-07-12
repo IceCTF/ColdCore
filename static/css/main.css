@@ -1,6 +1,6 @@
 body {
   background: #f2f2f2;
-  padding-top: 64px;
+  padding-top: 74px;
 }
 
 .nav-fixed{
@@ -21,6 +21,11 @@ body {
 .side-nav {
   background: #f2f2f2;
   box-shadow: none;
+}
+
+.register-info {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
 }
 
 .side-nav a {
@@ -105,12 +110,17 @@ body {
   background: white;
 }
 
-.team-wrapper {
-    background: #f9f9f9;
+.tabs .tab a {
+  color: #2196F3 !important;
 }
 
-.team-wrapper .col {
-  padding: 0;
+.tabs .indicator {
+  background: #76c2ff !important;
+}
+
+.team-wrapper {
+    background: #f9f9f9;
+    margin-top: 2rem;
 }
 
 .register-submit {

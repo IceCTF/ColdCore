@@ -6,7 +6,7 @@
 {% block content %}
 
 <div class="row">
-    <div class="panel light-blue lighten-1 white-text z-depth-2">
+    <div class="panel register-info light-blue lighten-1 white-text z-depth-2">
         <p>{{ config.eligibility }} If you do not meet these requirements, you are still welcome to play, but you will not be eligible for prizes.</p>
     </div>
 </div>
@@ -45,15 +45,15 @@
           </div>
           <div class="input-field col s6">
               <select required name="country" id="country">
-                  {{select.genoption(select.Countries, header='<option value="" disabled selected>Select country</option>')|safe}}
+                  {{select.genoption(select.Countries, header='<option value="" disabled selected>Select Country</option>')|safe}}
               </select>
               <label>Country</label>
           </div>
         </div>
-        <div class="row no-bot">
+        <div id="prize-info" class="row no-bot" style="display: none;">
             <div class="input-field col s6">
-                <select required name="tshirt_size" id="tshirt_size">
-                    {{select.genoption(select.TShirts, header='<option value="" disabled selected>Select country</option>')|safe}}
+                <select name="tshirt_size" id="tshirt_size">
+                    {{select.genoption(select.TShirts, header='<option value="" disabled selected>Select T-Shirt Size</option>')|safe}}
                 </select>
                 <label>Shirt Size</label>
             </div>
@@ -66,13 +66,13 @@
         </div>
         <div class="row team-wrapper z-depth-1">
             <input id="join_team" name="join_team" type="hidden" value="0"/>
-            <div class="col s12">
+            <div class="">
                 <ul class="tabs">
                     <li class="tab col s6"><a class="active" href="#create-team" id="create-team-btn">Create new Team</a></li>
                     <li class="tab col s6"><a href="#join-team" id="join-team-btn">Join existing team</a></li>
                 </ul>
             </div>
-            <div id="create-team" class="col s12">
+            <div id="create-team">
                 <div class="row no-bot">
                     <div class="input-field col s6">
                         <input class="validate" required id="team_name" name="team_name" type="text" />
