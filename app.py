@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for, request, g, flash, jsonify
 app = Flask(__name__)
 
-from database import User, Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, TroubleTicket, TicketComment, Notification, db
+from database import User, Team, UserAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, TroubleTicket, TicketComment, Notification, db
 from datetime import datetime
 from peewee import fn
 
@@ -88,6 +88,7 @@ def login():
         try:
             user = User.get(User.username == username)
             if(user.checkPassword(password)):
+                UserAccess.create(user=user, ip=misc.get_ip(), time=datetime.now())
                 session["user_id"] = user.id
                 flash("Login successful.")
                 return redirect(url_for('team_dashboard'))
@@ -204,6 +205,7 @@ def register():
         user.setPassword(password)
         user.save()
 
+        UserAccess.create(user=user, ip=misc.get_ip(), time=datetime.now())
         # print(confirmation_key)
 
         email.send_confirmation_email(user_email, confirmation_key)
