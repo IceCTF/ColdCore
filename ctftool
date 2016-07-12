@@ -19,7 +19,10 @@ import logging
 tables = [Team, TeamAccess, Challenge, ChallengeSolve, ChallengeFailure, NewsItem, TroubleTicket, TicketComment, Notification, ScoreAdjustment, AdminUser]
 
 def create_tables(args):
-    [i.create_table() for i in tables]
+    check = True
+    if args.fail:
+        check = False
+    [i.create_table(check) for i in tables]
     print("Tables created")
 
 def drop_tables(args):
@@ -169,8 +172,9 @@ def main():
     parser_database = subparser.add_parser("database", help="Deal with database")
     subparser_database = parser_database.add_subparsers(help="Select one of the following actions")
 
-    parser_database_drop = subparser_database.add_parser("create-tables", help="create tables")
-    parser_database_drop.set_defaults(func=create_tables)
+    parser_database_create = subparser_database.add_parser("create-tables", help="create tables")
+    parser_database_create.add_argument("-f", "--fail", help="Do not check if tables exist", action="store_true")
+    parser_database_create.set_defaults(func=create_tables)
 
     parser_database_clear = subparser_database.add_parser("drop-tables", help="drop tables")
     parser_database_clear.set_defaults(func=drop_tables)
