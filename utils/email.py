@@ -5,7 +5,6 @@ def send_email(to, subject, text):
     return requests.post("{}/messages".format(config.secret.mailgun_url), {"from": config.mail_from, "to": to, "subject": subject, "text": text}, auth=("api", config.secret.mailgun_key))
 
 
-# TODO Make a confirmation link
 def send_confirmation_email(team_email, confirmation_key):
     send_email(team_email, "Welcome to {}!".format(config.ctf_name),
 """Hello, and thanks for registering for {}! Before you can start solving problems,
@@ -20,3 +19,11 @@ If you didn't register an account, then you can disregard this email.
 
 def is_valid_email(email):
     return not email.strip().lower().endswith(config.disallowed_domain)
+
+def send_password_reset_email(team_email, password_reset_token):
+    send_email(team_email, "{} Password Reset".format(config.ctf_name),
+"""To reset your password click the link below and enter a new password.
+http://098f6bcd46.icec.tf/reset_password/{}
+
+If you didn't request this email, then you can disregard it.
+""".format(confirmation_key))

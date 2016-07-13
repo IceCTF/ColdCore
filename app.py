@@ -236,7 +236,56 @@ def confirm_email(confirmation_key):
 @app.route('/forgot_password/', methods=["GET", "POST"])
 def forgot_password():
     if request.method == "GET":
-        return redirect(url_for('login'))
+        return render_template("forgot_password.html")
+    elif request.method == "POST":
+        user_email = request.form["email"].strip()
+
+        if not (user_email and "." in user_email and "@" in user_email):
+            flash("You must have a valid email!")
+            return redirect(url_for('forgot_password'))
+
+        if not email.is_valid_email(user_email):
+            flash("You're lying")
+            return redirect(url_for('forgot_password'))
+
+        try:
+            user = User.get(User.email == user_email)
+            user.password_reset_token = misc.generate_confirmation_key()
+            user.password_reset_expired = datetime.today() + datetime.timedelta(days=1)
+            email.send_password_reset_email(user.email, user.password_reset_token)
+        except User.DoesNotExist:
+            flash("Email is not registered", "error")
+            return render_template("forgot_password.html")
+
+@app.route('/reset_password/<password_reset_token>', methods=["GET", "POST"])
+def reset_password(password_reset_token):
+    if request.method == "GET":
+        return render_template("reset_password.html")
+    elif request.method == "POST":
+        password = request.form["password"].strip()
+        confirm_password = request.form["confirm_password"].strip()
+
+        if not password == confirm_password:
+            flash("Password does not match")
+            return render_template("reset_password.html", password_reset_token=password_reset_token)
+
+        if not password_reset_token:
+            flash("Reset Token is invalid", "error")
+            return render_template("forgot_password.html")
+
+        try:
+            user = User.get(User.password_reset_token == password_reset_token)
+            if user.password_reset_expired < datetime.today():
+                flash("Token expired")
+                return redirect(url_for("forgot_password"))
+
+            user.setPassword(password)
+            user.password_reset_token = null
+            flash("Password successfully reset")
+            return redirect(url_for("login"))
+        except User.DoesNotExist:
+            flash("Reset Token is invalid", "error")
+            return render_template("forgot_password.html")
 
 @app.route('/user/', methods=["GET", "POST"])
 @decorators.login_required

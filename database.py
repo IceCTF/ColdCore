@@ -39,6 +39,7 @@ class User(BaseModel):
     team = ForeignKeyField(Team, related_name="members")
     banned = BooleanField(default=False)
     password_reset_token = CharField(null = True)
+    password_reset_expired = DateTimeField(null = True)
 
     def setPassword(self, pw):
         self.password = bcrypt.hashpw(pw.encode("utf-8"), bcrypt.gensalt())

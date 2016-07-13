@@ -7,11 +7,11 @@
     <div class="form-title blue-text">Login</div>
     <form method="POST">
         <div class="input-field">
-            <input id="username" name="username" type="text" />
+            <input required id="username" name="username" type="text" />
             <label for="username">Username</label>
         </div>
         <div class="input-field">
-            <input id="password" name="password" type="password" />
+            <input required id="password" name="password" type="password" />
             <label for="password">Password</label>
             <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
         </div>
