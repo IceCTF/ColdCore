@@ -233,6 +233,11 @@ def confirm_email(confirmation_key):
         flash("Incorrect confirmation key.")
     return redirect(url_for('user_dashboard'))
 
+@app.route('/forgot_password/', methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "GET":
+        return redirect(url_for('login'))
+
 @app.route('/user/', methods=["GET", "POST"])
 @decorators.login_required
 def user_dashboard():
