@@ -247,6 +247,7 @@ def forgot_password():
             user = User.get(User.username == username)
             user.password_reset_token = misc.generate_confirmation_key()
             user.password_reset_expired = datetime.datetime.now() + datetime.timedelta(days=1)
+            user.save()
             email.send_password_reset_email(user.email, user.password_reset_token)
             flash("Forgot password email sent! Check your email.")
             return render_template("forgot_password.html")
@@ -278,6 +279,7 @@ def reset_password(password_reset_token):
 
             user.setPassword(password)
             user.password_reset_token = None
+            user.save()
             flash("Password successfully reset")
             return redirect(url_for("login"))
         except User.DoesNotExist:
