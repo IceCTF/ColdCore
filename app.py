@@ -269,7 +269,7 @@ def reset_password(password_reset_token):
 
         if not password_reset_token:
             flash("Reset Token is invalid", "error")
-            return render_template("forgot_password.html")
+            return redirect(url_for("forgot_password"))
 
         try:
             user = User.get(User.password_reset_token == password_reset_token)
@@ -284,7 +284,7 @@ def reset_password(password_reset_token):
             return redirect(url_for("login"))
         except User.DoesNotExist:
             flash("Reset Token is invalid", "error")
-            return render_template("forgot_password.html")
+            return redirect(url_for("forgot_password"))
 
 @app.route('/user/', methods=["GET", "POST"])
 @decorators.login_required
