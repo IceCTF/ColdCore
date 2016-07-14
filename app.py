@@ -183,8 +183,11 @@ def register():
                 team = Team.get(Team.key == team_key)
             except Team.DoesNotExist:
                 flash("Couldn't find this team, check your team key.")
-                return rener_template("register.html")
+                return render_template("register.html")
         else:
+            if not team_name or len(team_name) > 100:
+                flash("Missing team name")
+                return render_template("register.html")
             if not team_affiliation or len(team_affiliation) > 100:
                 team_affiliation = "No affiliation"
             try:
