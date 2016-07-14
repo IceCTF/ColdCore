@@ -89,12 +89,16 @@
             <div class="col s10 offset-s1">
               <table>
                 <thead>
-                  <th> Username </th>
+                  <tr>
+                    <th>Username</th>
+                    <th>Eligibility Status</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {% for member in team.members %}
                   <tr>
                     <td>{{ member.username }}</td>
+                    <td>{{ member.eligible() }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
