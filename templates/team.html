@@ -83,58 +83,6 @@
 
 <div class="row">
     <div class="card">
-        <div class="card-header orange">Score Calculation</div>
-        <div class="card-content">
-            {% if team_solves.count() %}
-            <h5>Solved problems</h5>
-            <div class="row">
-                <div class="col s10 offset-s1">
-                    <table>
-                        <thead>
-                            <tr><th>Name</th><th>Category</th><th>Time</th><th>Value</th></tr>
-                        </thead>
-                        <tbody>
-                            {% for solve in team_solves %}
-                            <tr>
-                                <td>{{ solve.challenge.name }}</td>
-                                <td>{{ solve.challenge.category }}</td>
-                                <td><abbr class="time" title="{{ solve.time }}">{{ solve.time }}</abbr></td>
-                                <td>{{ solve.challenge.points }}</td>
-                                {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {% else %}
-            <p>No problems have been solved.</p>
-            {% endif %}
-            {% if team_adjustments.count() %}
-            <h5>Score adjustments</h5>
-            <div class="row">
-                <div class="col s10 offset-s1">
-                    <table>
-                        <thead>
-                            <tr><th>Reason</th><th>Value</th></tr>
-                        </thead>
-                        <tbody>
-                            {% for adj in team_adjustments %}
-                            <tr>
-                                <td>{{ adj.reason }}</td>
-                                <td>{{ adj.value }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {% else %}
-            <p>No score adjustments have been made.</p>
-            {% endif %}
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="card">
         <div class="card-header green">Members</div>
         <div class="card-content">
           <div class="row">
@@ -145,7 +93,9 @@
                 </thead>
                 <tbody>
                   {% for member in team.members %}
+                  <tr>
                     <td>{{ member.username }}</td>
+                  </tr>
                   {% endfor %}
                 </tbody>
               </table>
