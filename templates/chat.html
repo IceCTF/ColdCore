@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="center" style="margin-top: 50px;">
-    <iframe src="//webchat.freenode.net?nick={{ config.ctf_name | lower | urlencode }}|.....&channels={{ config.ctf_chat_channel | urlencode }}&prompt=1&uio=MTY9dHJ1ZSYyPXRydWUmOT10cnVlJjExPTI1NiYxMj10cnVl1c" width="647" height="400" frameBorder="0" style="border-width: 0px;" >Browser Incompatible. To access in another tab, go <a href="webchat.freenode.net?nick={{ config.ctf_name | lower | urlencode }}|.....&channels={{ config.ctf_chat_channel | urlencode }}&prompt=1&uio=MTY9dHJ1ZSYyPXRydWUmOT10cnVlJjExPTI1NiYxMj10cnVl1c" target="_blank" rel="noopener noreferrer">here</a></iframe>
+    <iframe class="chat-frame" src="http://chat.icec.tf/" frameBorder="0"></iframe>
 </div>
 </div>
 {% endblock %}
