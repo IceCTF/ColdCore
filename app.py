@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, redirect, url_for, request, g
 app = Flask(__name__)
 
 from database import User, Team, UserAccess, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, TroubleTicket, TicketComment, Notification, db
-import datetime
+from datetime import datetime, timedelta
 from peewee import fn
 
 from utils import decorators, flag, cache, misc, captcha, email, select
@@ -246,7 +246,7 @@ def forgot_password():
         try:
             user = User.get(User.username == username)
             user.password_reset_token = misc.generate_confirmation_key()
-            user.password_reset_expired = datetime.datetime.now() + datetime.timedelta(days=1)
+            user.password_reset_expired = datetime.now() + timedelta(days=1)
             user.save()
             email.send_password_reset_email(user.email, user.password_reset_token)
             flash("Forgot password email sent! Check your email.")
@@ -273,7 +273,7 @@ def reset_password(password_reset_token):
 
         try:
             user = User.get(User.password_reset_token == password_reset_token)
-            if user.password_reset_expired < datetime.datetime.now():
+            if user.password_reset_expired < datetime.now():
                 flash("Token expired")
                 return redirect(url_for("forgot_password"))
 
