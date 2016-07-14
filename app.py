@@ -185,7 +185,7 @@ def register():
                 flash("Couldn't find this team, check your team key.")
                 return render_template("register.html")
         else:
-            if not team_name or len(team_name) > 100:
+            if not team_name or len(team_name) > 50:
                 flash("Missing team name")
                 return render_template("register.html")
             if not team_affiliation or len(team_affiliation) > 100:
@@ -405,7 +405,7 @@ def team_dashboard():
         if not affiliation or len(affiliation) > 100:
             affiliation = "No affiliation"
 
-        if g.team_name != team_name:
+        if g.team.name != team_name:
             try:
                 team = Team.get(Team.name == team_name)
                 flash("This team name is already in use!")
