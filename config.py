@@ -17,7 +17,7 @@ proxied_ip_header = "X-Forwarded-For"
 flag_rl = 5
 teams_on_graph = 10
 
-mail_from = "no-reply@icec.tf"
+mail_from = "notice@icec.tf"
 
 immediate_scoreboard = False
 
