@@ -22,8 +22,8 @@ def is_valid_email(email):
 
 def send_password_reset_email(team_email, password_reset_token):
     send_email(team_email, "{} Password Reset".format(config.ctf_name),
-"""To reset your password click the link below and enter a new password.
+"""To reset your password click the link below and enter a new password. This link will expire in 24 hours.
 http://098f6bcd46.icec.tf/reset_password/{}
 
 If you didn't request this email, then you can disregard it.
-""".format(confirmation_key))
+""".format(password_reset_token))
