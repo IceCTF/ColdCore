@@ -98,7 +98,7 @@
                   {% for member in team.members %}
                   <tr>
                     <td>{{ member.username }}</td>
-                    <td>{{ member.eligible() }}</td>
+                    <td>{{ "Eligible" if member.eligible() else "Ineligibile" }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
