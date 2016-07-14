@@ -221,7 +221,7 @@ def register():
 def logout():
     session.pop("user_id")
     flash("You've successfully logged out.")
-    return redirect(url_for('root'))
+    return redirect(url_for('login'))
 
 # Things that require a team
 
