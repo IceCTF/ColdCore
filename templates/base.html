@@ -63,6 +63,10 @@
                         <div class="side-icon"><i class="material-icons green-text">chat</i></div>
                         <div class="side-text">Chat</div>
                     </a></li>
+                <li><a href="{{ url_for('chat') }}">
+                        <div class="side-icon"><i class="material-icons purple-text">build</i></div>
+                        <div class="side-text">Status</div>
+                    </a></li>
                 {% endif %}
                 {% if logged_in %}
                 <li><a href="{{ url_for('team_tickets') }}">
@@ -70,10 +74,7 @@
                         <div class="side-text">Tickets</div>
                     </a></li>
                 {% endif %}
-                <li><a href="{{ url_for('chat') }}">
-                        <div class="side-icon"><i class="material-icons purple-text">build</i></div>
-                        <div class="side-text">Status</div>
-                    </a></li>
+
                 <div class="divider" /></div>
                 {% if logged_in %}
 
