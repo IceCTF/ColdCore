@@ -34,6 +34,10 @@ custom_stylesheet = "css/main.css"
 competition_begin = datetime(1970, 1, 1, 0, 0)
 competition_end = datetime(2018, 1, 1, 0, 0)
 
+if production:
+    competition_begin = datetime(2016, 8, 12, hour=16, minute=0, second=0)
+    competition_end = datetime(2016, 8, 26, hour=16, minute=0, second=0)
+
 # Are you using a resume server?
 resumes = False
 # If yes, where's it hosted? Otherwise, just put None.
