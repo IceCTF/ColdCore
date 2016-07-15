@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
 
+production = os.getenv("PRODUCTION", None) is not None
+
 ctf_name = "IceCTF"
 #IRC Channel
 ctf_chat_channel = "#IceCTF"
@@ -49,3 +51,17 @@ from collections import namedtuple
 with open("secrets") as f:
     _secret = yaml.load(f)
     secret = namedtuple('SecretsDict', _secret.keys())(**_secret)
+
+_redis = {
+    'host': 'localhost',
+    'port': 6379,
+    'db': 0
+}
+
+if production:
+    with open("database") as f:
+        _database = yaml.load(f)
+        database = namedtuple('DatabaseDict', _database.keys())(**_database)
+    _redis['db'] = 1
+
+redis = namedtuple('RedisDict', _redis.keys())(**_redis)

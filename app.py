@@ -17,7 +17,10 @@ import socket
 app.secret_key = config.secret.key
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+if config.production:
+    logging.basicConfig(level=logging.INFO)
+else:
+    logging.basicConfig(level=logging.DEBUG)
 
 @app.before_request
 def make_info_available():
@@ -561,7 +564,7 @@ def debug_app():
 def before_request():
     g.connected = True
     db.connect()
-    g.redis = redis.StrictRedis()
+    g.redis = redis.StrictRedis(host=config.redis.host, port=config.redis.port, db=config.redis.db)
 
 @app.teardown_request
 def teardown_request(exc):
