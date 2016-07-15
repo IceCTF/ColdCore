@@ -33,6 +33,8 @@ def make_info_available():
         except User.DoesNotExist:
             session.pop("user_id")
             return render_template("login.html")
+    else:
+        g.logged_in = False
 
 @app.context_processor
 def scoreboard_variables():
@@ -59,6 +61,8 @@ app.register_blueprint(admin.admin)
 
 @app.route('/')
 def root():
+    if g.logged_in:
+        return redirect(url_for('team_dashboard'))
     return redirect(url_for('register'))
 
 @app.route('/chat/')
