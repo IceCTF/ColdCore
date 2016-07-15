@@ -30,7 +30,9 @@ def make_info_available():
             g.user_restricts = g.user.restricts.split(",")
             g.team = g.user.team
             g.team_restricts = g.team.restricts.split(",")
+            g.logged_in = True
         except User.DoesNotExist:
+            g.logged_in = False
             session.pop("user_id")
             return render_template("login.html")
     else:
