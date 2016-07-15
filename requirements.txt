@@ -6,3 +6,4 @@ redis
 pyyaml
 oath
 pycountry
+psycopg2
