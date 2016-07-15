@@ -25,12 +25,12 @@ else:
 @app.before_request
 def make_info_available():
     if "user_id" in session:
+        g.logged_in = True
         try:
             g.user = User.get(User.id == session["user_id"])
             g.user_restricts = g.user.restricts.split(",")
             g.team = g.user.team
             g.team_restricts = g.team.restricts.split(",")
-            g.logged_in = True
         except User.DoesNotExist:
             g.logged_in = False
             session.pop("user_id")
