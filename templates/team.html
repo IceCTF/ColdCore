@@ -80,6 +80,34 @@
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="card">
+        <div class="card-header green">Members</div>
+        <div class="card-content">
+          <div class="row">
+            <div class="col s10 offset-s1">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Eligibility Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for member in team.members %}
+                  <tr>
+                    <td>{{ member.username }}</td>
+                    <td>{{ "Eligible" if member.eligible() else "Ineligibile" }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="card">
         <div class="card-header orange">Score Calculation</div>

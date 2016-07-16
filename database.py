@@ -1,6 +1,11 @@
 from peewee import *
 import bcrypt
-db = SqliteDatabase("dev.db")
+import config
+if config.production:
+    db = PostgresqlDatabase(config.database.database, user=config.database.user, password=config.database.password)
+else:
+    db = SqliteDatabase("dev.db")
+
 
 class BaseModel(Model):
     class Meta:

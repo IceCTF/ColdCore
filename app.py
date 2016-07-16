@@ -17,19 +17,26 @@ import socket
 app.secret_key = config.secret.key
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+if config.production:
+    logging.basicConfig(level=logging.INFO)
+else:
+    logging.basicConfig(level=logging.DEBUG)
 
 @app.before_request
 def make_info_available():
     if "user_id" in session:
+        g.logged_in = True
         try:
             g.user = User.get(User.id == session["user_id"])
             g.user_restricts = g.user.restricts.split(",")
             g.team = g.user.team
             g.team_restricts = g.team.restricts.split(",")
         except User.DoesNotExist:
+            g.logged_in = False
             session.pop("user_id")
             return render_template("login.html")
+    else:
+        g.logged_in = False
 
 @app.context_processor
 def scoreboard_variables():
@@ -56,6 +63,8 @@ app.register_blueprint(admin.admin)
 
 @app.route('/')
 def root():
+    if g.logged_in:
+        return redirect(url_for('team_dashboard'))
     return redirect(url_for('register'))
 
 @app.route('/chat/')
@@ -183,8 +192,11 @@ def register():
                 team = Team.get(Team.key == team_key)
             except Team.DoesNotExist:
                 flash("Couldn't find this team, check your team key.")
-                return rener_template("register.html")
+                return render_template("register.html")
         else:
+            if not team_name or len(team_name) > 50:
+                flash("Missing team name")
+                return render_template("register.html")
             if not team_affiliation or len(team_affiliation) > 100:
                 team_affiliation = "No affiliation"
             try:
@@ -218,7 +230,7 @@ def register():
 def logout():
     session.pop("user_id")
     flash("You've successfully logged out.")
-    return redirect(url_for('root'))
+    return redirect(url_for('login'))
 
 # Things that require a team
 
@@ -402,7 +414,7 @@ def team_dashboard():
         if not affiliation or len(affiliation) > 100:
             affiliation = "No affiliation"
 
-        if g.team_name != team_name:
+        if g.team.name != team_name:
             try:
                 team = Team.get(Team.name == team_name)
                 flash("This team name is already in use!")
@@ -556,9 +568,9 @@ def debug_app():
 
 @app.before_request
 def before_request():
-    g.connected = True
     db.connect()
-    g.redis = redis.StrictRedis()
+    g.redis = redis.StrictRedis(host=config.redis.host, port=config.redis.port, db=config.redis.db)
+    g.connected = True
 
 @app.teardown_request
 def teardown_request(exc):
