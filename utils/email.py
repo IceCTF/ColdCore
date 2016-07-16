@@ -9,7 +9,7 @@ def send_confirmation_email(team_email, confirmation_key):
     send_email(team_email, "Welcome to {}!".format(config.ctf_name),
 """Hello, and thanks for registering for {}! Before you can start solving problems,
 you must confirm your email by clicking the link below:
-http://098f6bcd46.icec.tf/confirm_email/{}
+https://play.icec.tf/confirm_email/{}
 
 Once you've done that, your account will be enabled, and you will be able to access
 the challenges. If you have any trouble, feel free to contact an organizer!
@@ -23,7 +23,7 @@ def is_valid_email(email):
 def send_password_reset_email(team_email, password_reset_token):
     send_email(team_email, "{} Password Reset".format(config.ctf_name),
 """To reset your password click the link below and enter a new password. This link will expire in 24 hours.
-http://098f6bcd46.icec.tf/reset_password/{}
+https://play.icec.tf/reset_password/{}
 
 If you didn't request this email, then you can disregard it.
 """.format(password_reset_token))
