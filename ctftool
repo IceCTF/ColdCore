@@ -17,7 +17,7 @@ import yaml
 import argparse
 import logging
 
-tables = [User, Team, UserAccess, Challenge, ChallengeSolve, ChallengeFailure, NewsItem, TroubleTicket, TicketComment, Notification, ScoreAdjustment, AdminUser]
+tables = [Team, User, UserAccess, Challenge, ChallengeSolve, ChallengeFailure, NewsItem, TroubleTicket, TicketComment, Notification, ScoreAdjustment, AdminUser]
 
 def create_tables(args):
     check = True
