@@ -1,13 +1,14 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash
-from database import AdminUser, Team, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, TroubleTicket, TicketComment, Notification
+from data.database import AdminUser, Team, Challenge, ChallengeSolve, ScoreAdjustment, TroubleTicket, TicketComment, Notification
 import utils
 import utils.admin
-import utils.scoreboard
+from data import scoreboard
 from utils.decorators import admin_required, csrf_check
 from utils.notification import make_link
 from datetime import datetime
 from config import secret
-admin = Blueprint("admin", "admin", url_prefix="/admin")
+admin = Blueprint("admin", __name__, url_prefix="/admin")
+
 
 @admin.route("/")
 def admin_root():
@@ -15,6 +16,7 @@ def admin_root():
         return redirect(url_for(".admin_dashboard"))
     else:
         return redirect(url_for(".admin_login"))
+
 
 @admin.route("/login/", methods=["GET", "POST"])
 def admin_login():
@@ -42,16 +44,18 @@ def admin_login():
         flash("Y̸̤̗͍̘ͅo͙̠͈͎͎͙̟u̺ ̘̘̘̹̩̹h͔̟̟̗͠a̠͈v͍̻̮̗̬̬̣e̟̫̼̹̠͕ ̠̳͖͡ma͈̱͟d̙͍̀ͅe̵͕̙̯̟̟̞̳ ͉͚̙a̡̱̮̫̰̰ ̜̙̝̭͚t̜̙͚̗͇ͅͅe͉r҉r̸͎̝̞̙̦̹i͏̙b̶̜̟̭͕l̗̰̰̠̳̝̕e͎̥ ̸m̰̯̮̲̘̻͍̀is̜̲̮͍͔̘͕͟t̟͈̮a̙̤͎̠ķ̝̺͇̩e̷͍̤̠͖̣͈.̺̩̦̻.")
         return render_template("admin/login.html")
 
+
 @admin.route("/dashboard/")
 @admin_required
 def admin_dashboard():
     teams = Team.select()
     solves = ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge)
     adjustments = ScoreAdjustment.select()
-    scoredata = utils.scoreboard.get_all_scores(teams, solves, adjustments)
-    lastsolvedata = utils.scoreboard.get_last_solves(teams, solves)
-    tickets = list(TroubleTicket.select().where(TroubleTicket.active == True))
+    scoredata = scoreboard.get_all_scores(teams, solves, adjustments)
+    lastsolvedata = scoreboard.get_last_solves(teams, solves)
+    tickets = list(TroubleTicket.select().where(TroubleTicket.active==True))
     return render_template("admin/dashboard.html", teams=teams, scoredata=scoredata, lastsolvedata=lastsolvedata, tickets=tickets)
+
 
 @admin.route("/tickets/")
 @admin_required
@@ -59,12 +63,14 @@ def admin_tickets():
     tickets = list(TroubleTicket.select(TroubleTicket, Team).join(Team).order_by(TroubleTicket.id.desc()))
     return render_template("admin/tickets.html", tickets=tickets)
 
+
 @admin.route("/tickets/<int:ticket>/")
 @admin_required
 def admin_ticket_detail(ticket):
     ticket = TroubleTicket.get(TroubleTicket.id == ticket)
     comments = list(TicketComment.select().where(TicketComment.ticket == ticket).order_by(TicketComment.time))
     return render_template("admin/ticket_detail.html", ticket=ticket, comments=comments)
+
 
 @admin.route("/tickets/<int:ticket>/comment/", methods=["POST"])
 @admin_required
@@ -89,11 +95,13 @@ def admin_ticket_comment(ticket):
 
     return redirect(url_for(".admin_ticket_detail", ticket=ticket.id))
 
+
 @admin.route("/team/<int:tid>/")
 @admin_required
 def admin_show_team(tid):
     team = Team.get(Team.id == tid)
     return render_template("admin/team.html", team=team)
+
 
 @admin.route("/team/<int:tid>/<csrf>/impersonate/")
 @csrf_check
@@ -101,6 +109,7 @@ def admin_show_team(tid):
 def admin_impersonate_team(tid):
     session["team_id"] = tid
     return redirect(url_for("scoreboard"))
+
 
 @admin.route("/team/<int:tid>/<csrf>/toggle_eligibility/")
 @csrf_check
@@ -112,6 +121,7 @@ def admin_toggle_eligibility(tid):
     flash("Eligibility set to {}".format(team.eligible))
     return redirect(url_for(".admin_show_team", tid=tid))
 
+
 @admin.route("/team/<int:tid>/<csrf>/toggle_eligibility_lock/")
 @csrf_check
 @admin_required
@@ -121,6 +131,7 @@ def admin_toggle_eligibility_lock(tid):
     team.save()
     flash("Eligibility lock set to {}".format(team.eligibility_locked))
     return redirect(url_for(".admin_show_team", tid=tid))
+
 
 @admin.route("/team/<int:tid>/adjust_score/", methods=["POST"])
 @admin_required
@@ -134,6 +145,7 @@ def admin_score_adjust(tid):
     flash("Score adjusted.")
 
     return redirect(url_for(".admin_show_team", tid=tid))
+
 
 @admin.route("/logout/")
 def admin_logout():

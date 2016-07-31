@@ -53,7 +53,7 @@
                 Team
             </div>
             <div class="card-content">
-                <p>Your score is currently {{ team_score }}. <a href="{{ url_for('challenges') }}">Go solve more challenges!</a></p>
+                <p>Your score is currently {{ team_score }}. <a href="{{ url_for('challenges.index') }}">Go solve more challenges!</a></p>
                 {{ team.affiliation }}.</p>
                 <p>Your team is currently marked {{ "eligible" if team.eligible() else "ineligible" }}.</p>
             </div>

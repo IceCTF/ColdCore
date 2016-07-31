@@ -46,11 +46,11 @@ class User(BaseModel):
     password_reset_token = CharField(null = True)
     password_reset_expired = DateTimeField(null = True)
 
-    def setPassword(self, pw):
+    def set_password(self, pw):
         self.password = bcrypt.hashpw(pw.encode("utf-8"), bcrypt.gensalt())
         return
 
-    def checkPassword(self, pw):
+    def check_password(self, pw):
         return bcrypt.checkpw(pw.encode("utf-8"), self.password.encode("utf-8"))
 
     def eligible(self):
@@ -72,6 +72,7 @@ class Challenge(BaseModel):
     flag = TextField()
 
 class ChallengeSolve(BaseModel):
+    user = ForeignKeyField(User, related_name='solves')
     team = ForeignKeyField(Team, related_name='solves')
     challenge = ForeignKeyField(Challenge, related_name='solves')
     time = DateTimeField()
@@ -80,6 +81,7 @@ class ChallengeSolve(BaseModel):
         primary_key = CompositeKey('team', 'challenge')
 
 class ChallengeFailure(BaseModel):
+    user = ForeignKeyField(User, related_name='failures')
     team = ForeignKeyField(Team, related_name='failures')
     challenge = ForeignKeyField(Challenge, related_name='failures')
     attempt = CharField()

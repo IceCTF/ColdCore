@@ -1,7 +1,8 @@
-from database import Team, Challenge, ChallengeSolve, ScoreAdjustment
+from .database import Team, Challenge, ChallengeSolve, ScoreAdjustment
 from datetime import datetime, timedelta
 
 import config
+
 
 def get_all_scores(teams, solves, adjustments):
     scores = {team.id: 0 for team in teams}
@@ -13,12 +14,14 @@ def get_all_scores(teams, solves, adjustments):
 
     return scores
 
+
 def get_last_solves(teams, solves):
     last = {team.id: datetime(1970, 1, 1) for team in teams}
     for solve in solves:
         if solve.time > last[solve.team_id]:
             last[solve.team_id] = solve.time
     return last
+
 
 def calculate_scores():
     solves = ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge)
@@ -39,10 +42,11 @@ def calculate_scores():
     # eligible, teamid, teamname, affiliation, score
     return [(team_mapping[i[0]].eligible(), i[0], team_mapping[i[0]].name, team_mapping[i[0]].affiliation, i[1]) for idx, i in enumerate(sorted(scores.items(), key=lambda k: (-k[1], most_recent_solve[k[0]])))]
 
+
 def calculate_graph(scoredata):
     solves = list(ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge).order_by(ChallengeSolve.time))
     adjustments = list(ScoreAdjustment.select())
-    scoredata = [i for i in scoredata if i[0]] # Only eligible teams are on the score graph
+    scoredata = [i for i in scoredata if i[0]]  # Only eligible teams are on the score graph
     graph_data = []
     for eligible, tid, name, affiliation, score in scoredata[:config.teams_on_graph]:
         our_solves = [i for i in solves if i.team_id == tid]

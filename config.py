@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 production = os.getenv("PRODUCTION", None) is not None
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 ctf_name = "IceCTF"
 #IRC Channel
