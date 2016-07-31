@@ -105,7 +105,6 @@ def logout():
 
 @users.route('/confirm_email/<confirmation_key>', methods=["GET"])
 @decorators.login_required
-@ratelimit.ratelimit(limit=6, per=120)
 def confirm_email(confirmation_key):
     try:
         user.confirm_email(g.user, confirmation_key)
@@ -149,7 +148,7 @@ def reset_password(password_reset_token):
             return redirect(url_for(".login"))
         except exceptions.ValidationError as e:
             flash(str(e))
-            return redirect(url_for(".reset_password", password_reset_token))
+            return redirect(url_for(".reset_password", password_reset_token=password_reset_token))
 
 
 @users.route('/user/', methods=["GET", "POST"])

@@ -117,3 +117,10 @@ class AdminUser(BaseModel):
     username = CharField()
     password = CharField()
     secret = CharField()
+
+class SshAccount(BaseModel):
+    team = ForeignKeyField(Team, null=True, related_name='ssh_account')
+    username = CharField()
+    password = CharField()
+    hostname = CharField()
+    port = IntegerField()

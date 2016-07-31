@@ -5,46 +5,57 @@ production = os.getenv("PRODUCTION", None) is not None
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 ctf_name = "IceCTF"
+eligibility = "In order to be eligible for prizes, all members of your team must be Icelandic residents, and you must not have more than three team members."
+tagline = "The Icelandic Hacking Competition"
 #IRC Channel
 ctf_chat_channel = "#IceCTF"
 ctf_home_url = "https://icec.tf"
-eligibility = "In order to be eligible for prizes, all members of your team must be Icelandic residents, and you must not have more than three team members."
-tagline = "The Icelandic Hacking Competition"
 
+# Serve javascript libraries from CDN
 cdn = True
+# Allow users to submit via an api?
 apisubmit = True
+# Allow registration?
 registration = True
-
+# If running behind proxy (nginx), which header contains the real IP
 proxied_ip_header = "X-Forwarded-For"
-
-flag_rl = 5
+# How many teams to show on the scoreboard graph
 teams_on_graph = 10
 
+# Which email to send out notifications from
 mail_from = "notice@icec.tf"
 
+# Wether to render the scoreboard on request or cache
 immediate_scoreboard = False
 
-# IPs that are allowed to confirm teams by posting to /teamconfirm/
-# Useful for verifying resumes and use with resume server.
-confirm_ip = []
+# Banned email domains
+disallowed_domain = "icec.tf"
 
+# Where the static stuff is stored
 static_prefix = "http://127.0.0.1/static/"
 static_dir = "{}/static/".format(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 custom_stylesheet = "css/main.css"
 
+# Shell accounts?
+
+enable_shell = True
+
+shell_port = 22
+
+shell_user_prefixes  = ["ctf-"]
+shell_password_length = 6
+shell_free_acounts = 10
+shell_max_accounts = 99999
+
+shell_user_creation = "sudo useradd -m {username} -p {password} -g ctf -b /home_users"
+
+# when the competition begins
 competition_begin = datetime(1970, 1, 1, 0, 0)
 competition_end = datetime(2018, 1, 1, 0, 0)
 
 if production:
     competition_begin = datetime(2016, 8, 12, hour=16, minute=0, second=0)
     competition_end = datetime(2016, 8, 26, hour=16, minute=0, second=0)
-
-# Are you using a resume server?
-resumes = False
-# If yes, where's it hosted? Otherwise, just put None.
-resume_server = None
-
-disallowed_domain = "icec.tf"
 
 
 def competition_is_running():
