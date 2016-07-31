@@ -17,23 +17,23 @@
         <div class="row no-bot">
           <div class="input-field col s12">
               <input class="validate" required maxlength="50" id="username" name="username" type="text" />
-              <label for="team-name">Username</label>
+              <label class="truncate" for="team-name">Username</label>
           </div>
         </div>
         <div class="row no-bot">
           <div class="input-field col s12">
               <input class="validate" required id="email" name="email" type="email" />
-              <label for="email">Email</label>
+              <label class="truncate" for="email">Email</label>
           </div>
         </div>
         <div class="row no-bot">
             <div class="input-field col s6">
                 <input class="validate" required id="password" name="password" type="password" />
-                <label for="password">Password</label>
+                <label class="truncate" for="password">Password</label>
             </div>
             <div class="input-field col s6">
                 <input class="validate" required id="confirm_password" name="confirm_password" type="password" />
-                <label for="confirm_password">Confirm Password</label>
+                <label class="truncate" for="confirm_password">Confirm Password</label>
             </div>
         </div>
         <div class="row no-bot">
@@ -68,19 +68,19 @@
             <input id="join_team-input" name="join_team" type="hidden" value="0"/>
             <div class="">
                 <ul class="tabs">
-                    <li class="tab col s6"><a class="active" href="#create-team" id="create-team-btn">Create new Team</a></li>
-                    <li class="tab col s6"><a href="#join-team" id="join-team-btn">Join existing team</a></li>
+                    <li class="tab col s6"><a class="active truncate" href="#create-team" id="create-team-btn">Create new Team</a></li>
+                    <li class="tab col s6"><a class="truncate" href="#join-team" id="join-team-btn">Join existing team</a></li>
                 </ul>
             </div>
             <div id="create-team">
                 <div class="row no-bot">
                     <div class="input-field col s6">
                         <input class="validate" required id="team_name" name="team_name" type="text" />
-                        <label for="team_name">Team Name</label>
+                        <label class="truncate" for="team_name">Team Name</label>
                     </div>
                     <div class="input-field col s6">
                         <input class="validate" id="team_affiliation" name="team_affiliation" type="text" />
-                        <label for="team_affiliation">Affiliation (e.g school, company, etc)</label>
+                        <label class="truncate" for="team_affiliation">Affiliation (e.g school, company, etc)</label>
                     </div>
                 </div>
             </div>
