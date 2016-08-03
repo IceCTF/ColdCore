@@ -103,6 +103,7 @@ def scan_challenges(args):
             with open(os.path.join(d, "problem.yml")) as f:
                 n += 1
                 data = yaml.load(f)
+                print("Inserting problem in directory %s" % (d))
                 for i in staticpaths:
                     print("looking for |{}|".format(i))
                     data["description"] = data["description"].replace("|{}|".format(i), "{}{}".format(config.static_prefix, staticpaths[i]))
