@@ -55,7 +55,8 @@
             <div class="card-content">
                 <p>Your score is currently {{ team_score }}. <a href="{{ url_for('challenges.index') }}">Go solve more challenges!</a></p>
                 {{ team.affiliation }}.</p>
-                <p>Your team is currently marked {{ "eligible" if team.eligible() else "ineligible" }}.</p>
+                <p>Your team is {{ "eligible" if team.eligible() else "ineligible" }} for prizes.</p>
+                <a class="waves-effect waves-light modal-trigger" href="#whyModal">Why?</a>
             </div>
         </div>
     </div>
@@ -158,6 +159,19 @@
             <p>No score adjustments have been made.</p>
             {% endif %}
         </div>
+    </div>
+</div>
+
+<div id="whyModal" class="modal">
+    <div class="modal-content">
+        <h4>Why am I {{ "eligible" if team.eligible() else "ineligible" }} for prizes?</h4>
+        <p>This competition was made to promote computer security awareness in Iceland and we want to encourage Icelandic programmers to think more critically of cyber security.
+        Our sponsors share this goal and want to support the Icelandic community, so only Icelandic teams who are able show up to our final meetup are eligible for prizes. </p>
+        <h4>Can I still compete?</h4>
+        <p>Yes, you can still compete for the top ranks and play along like a normal contestant.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Got it!</a>
     </div>
 </div>
 {% endblock %}
