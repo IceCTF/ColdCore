@@ -31,7 +31,7 @@ def validate(username, email, password, background, country, tshirt_size=None, g
     if not email or "." not in email or "@" not in email:
         raise ValidationError("You must have a valid email!")
 
-    if not email.is_valid_email(email):
+    if not utils.email.is_valid_email(email):
         raise ValidationError("You're lying")
 
     if background not in utils.select.BackgroundKeys:
@@ -101,7 +101,7 @@ def reset_password(token, password):
     if len(password) < 6:
         raise ValidationError("Password is too short!")
     try:
-        user = User.get(User.password_reset_token == password_reset_token)
+        user = User.get(User.password_reset_token == token)
         if user.password_reset_expired < datetime.now():
             raise ValidationError("Token expired")
         user.set_password(password)
