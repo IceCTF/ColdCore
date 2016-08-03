@@ -70,6 +70,9 @@ def add_admin(args):
 def scan_challenges(args):
     path = args.path
     dirs = [j for j in [os.path.join(path, i) for i in os.listdir(path)] if os.path.isdir(j)]
+    # recurse to 2 levels
+    # TODO: do this better
+    dirs = [j for j in [os.path.join(k, i) for i in os.listdir(k) for k in dirs] if os.path.isdir(j)]
     print(dirs)
     n = 0
 
