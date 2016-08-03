@@ -57,7 +57,7 @@ def scoreboard_variables():
         var["logged_in"] = True
         var["user"] = g.user
         var["team"] = g.team
-        var["notifications"] = data.notification.get_notifications()
+        var["notifications"] = data.notification.get_notifications(team=g.team)
     else:
         var["logged_in"] = False
         var["notifications"] = []
