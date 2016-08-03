@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, g, request
+from flask import Blueprint, g, request, render_template, redirect, url_for, flash
 
 from utils import decorators, ratelimit
 
@@ -9,11 +9,13 @@ import exceptions
 tickets = Blueprint("tickets", __name__, template_folder="../templates/tickets")
 # Trouble tickets
 
+
 @tickets.route('/tickets/')
 @decorators.must_be_allowed_to("view tickets")
 @decorators.login_required
 def index():
     return render_template("tickets.html", tickets=list(ticket.get_tickets(g.team)))
+
 
 @tickets.route('/tickets/new/', methods=["GET", "POST"])
 @decorators.must_be_allowed_to("submit tickets")
@@ -26,9 +28,10 @@ def open_ticket():
     elif request.method == "POST":
         summary = request.form["summary"]
         description = request.form["description"]
-        ticket = ticket.create_ticket(g.team, summary, description)
-        flash("Ticket #{} opened.".format(ticket.id))
-        return redirect(url_for(".detail", ticket=ticket.id))
+        t = ticket.create_ticket(g.team, summary, description)
+        flash("Ticket #{} opened.".format(t.id))
+        return redirect(url_for(".detail", ticket=t.id))
+
 
 @tickets.route('/tickets/<int:ticket>/')
 @decorators.must_be_allowed_to("view tickets")
@@ -42,6 +45,7 @@ def detail(ticket):
 
     comments = ticket.get_comments(ticket)
     return render_template("ticket_detail.html", ticket=ticket, comments=comments)
+
 
 @tickets.route('/tickets/<int:ticket>/comment/', methods=["POST"])
 @decorators.must_be_allowed_to("comment on tickets")
