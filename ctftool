@@ -144,6 +144,11 @@ def del_challenge(args):
     ChallengeSolve.delete().where(ChallengeSolve.challenge == c).execute()
     c.delete_instance()
 
+def clear_challenges(args):
+    ChallengeFailure.delete().execute()
+    ChallengeSolve.delete().execute()
+    Challenge.delete().execute()
+
 
 def recache_solves(args):
     r = redis.StrictRedis()
@@ -180,6 +185,9 @@ def main():
     parser_problems_del = subparser_problems.add_parser('del', help='Delete a problem')
     parser_problems_del.add_argument('id', help="ID of problem to remove")
     parser_problems_del.set_defaults(func=del_challenge)
+
+    parser_problems_clear = subparser_problems.add_parser('clear', help='Delete a problem')
+    parser_problems_clear.set_defaults(func=clear_challenges)
 
 
     # Database
