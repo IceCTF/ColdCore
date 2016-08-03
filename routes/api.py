@@ -8,7 +8,7 @@ import config
 api = Blueprint("api", __name__, url_prefix="/api")
 
 
-@api.route("/submit/<int:challenge>.json", methods=["POST"])
+@api.route("/submit/<int:challenge_id>.json", methods=["POST"])
 @decorators.must_be_allowed_to("solve challenges")
 @decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
