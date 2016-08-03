@@ -19,12 +19,12 @@ def get_user(username=None, id=None):
 def login(username, password):
     user = get_user(username=username)
     if not user:
-        return False
+        return False, None
 
     if(user.check_password(password)):
         UserAccess.create(user=user, ip=utils.misc.get_ip(), time=datetime.now())
-        return True
-    return False
+        return True, user.id
+    return False, None
 
 
 def validate(username, email, password, background, country, tshirt_size=None, gender=None):

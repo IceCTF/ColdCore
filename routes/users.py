@@ -18,8 +18,9 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        if user.login(username, password):
-            session["user_id"] = user.id
+        success, id = user.login(username, password)
+        if success:
+            session["user_id"] = id
             flash("Login successful.")
             return redirect(url_for('teams.dashboard'))
         else:
