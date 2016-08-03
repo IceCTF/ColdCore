@@ -20,7 +20,7 @@ def index():
     return render_template("challenges.html", challenges=chals, solved=solved, categories=categories, solves=solves)
 
 
-@challenges.route('/challenges/<int:challenge>/solves/')
+@challenges.route('/challenges/<int:challenge_id>/solves/')
 @decorators.must_be_allowed_to("view challenge solves")
 @decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
@@ -35,7 +35,7 @@ def show_solves(challenge_id):
     return render_template("challenge_solves.html", challenge=chall, solves=solves)
 
 
-@challenges.route('/submit/<int:challenge>/', methods=["POST"])
+@challenges.route('/submit/<int:challenge_id>/', methods=["POST"])
 @decorators.must_be_allowed_to("solve challenges")
 @decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
