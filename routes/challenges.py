@@ -25,9 +25,9 @@ def index():
 @decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
 @decorators.confirmed_email_required
-def show_solves(challenge):
+def show_solves(challenge_id):
     try:
-        chall = challenge.get_challenge(challenge)
+        chall = challenge.get_challenge(challenge_id)
     except exceptions.ValidationError as e:
         flash(str(e))
         return redirect(url_for(".index"))
