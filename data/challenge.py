@@ -33,7 +33,7 @@ def submit_flag(chall, user, team, flag):
         raise ValidationError("Your team has already solved this problem!")
     elif not chall.enabled:
         raise ValidationError("This challenge is disabled.")
-    elif flag.strip().lower() != chall.flag.strip.lower():
+    elif flag.strip().lower() != chall.flag.strip().lower():
         ChallengeFailure.create(user=user, team=team, challenge=chall, attempt=flag, time=datetime.now())
         return "Incorrect flag"
     else:
