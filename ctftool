@@ -53,7 +53,7 @@ def gen_team(args):
                            team=t)
         t.save()
         password = "password{}".format(user.id)
-        user.setPassword(password)
+        user.set_password(password)
         user.save()
         print("Team added with id {}".format(t.id))
         print("User added with username {} and password {}".format(username, password))
