@@ -13,11 +13,12 @@ challenges = Blueprint("challenges", __name__, template_folder="../templates/cha
 @decorators.competition_running_required
 @decorators.confirmed_email_required
 def index():
-    chals = challenge.get_challenges()
+    stages = challenge.get_stages()
+    challs = challenge.get_challenges()
     solved = challenge.get_solved(g.team)
-    solves = {i: int(g.redis.hget("solves", i).decode()) for i in [k.id for k in chals]}
-    categories = sorted(list({chal.category for chal in chals}))
-    return render_template("challenges.html", challenges=chals, solved=solved, categories=categories, solves=solves)
+    solves = challenge.get_solves()
+    categories = challenge.get_categories()
+    return render_template("challenges.html", stages=stages, challenges=challs, solved=solved, categories=categories, solves=solves)
 
 
 @challenges.route('/challenges/<int:challenge_id>/solves/')

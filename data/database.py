@@ -68,8 +68,15 @@ class UserAccess(BaseModel):
     time = DateTimeField()
 
 
+class Stage(BaseModel):
+    name = CharField()
+    alias = CharField(unique=True, index=True)
+    description = CharField(null=True)
+
+
 class Challenge(BaseModel):
     name = CharField()
+    alias = CharField(unique=True, index=True)
     category = CharField()
     author = CharField()
     description = TextField()
@@ -77,6 +84,7 @@ class Challenge(BaseModel):
     breakthrough_bonus = IntegerField(default=0)
     enabled = BooleanField(default=True)
     flag = TextField()
+    stage = ForeignKeyField(Stage, related_name='challenges')
 
 
 class ChallengeSolve(BaseModel):

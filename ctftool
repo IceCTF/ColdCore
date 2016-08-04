@@ -17,7 +17,7 @@ import yaml
 import argparse
 import logging
 
-tables = [Team, User, UserAccess, Challenge, ChallengeSolve, ChallengeFailure, NewsItem, TroubleTicket, TicketComment, Notification, ScoreAdjustment, AdminUser, SshAccount]
+tables = [Team, User, UserAccess, Stage, Challenge, ChallengeSolve, ChallengeFailure, NewsItem, TroubleTicket, TicketComment, Notification, ScoreAdjustment, AdminUser, SshAccount]
 
 def create_tables(args):
     check = True
@@ -66,57 +66,70 @@ def add_admin(args):
     secret = "".join([r.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567") for i in range(16)])
     AdminUser.create(username=username, password=pwhash, secret=secret)
     print("AdminUser created; Enter the following key into your favorite TOTP application (Google Authenticator Recommended): {}".format(secret))
+def scan_challenges_problem(d, files):
+    staticpaths = {}
+    if "static.yml" in files:
+        with open(os.path.join(d, "static.yml")) as f:
+            statics = yaml.load(f)
+            for static in statics:
+                h = hashlib.sha256()
+                with open(os.path.join(d, static), "rb") as staticfile:
+                    while True:
+                        buf = staticfile.read(4096)
+                        h.update(buf)
+                        if not buf:
+                            break
+
+                if "." in static:
+                    name, ext = static.split(".", maxsplit=1)
+                    fn = "{}_{}.{}".format(name, h.hexdigest(), ext)
+                else:
+                    fn = "{}_{}".format(static, h.hexdigest())
+                staticpaths[static] = fn
+                shutil.copy(os.path.join(d, static), os.path.join(config.static_dir, fn))
+                print(fn)
+
+    with open(os.path.join(d, "problem.yml")) as f:
+        data = yaml.load(f)
+        print("Inserting problem in directory %s" % (d))
+        for i in staticpaths:
+            print("looking for |{}|".format(i))
+            data["description"] = data["description"].replace("|{}|".format(i), "{}{}".format(config.static_prefix, staticpaths[i]))
+
+        data["stage"] = Stage.get(Stage.alias == data["stage"])
+        query = Challenge.select().where(Challenge.alias == data["alias"])
+        if query.exists():
+            print("Updating " + str(data["name"]) + "...")
+            q = Challenge.update(**data).where(Challenge.alias == data["alias"])
+            q.execute()
+        else:
+            Challenge.create(**data)
+
+
+def scan_challenges_stage(d, files):
+    with open(os.path.join(d, "stage.yml")) as f:
+        data = yaml.load(f)
+        query = Stage.select().where(Stage.alias == data["alias"])
+        if query.exists():
+            print("Updating %s..." % (data["name"]))
+            q = Challenge.update(**data).where(Stage.alias == data["alias"])
+        else:
+            Stage.create(**data)
+
 
 def scan_challenges(args):
     path = args.path
-    dirs = [j for j in [os.path.join(path, i) for i in os.listdir(path)] if os.path.isdir(j)]
-    # recurse to 2 levels
-    # TODO: do this better
-    dirs = [j for j in [os.path.join(k, i) for k in dirs for i in os.listdir(k)] if os.path.isdir(j)]
-    print(dirs)
     n = 0
 
-    for d in dirs:
-        staticpaths = {}
-        if os.path.exists(os.path.join(d, "static.yml")):
-            with open(os.path.join(d, "static.yml")) as f:
-                statics = yaml.load(f)
-                for static in statics:
-                    h = hashlib.sha256()
-                    with open(os.path.join(d, static), "rb") as staticfile:
-                        while True:
-                            buf = staticfile.read(4096)
-                            h.update(buf)
-                            if not buf:
-                                break
-
-                    if "." in static:
-                        name, ext = static.split(".", maxsplit=1)
-                        fn = "{}_{}.{}".format(name, h.hexdigest(), ext)
-                    else:
-                        fn = "{}_{}".format(static, h.hexdigest())
-                    staticpaths[static] = fn
-                    shutil.copy(os.path.join(d, static), os.path.join(config.static_dir, fn))
-                    print(fn)
-
-        if os.path.exists(os.path.join(d, "problem.yml")):
-            with open(os.path.join(d, "problem.yml")) as f:
-                n += 1
-                data = yaml.load(f)
-                print("Inserting problem in directory %s" % (d))
-                for i in staticpaths:
-                    print("looking for |{}|".format(i))
-                    data["description"] = data["description"].replace("|{}|".format(i), "{}{}".format(config.static_prefix, staticpaths[i]))
-
-                query = Challenge.select().where(Challenge.name == data["name"])
-                if query.exists():
-                    print("Updating " + str(data["name"]) + "...")
-                    q = Challenge.update(**data).where(Challenge.name == data["name"])
-                    q.execute()
-                else:
-                    Challenge.create(**data)
+    for root, dirs, files in os.walk(path):
+        if "problem.yml" in files:
+            n += 1
+            scan_challenges_problem(root, files)
+        if "stage.yml" in files:
+            scan_challenges_stage(root, files)
 
     print(n, "challenges loaded")
+
 
 def add_challenge(args):
     challengefile = args.file

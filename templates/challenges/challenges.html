@@ -37,9 +37,10 @@
 </select>
 <span class="left"><a href="javascript:toggle()" id="toggleState">{% if solved.count() %}Expand all challenges.{% else %}Collapse all challenges.{% endif %}</a></span>
 <br />
-
+{% for stage in stages %}
+{{ stage.name }}
 <ul class="collapsible popout" data-collapsible="accordion">
-    {% for challenge in challenges %}
+    {% for challenge in challenges[stage.id] %}
     <li class="challenge" data-category="{{ challenge.category }}">
         <div id="header{{ challenge.id }}" class="collapsible-header">
             <div class="status-dot green circle tooltipped" data-position="right" data-tooltip="This challenge is Online"></div>
@@ -88,6 +89,7 @@
     </li>
     {% endfor %}
 </ul>
+{% endfor %}
 {% endblock %}
 {% block postscript %}
 <script>

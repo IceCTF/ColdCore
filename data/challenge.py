@@ -1,12 +1,39 @@
-from data.database import Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, Team
+from data.database import Stage, Challenge, ChallengeSolve, ChallengeFailure, ScoreAdjustment, Team
 from datetime import datetime
 from exceptions import ValidationError
 from flask import g
 import config
 
 
+def get_stages():
+    return Stage.select().order_by(Stage.name)
+
+
+def get_categories():
+    return [q.category for q in Challenge.select(Challenge.category).distinct().order_by(Challenge.category)]
+
+
 def get_challenges():
-    return Challenge.select().order_by(Challenge.points, Challenge.name)
+    challenges = Challenge.select().order_by(Challenge.stage_id, Challenge.points, Challenge.name)
+    d = dict()
+    for chall in challenges:
+        if chall.stage_id in d:
+            d[chall.stage_id].append(chall)
+        else:
+            d[chall.stage_id] = [chall]
+    return d
+
+
+def get_solves():
+    # TODO: optimize
+    d = dict()
+    for k in Challenge.select(Challenge.id):
+        s = g.redis.hget("solves", k.id)
+        if s:
+            d[k.id] = int(s.decode())
+        else:
+            d[k.id] = -1
+    return d
 
 
 def get_challenge(id):
