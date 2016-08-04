@@ -6,7 +6,12 @@ import config
 
 
 def get_stages():
-    return Stage.select().order_by(Stage.name)
+    return list(Stage.select().order_by(Stage.name))
+
+
+def get_stage_challenges(stage_id):
+    print(stage_id)
+    return list(Challenge.select(Challenge.alias).where(Challenge.stage == stage_id))
 
 
 def get_categories():
@@ -14,7 +19,7 @@ def get_categories():
 
 
 def get_challenges():
-    challenges = Challenge.select().order_by(Challenge.stage_id, Challenge.points, Challenge.name)
+    challenges = Challenge.select().order_by(Challenge.stage, Challenge.points, Challenge.name)
     d = dict()
     for chall in challenges:
         if chall.stage_id in d:

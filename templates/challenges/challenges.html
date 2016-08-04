@@ -26,7 +26,7 @@
 <ul class="collapsible popout" data-collapsible="expandable">
     {% for challenge in challenges[stage.id] %}
     <li class="challenge" data-category="{{ challenge.category }}" data-stage="{{stage.alias}}">
-        <div id="header-{{ challenge.alias }}" data-challenge="{{ challenge.alias }}" class="collapsible-header active">
+        <div id="header-{{ challenge.alias }}" data-challenge="{{ challenge.alias }}" class="collapsible-header">
             <div class="status-dot green circle tooltipped" data-position="right" data-tooltip="This challenge is Online"></div>
             <div class="challenge-text truncate">{{ challenge.name }}</div>
             <span class="right">
@@ -83,27 +83,27 @@
 </script>
 {% if config.apisubmit %}
 <script>
-    var challenges_closed = JSON.parse(localStorage.getItem("challenges-closed")) || {};
-    Object.keys(challenges_closed).forEach(function(el){
-        $(".collapsible-header#header-" + el).removeClass("active"); // close
+    var challenges_open = JSON.parse(localStorage.getItem("challenges-open")) || {{ first_stage | tojson }};
+    Object.keys(challenges_open).forEach(function(el){
+        $(".collapsible-header#header-" + el).addClass("active");
     });
     
     $(".collapsible-header").on("click", function(){
         var chall = $(this).data('challenge');
-        if(challenges_closed.hasOwnProperty(chall)) {
-            delete challenges_closed[chall];
+        if(challenges_open.hasOwnProperty(chall)) {
+            delete challenges_open[chall];
         } else {
-            challenges_closed[chall] = true;
+            challenges_open[chall] = true;
         }
-        localStorage.setItem("challenges-closed", JSON.stringify(challenges_closed));
+        localStorage.setItem("challenges-open", JSON.stringify(challenges_open));
         
     });
-    var state = $(".collapsible-header.active").length != 0;
+    var state = $(".collapsible-header.active").length == 0;
     function updateButton(){
         if(state){
-            $("#toggleState").html("Collapse all challenges");
-        } else {
             $("#toggleState").html("Expand all challenges");
+        } else {
+            $("#toggleState").html("Collapse all challenges");
         }
 
     }

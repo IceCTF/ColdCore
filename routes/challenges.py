@@ -14,11 +14,13 @@ challenges = Blueprint("challenges", __name__, template_folder="../templates/cha
 @decorators.confirmed_email_required
 def index():
     stages = challenge.get_stages()
+    first_stage = {a.alias: True for a in challenge.get_stage_challenges(stages[0].id)}
+    print(first_stage)
     challs = challenge.get_challenges()
     solved = challenge.get_solved(g.team)
     solves = challenge.get_solves()
     categories = challenge.get_categories()
-    return render_template("challenges.html", stages=stages, challenges=challs, solved=solved, categories=categories, solves=solves)
+    return render_template("challenges.html", stages=stages, first_stage=first_stage, challenges=challs, solved=solved, categories=categories, solves=solves)
 
 
 @challenges.route('/challenges/<int:challenge_id>/solves/')
