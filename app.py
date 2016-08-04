@@ -68,7 +68,7 @@ def scoreboard_variables():
 @app.route('/')
 def root():
     if g.logged_in:
-        return redirect(url_for('team.dashboard'))
+        return redirect(url_for('teams.dashboard'))
     return redirect(url_for('users.register'))
 
 
