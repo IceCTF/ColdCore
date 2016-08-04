@@ -20,8 +20,9 @@
 </div>
 {% for stage in stages %}
 <hr />
-<h4>{{ stage.name }}</h4>
-<span class="pull-right" />
+<span class="left"><h4>{{ stage.name }}</h4></span>
+<span class="right"><a class="stage-collapse" data-collapse="{{ stage.alias }}" href="#">Toggle</a></span>
+<div class="clearfix"></div>
 <ul class="collapsible popout" data-collapsible="expandable">
     {% for challenge in challenges[stage.id] %}
     <li class="challenge" data-category="{{ challenge.category }}" data-stage="{{stage.alias}}">
@@ -83,14 +84,12 @@
 {% if config.apisubmit %}
 <script>
     var challenges_closed = JSON.parse(localStorage.getItem("challenges-closed")) || {};
-    console.log(challenges_closed);
     Object.keys(challenges_closed).forEach(function(el){
         $(".collapsible-header#header-" + el).removeClass("active"); // close
     });
     
     $(".collapsible-header").on("click", function(){
         var chall = $(this).data('challenge');
-        console.log(chall);
         if(challenges_closed.hasOwnProperty(chall)) {
             delete challenges_closed[chall];
         } else {
@@ -99,7 +98,7 @@
         localStorage.setItem("challenges-closed", JSON.stringify(challenges_closed));
         
     });
-    var state = $(".collapsible-header").length == $(".collapsible-header.active").length;
+    var state = $(".collapsible-header.active").length != 0;
     function updateButton(){
         if(state){
             $("#toggleState").html("Collapse all challenges");
@@ -130,6 +129,16 @@
     $("#toggleState").on("click", function(e){
         e.preventDefault();
         toggle();
+    });
+    $(".stage-collapse").on("click", function(e){
+        e.preventDefault();
+        var stage = $(this).data('collapse');
+        var header_selector = ".challenge[data-stage=" + stage + "] .collapsible-header";
+        var state = $(header_selector + ".active").length != 0;
+        if(state)
+            $(header_selector).each(function(i, x){ $(x).hasClass("active") && $(x).click(); });
+        else
+            $(header_selector).each(function(i, x){ $(x).hasClass("active") || $(x).click(); });
     });
     $("form").submit(function(e) {
         var id = $(this).attr("data-challengeid");
