@@ -39,7 +39,7 @@
 <br />
 {% for stage in stages %}
 {{ stage.name }}
-<ul class="collapsible popout" data-collapsible="accordion">
+<ul class="collapsible popout" data-collapsible="expandable">
     {% for challenge in challenges[stage.id] %}
     <li class="challenge" data-category="{{ challenge.category }}">
         <div id="header{{ challenge.id }}" class="collapsible-header">
