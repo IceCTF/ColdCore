@@ -38,6 +38,7 @@
 <span class="left"><a href="javascript:toggle()" id="toggleState">{% if solved.count() %}Expand all challenges.{% else %}Collapse all challenges.{% endif %}</a></span>
 <br />
 {% for stage in stages %}
+<hr />
 <h4>{{ stage.name }}</h4>
 <span class="pull-right" />
 <ul class="collapsible popout" data-collapsible="expandable">
