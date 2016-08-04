@@ -8,7 +8,7 @@ import config
 api = Blueprint("api", __name__, url_prefix="/api")
 
 
-@api.route("/submit/<int:challenge_id>.json", methods=["POST"])
+@api.route("/submit/<challenge_id>.json", methods=["POST"])
 @decorators.must_be_allowed_to("solve challenges")
 @decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
@@ -16,14 +16,15 @@ api = Blueprint("api", __name__, url_prefix="/api")
 @ratelimit.ratelimit(limit=10, per=120, over_limit=ratelimit.on_over_api_limit)
 def submit_api(challenge_id):
     try:
-        chall = challenge.get_challenge(challenge_id)
+        chall = challenge.get_challenge(alias=challenge_id)
     except exceptions.ValidationError as e:
         return jsonify(dict(code=1001, message=str(e)))
     flag = request.form["flag"]
 
     try:
         challenge.submit_flag(chall, g.user, g.team, flag)
-        return jsonify(dict(code=0, message="Success!"))
+        solves = challenge.get_solve_count(chall.id)
+        return jsonify(dict(code=0, message="Success!", solves=solves))
     except exceptions.ValidationError as e:
         return jsonify(dict(code=1001, message=str(e)))
 

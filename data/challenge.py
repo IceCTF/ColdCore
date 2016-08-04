@@ -29,21 +29,29 @@ def get_challenges():
     return d
 
 
-def get_solves():
+def get_solve_counts():
     # TODO: optimize
     d = dict()
     for k in Challenge.select(Challenge.id):
-        s = g.redis.hget("solves", k.id)
-        if s:
-            d[k.id] = int(s.decode())
-        else:
-            d[k.id] = -1
+        d[k.id] = get_solve_count(k.id)
     return d
 
+def get_solve_count(chall_id):
+    s = g.redis.hget("solves", chall_id)
+    if s is not None:
+        return int(s.decode())
+    else:
+        return -1
 
-def get_challenge(id):
+
+def get_challenge(id=None, alias=None):
     try:
-        return Challenge.get(Challenge.id == id)
+        if id is not None:
+            return Challenge.get(Challenge.id == id)
+        elif alias is not None:
+            return Challenge.get(Challenge.alias == alias)
+        else:
+            raise ValueError("Invalid argument")
     except Challenge.DoesNotExist:
         raise ValidationError("Challenge does not exist!")
 
