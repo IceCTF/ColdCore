@@ -1,42 +1,23 @@
 {% extends "base.html" %}
 {% block title %}Challenges{% endblock %}
 {% block head %}
-<script>
-    var state = !{{ solved.count() }};
-    function openAll() {
-        $(".collapsible-header").each(function(i, x){ $(x).hasClass("active") || $(x).click(); });
-        $("#toggleState").html("Collapse all challenges.");
-    }
-    function closeAll() {
-        $(".collapsible-header").each(function(i, x){ $(x).hasClass("active") && $(x).click(); });
-        $("#toggleState").html("Expand all challenges.");
-    }
-    function toggle() {
-        if(state) closeAll();
-        else openAll();
-        state = !state;
-    }
-    function filterCategories(t) {
-        var v = t.options[t.selectedIndex].value;
-        if(v == "*")
-        $(".challenge").show();
-        else {
-            $(".challenge[data-category=" + v + "]").show();
-            $(".challenge[data-category!=" + v + "]").hide();
-        }
-    }
-</script>
 {% endblock %}
 {% block content %}
-
-<select onchange="filterCategories(this);">
-    <option value="*">Show all</option>
-    {% for category in categories %}
-    <option>{{ category }}</option>
-    {% endfor %}
-</select>
-<span class="left"><a href="javascript:toggle()" id="toggleState">{% if solved.count() %}Expand all challenges.{% else %}Collapse all challenges.{% endif %}</a></span>
-<br />
+<div class="row">
+    <div class="col s6">
+        <div class="left">
+        <select onchange="filterCategories(this);">
+            <option value="*">Show all</option>
+            {% for category in categories %}
+            <option>{{ category }}</option>
+            {% endfor %}
+        </select>
+        </div>
+    </div>
+    <div class="col s6">
+        <span class="right"><a class="btn" href="#" id="toggleState">Collapse all challenges</a></span>
+    </div>
+</div>
 {% for stage in stages %}
 <hr />
 <h4>{{ stage.name }}</h4>
@@ -44,7 +25,7 @@
 <ul class="collapsible popout" data-collapsible="expandable">
     {% for challenge in challenges[stage.id] %}
     <li class="challenge" data-category="{{ challenge.category }}" data-stage="{{stage.alias}}">
-        <div id="header{{ challenge.alias }}" class="collapsible-header {{ "active" if challenge not in solved else "" }}">
+        <div id="header-{{ challenge.alias }}" data-challenge="{{ challenge.alias }}" class="collapsible-header active">
             <div class="status-dot green circle tooltipped" data-position="right" data-tooltip="This challenge is Online"></div>
             <div class="challenge-text truncate">{{ challenge.name }}</div>
             <span class="right">
@@ -101,6 +82,55 @@
 </script>
 {% if config.apisubmit %}
 <script>
+    var challenges_closed = JSON.parse(localStorage.getItem("challenges-closed")) || {};
+    console.log(challenges_closed);
+    Object.keys(challenges_closed).forEach(function(el){
+        $(".collapsible-header#header-" + el).removeClass("active"); // close
+    });
+    
+    $(".collapsible-header").on("click", function(){
+        var chall = $(this).data('challenge');
+        console.log(chall);
+        if(challenges_closed.hasOwnProperty(chall)) {
+            delete challenges_closed[chall];
+        } else {
+            challenges_closed[chall] = true;
+        }
+        localStorage.setItem("challenges-closed", JSON.stringify(challenges_closed));
+        
+    });
+    var state = $(".collapsible-header").length == $(".collapsible-header.active").length;
+    function updateButton(){
+        if(state){
+            $("#toggleState").html("Collapse all challenges");
+        } else {
+            $("#toggleState").html("Expand all challenges");
+        }
+
+    }
+    updateButton(state);
+    function toggle() {
+        if(state) {
+            $(".collapsible-header").each(function(i, x){ $(x).hasClass("active") || $(x).click(); });
+        } else {
+            $(".collapsible-header").each(function(i, x){ $(x).hasClass("active") && $(x).click(); });
+        }
+        state = !state;
+        updateButton(state);
+    }
+    function filterCategories(t) {
+        var v = t.options[t.selectedIndex].value;
+        if(v == "*")
+        $(".challenge").show();
+        else {
+            $(".challenge[data-category=" + v + "]").show();
+            $(".challenge[data-category!=" + v + "]").hide();
+        }
+    }
+    $("#toggleState").on("click", function(e){
+        e.preventDefault();
+        toggle();
+    });
     $("form").submit(function(e) {
         var id = $(this).attr("data-challengeid");
         api.makeCall("/submit/" + id + ".json", {flag: $("#flag" + id).val(), _csrf_token: "{{ csrf_token() }}"}, function(data) {
