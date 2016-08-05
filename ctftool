@@ -107,6 +107,7 @@ def scan_challenges_problem(d, files):
 
 
 def scan_challenges_stage(d, files):
+
     with open(os.path.join(d, "stage.yml")) as f:
         data = yaml.load(f)
         query = Stage.select().where(Stage.alias == data["alias"])
@@ -121,6 +122,7 @@ def scan_challenges(args):
     path = args.path
     n = 0
 
+    os.makedirs(config.static_dir, exist_ok=True)
     for root, dirs, files in os.walk(path):
         if "problem.yml" in files:
             n += 1

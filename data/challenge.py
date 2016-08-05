@@ -36,6 +36,7 @@ def get_solve_counts():
         d[k.id] = get_solve_count(k.id)
     return d
 
+
 def get_solve_count(chall_id):
     s = g.redis.hget("solves", chall_id)
     if s is not None:
@@ -58,6 +59,10 @@ def get_challenge(id=None, alias=None):
 
 def get_solved(team):
     return Challenge.select().join(ChallengeSolve).where(ChallengeSolve.team == g.team)
+
+
+def get_solves(team):
+    return ChallengeSolve.select(ChallengeSolve, Challenge).join(Challenge).where(ChallengeSolve.team == g.team)
 
 
 def get_adjustments(team):

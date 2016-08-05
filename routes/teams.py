@@ -17,7 +17,7 @@ teams = Blueprint("teams", __name__, template_folder="../templates/teams")
 @ratelimit.ratelimit(limit=6, per=120)
 def dashboard():
     if request.method == "GET":
-        team_solves = challenge.get_solved(g.team)
+        team_solves = challenge.get_solves(g.team)
         team_adjustments = challenge.get_adjustments(g.team)
         team_score = sum([i.challenge.points for i in team_solves] + [i.value for i in team_adjustments])
         return render_template("team.html", team_solves=team_solves, team_adjustments=team_adjustments, team_score=team_score)
