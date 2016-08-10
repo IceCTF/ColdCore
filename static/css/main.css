@@ -174,7 +174,7 @@ code, kbd, pre, samp {
     font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 }
 
-code {
+.challenge code {
     padding: 2px 4px;
     font-size: 90%;
     color: #c7254e;
