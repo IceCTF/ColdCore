@@ -11,9 +11,9 @@ def run():
 
     try:
         shell = spur.SshShell(
-            hostname=config.secrets.shell_host,
-            username=config.secrets.shell_username,
-            private_key_file=config.secrets.shell_privkey,
+            hostname=config.secret.shell_host,
+            username=config.secret.shell_username,
+            private_key_file=config.secret.shell_privkey,
             port=config.shell_port,
             missing_host_key=spur.ssh.MissingHostKey.accept
         )
