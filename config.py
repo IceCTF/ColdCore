@@ -49,6 +49,7 @@ shell_max_accounts = 99999
 
 shell_user_creation = "sudo useradd -m {username} -p {password} -g ctf -b /home_users"
 
+
 # when the competition begins
 competition_begin = datetime(1970, 1, 1, 0, 0)
 competition_end = datetime(2018, 1, 1, 0, 0)
