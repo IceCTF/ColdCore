@@ -182,6 +182,12 @@ code, kbd, pre, samp {
     border-radius: 4px;
 }
 
+.shell-frame {
+    border-width: 0px;
+    width: 100%;
+    height: calc(100% - 64px);
+}
+
 
 /* MEDIUM */
 @media only screen and (max-width : 992px) {

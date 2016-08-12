@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card orange darken-1">
-    <div class="card-content">
-        Username: {{account.username}} Password: {{account.password}} <code> ssh {{account.username}}@{{account.hostname}} -p {{account.port}}</code>
+<div class="card orange darken-2">
+    <div class="card-content white-text">
+        <span class="card-title">Username: {{account.username}} Password: {{account.password}}</span>
+        <code> ssh {{account.username}}@{{account.hostname}} -p {{account.port}}</code>
     </div>
 </div>
 <div class="center" style="margin-top: 50px;">
