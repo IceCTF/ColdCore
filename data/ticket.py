@@ -8,7 +8,7 @@ def get_tickets(team):
 
 def get_ticket(team, id):
     try:
-        return TroubleTicket.get(TroubleTicket.id == ticket and TroubleTicket.team == team)
+        return TroubleTicket.get(TroubleTicket.id == id and TroubleTicket.team == team)
     except TroubleTicket.DoesNotExist:
         raise ValidationError("Ticket not found!")
 
