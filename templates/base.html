@@ -48,7 +48,7 @@
             </nav>
             <ul id="nav-mobile" class="side-nav fixed">
 
-                {% if config.competition_is_running() %}
+                {% if config.competition_is_running() or session.admin %}
                 {% if logged_in %}
                 <li><a href="{{ url_for('challenges.index') }}">
                         <div class="side-icon"><i class="material-icons blue-text">flag</i></div>
