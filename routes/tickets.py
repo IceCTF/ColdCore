@@ -30,7 +30,7 @@ def open_ticket():
         description = request.form["description"]
         t = ticket.create_ticket(g.team, summary, description)
         flash("Ticket #{} opened.".format(t.id))
-        return redirect(url_for(".detail", ticket=t.id))
+        return redirect(url_for(".detail", ticket_id=t.id))
 
 
 @tickets.route('/tickets/<int:ticket_id>/')
@@ -44,7 +44,7 @@ def detail(ticket_id):
         return redirect(url_for(".index"))
 
     comments = ticket.get_comments(t)
-    return render_template("ticket_detail.html", ticket=t, comments=comments)
+    return render_template("ticket_detail.html", ticket_id=t, comments=comments)
 
 
 @tickets.route('/tickets/<int:ticket_id>/comment/', methods=["POST"])
@@ -70,4 +70,4 @@ def comment(ticket_id):
         ticket.open_ticket(t)
         flash("Ticket re-opened.")
 
-    return redirect(url_for(".detail", ticket=t.id))
+    return redirect(url_for(".detail", ticket_id=t.id))
