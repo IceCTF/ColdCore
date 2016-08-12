@@ -116,20 +116,12 @@ def admin_impersonate_team(tid):
 @admin_required
 def admin_toggle_eligibility(tid):
     team = Team.get(Team.id == tid)
-    team.eligible = not team.eligible
+    if team.eligibility is None:
+        team.eligibility = False
+    else:
+        team.eligibility = not team.eligibility
     team.save()
     flash("Eligibility set to {}".format(team.eligible))
-    return redirect(url_for(".admin_show_team", tid=tid))
-
-
-@admin.route("/team/<int:tid>/<csrf>/toggle_eligibility_lock/")
-@csrf_check
-@admin_required
-def admin_toggle_eligibility_lock(tid):
-    team = Team.get(Team.id == tid)
-    team.eligibility_locked = not team.eligibility_locked
-    team.save()
-    flash("Eligibility lock set to {}".format(team.eligibility_locked))
     return redirect(url_for(".admin_show_team", tid=tid))
 
 
