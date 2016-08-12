@@ -13,21 +13,23 @@ challenges = Blueprint("challenges", __name__, template_folder="../templates/cha
 @decorators.competition_running_required
 @decorators.confirmed_email_required
 def index():
-    chals = challenge.get_challenges()
+    stages = challenge.get_stages()
+    challs = challenge.get_challenges()
     solved = challenge.get_solved(g.team)
-    solves = {i: int(g.redis.hget("solves", i).decode()) for i in [k.id for k in chals]}
-    categories = sorted(list({chal.category for chal in chals}))
-    return render_template("challenges.html", challenges=chals, solved=solved, categories=categories, solves=solves)
+    solves = challenge.get_solve_counts()
+    categories = challenge.get_categories()
+    first_stage = {chall.alias: True for chall in challs[stages[0].id]} if stages else None
+    return render_template("challenges.html", stages=stages, first_stage=first_stage, challenges=challs, solved=solved, categories=categories, solves=solves)
 
 
-@challenges.route('/challenges/<int:challenge_id>/solves/')
+@challenges.route('/challenges/<challenge_id>/solves/')
 @decorators.must_be_allowed_to("view challenge solves")
 @decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required
 @decorators.confirmed_email_required
 def show_solves(challenge_id):
     try:
-        chall = challenge.get_challenge(challenge_id)
+        chall = challenge.get_challenge(alias=challenge_id)
     except exceptions.ValidationError as e:
         flash(str(e))
         return redirect(url_for(".index"))
@@ -35,7 +37,7 @@ def show_solves(challenge_id):
     return render_template("challenge_solves.html", challenge=chall, solves=solves)
 
 
-@challenges.route('/submit/<int:challenge_id>/', methods=["POST"])
+@challenges.route('/submit/<challenge_id>/', methods=["POST"])
 @decorators.must_be_allowed_to("solve challenges")
 @decorators.must_be_allowed_to("view challenges")
 @decorators.competition_running_required

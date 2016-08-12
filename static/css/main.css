@@ -170,6 +170,25 @@ body {
     margin-left: -40px;
 }
 
+code, kbd, pre, samp {
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
+
+.challenge code {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+}
+
+.shell-frame {
+    border-width: 0px;
+    width: 100%;
+    height: calc(100% - 64px);
+}
+
+
 /* MEDIUM */
 @media only screen and (max-width : 992px) {
   .cont {

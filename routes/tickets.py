@@ -30,44 +30,44 @@ def open_ticket():
         description = request.form["description"]
         t = ticket.create_ticket(g.team, summary, description)
         flash("Ticket #{} opened.".format(t.id))
-        return redirect(url_for(".detail", ticket=t.id))
+        return redirect(url_for(".detail", ticket_id=t.id))
 
 
-@tickets.route('/tickets/<int:ticket>/')
+@tickets.route('/tickets/<int:ticket_id>/')
 @decorators.must_be_allowed_to("view tickets")
 @decorators.login_required
-def detail(ticket):
+def detail(ticket_id):
     try:
-        ticket = ticket.get_ticket(g.team, ticket)
+        t = ticket.get_ticket(g.team, ticket_id)
     except exceptions.ValidationError as e:
         flash(str(e))
         return redirect(url_for(".index"))
 
-    comments = ticket.get_comments(ticket)
-    return render_template("ticket_detail.html", ticket=ticket, comments=comments)
+    comments = ticket.get_comments(t)
+    return render_template("ticket_detail.html", ticket=t, comments=comments)
 
 
-@tickets.route('/tickets/<int:ticket>/comment/', methods=["POST"])
+@tickets.route('/tickets/<int:ticket_id>/comment/', methods=["POST"])
 @decorators.must_be_allowed_to("comment on tickets")
 @decorators.must_be_allowed_to("view tickets")
 @ratelimit.ratelimit(limit=1, per=120)
-def comment(ticket):
+def comment(ticket_id):
     try:
-        ticket = ticket.get_ticket(g.team, ticket)
+        t = ticket.get_ticket(g.team, ticket_id)
     except exceptions.ValidationError as e:
         flash(str(e))
         return redirect(url_for(".index"))
 
     if request.form["comment"]:
-        ticket.create_comment(ticket, g.user, request.form["comment"])
+        ticket.create_comment(t, g.user, request.form["comment"])
         flash("Comment added.")
 
-    if ticket.active and "resolved" in request.form:
-        ticket.close_ticket(ticket)
+    if t.active and "resolved" in request.form:
+        ticket.close_ticket(t)
         flash("Ticket closed.")
 
-    elif not ticket.active and "resolved" not in request.form:
-        ticket.open_ticket(ticket)
+    elif not t.active and "resolved" not in request.form:
+        ticket.open_ticket(t)
         flash("Ticket re-opened.")
 
-    return redirect(url_for(".detail", ticket=ticket.id))
+    return redirect(url_for(".detail", ticket_id=t.id))

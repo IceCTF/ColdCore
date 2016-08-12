@@ -102,5 +102,6 @@ tags
 dev.db
 dump.rdb
 /problems
+/problem_static
 /secrets
 /database

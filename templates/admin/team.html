@@ -3,8 +3,7 @@
 <h2>{{ team.name }}</h2>
 <a href="{{ url_for('admin.admin_impersonate_team', tid=team.id, csrf=csrf_token()) }}">Impersonate team</a><br />
 <p>
-This team is <strong>{{ "eligible" if team.eligible else "not eligible" }}</strong> (<a href="{{ url_for('admin.admin_toggle_eligibility', tid=team.id, csrf=csrf_token()) }}">toggle</a>).
-Eligibility is <strong>{{ "locked" if team.eligibility_locked else "unlocked" }}</strong> (<a href="{{ url_for('admin.admin_toggle_eligibility_lock', tid=team.id, csrf=csrf_token()) }}">toggle</a>).
+This team is <strong>{{ "eligible" if team.eligible() else "not eligible" }}</strong> (<a href="{{ url_for('admin.admin_toggle_eligibility', tid=team.id, csrf=csrf_token()) }}">toggle</a>).
 </p>
 <p>This team's affiliation is <strong>{{ team.affiliation }}</strong></p>
 <h3>Email</h3>

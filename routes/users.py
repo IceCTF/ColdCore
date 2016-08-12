@@ -68,7 +68,7 @@ def register():
         if join_team:
             team_key = request.form["team_key"].strip()
             t = team.get_team(key=team_key)
-            if not team:
+            if not t:
                 flash("This team could not be found, check your team key.")
                 return redirect(url_for('.register'))
         else:

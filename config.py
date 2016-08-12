@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ctf_name = "IceCTF"
 eligibility = "In order to be eligible for prizes, all members of your team must be Icelandic residents, and you must not have more than three team members."
 tagline = "The Icelandic Hacking Competition"
-#IRC Channel
+# IRC Channel
 ctf_chat_channel = "#IceCTF"
 ctf_home_url = "https://icec.tf"
 
@@ -32,8 +32,8 @@ immediate_scoreboard = False
 disallowed_domain = "icec.tf"
 
 # Where the static stuff is stored
-static_prefix = "http://127.0.0.1/static/"
-static_dir = "{}/static/".format(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+static_prefix = "/problem-static/"
+static_dir = "{}/problem_static/".format(os.path.dirname(os.path.abspath(__file__)))
 custom_stylesheet = "css/main.css"
 
 # Shell accounts?
@@ -41,13 +41,15 @@ custom_stylesheet = "css/main.css"
 enable_shell = True
 
 shell_port = 22
+shell_host = "shell.icec.tf"
 
-shell_user_prefixes  = ["ctf-"]
-shell_password_length = 6
+shell_user_prefixes = ["ctf-"]
+shell_password_length = 8
 shell_free_acounts = 10
 shell_max_accounts = 99999
 
 shell_user_creation = "sudo useradd -m {username} -p {password} -g ctf -b /home_users"
+
 
 # when the competition begins
 competition_begin = datetime(1970, 1, 1, 0, 0)

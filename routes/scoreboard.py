@@ -19,6 +19,6 @@ def index():
             data.scoreboard.set_complex("scoreboard", data, 120)
             data.scoreboard.set_complex("graph", graphdata, 120)
         else:
-            return "No scoreboard data available. Please contact an organizer."
+            return "CTF hasn't started!"
 
     return render_template("scoreboard.html", data=scoreboard_data, graphdata=graphdata)

@@ -7,7 +7,7 @@ You have the following open tickets. If you're having an issue, you can <a href=
 <div class="collection">
     {% for ticket in tickets %}
         {% if ticket.active %}
-        <a class="collection-item" href="{{ url_for('.detail', ticket=ticket.id) }}">#{{ ticket.id }} {{ ticket.summary }}</a>
+        <a class="collection-item" href="{{ url_for('.detail', ticket_id=ticket.id) }}">#{{ ticket.id }} {{ ticket.summary }}</a>
         {% endif %}
     {% endfor %}
 </div>
@@ -16,7 +16,7 @@ You have the following closed tickets:
 <div class="collection">
     {% for ticket in tickets %}
         {% if not ticket.active %}
-        <a class="collection-item" href="{{ url_for('.detail', ticket=ticket.id) }}">#{{ ticket.id }} {{ ticket.summary }}</a>
+        <a class="collection-item" href="{{ url_for('.detail', ticket_id=ticket.id) }}">#{{ ticket.id }} {{ ticket.summary }}</a>
         {% endif %}
     {% endfor %}
 </div>

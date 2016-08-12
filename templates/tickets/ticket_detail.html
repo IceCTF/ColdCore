@@ -9,7 +9,7 @@
 <small><abbr class="time" title="{{ comment.time }}">{{ comment.time }}</abbr> &middot; {{ comment.comment_by }}</small>
 {% endfor %}
 <br />
-<form action="{{ url_for('.comment', ticket=ticket.id) }}" method="POST">
+<form action="{{ url_for('.comment', ticket_id=ticket.id) }}" method="POST">
     <div class="input-field">
         <textarea id="comment" name="comment" class="materialize-textarea"></textarea>
         <label for="comment">Comment</label>

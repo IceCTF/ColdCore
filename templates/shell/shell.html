@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+{% if account %}
+<div class="card orange darken-2">
+    <div class="card-content white-text">
+        <p class="card-title">Username: {{account.username}} Password: {{account.password}}</p>
+        <code> ssh {{account.username}}@{{account.hostname}} -p {{account.port}}</code>
+    </div>
+</div>
+<div class="center" style="margin-top: 50px;">
+    <iframe class="shell-frame" src="https://shell.icec.tf/wetty" frameBorder="0"></iframe>
+</div>
+</div>
+{% else %}
+<div class="card red darken-2">
+    <div class="card-content white-text">
+        <p class="card-title">You don't have an account yet! Don't worry, one will be created shortly.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

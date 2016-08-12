@@ -18,7 +18,7 @@ class RateLimit(object):
         self.current = min(p.execute()[0], limit)
 
     remaining = property(lambda x: x.limit - x.current)
-    over_limit = property(lambda x: x.current >= x.limit)
+    over_limit = property(lambda x: x.current > x.limit)
 
 
 def get_view_rate_limit():

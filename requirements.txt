@@ -7,3 +7,4 @@ pyyaml
 oath
 pycountry
 psycopg2
+spur

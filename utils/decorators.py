@@ -9,7 +9,7 @@ def login_required(f):
             return f(*args, **kwargs)
         else:
             flash("You need to be logged in")
-            return redirect(url_for('login'))
+            return redirect(url_for('users.login'))
     return decorated
 
 def must_be_allowed_to(thing):
@@ -17,7 +17,7 @@ def must_be_allowed_to(thing):
         @wraps(f)
         def decorated(*args, **kwargs):
             if getattr(g, 'user_restricts', None) is None:
-                return redirect(url_for('login'))
+                return redirect(url_for('users.login'))
             if g.user_restricts and thing in g.user_restricts:
                 return "You are restricted from performing the {} action. Contact an organizer.".format(thing)
 
@@ -31,20 +31,20 @@ def confirmed_email_required(f):
         if "user_id" in session and session["user_id"]:
             if not g.user.email_confirmed:
                 flash("Please confirm your email")
-                return redirect(url_for('user_dashboard'))
+                return redirect(url_for('users.dashboard'))
             else:
                 return f(*args, **kwargs)
         else:
             flash("You need to be logged in to access that page.")
-            return redirect(url_for('login'))
+            return redirect(url_for('users.login'))
     return decorated
 
 def competition_running_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if not config.competition_is_running():
+        if not config.competition_is_running() and not ("admin" in session and session["admin"]):
             flash("The competition hasn't started")
-            return redirect(url_for('scoreboard'))
+            return redirect(url_for('scoreboard.index'))
         return f(*args, **kwargs)
     return decorated
 
