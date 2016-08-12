@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-{% if account is not None %}
+{% if account %}
 <div class="card orange darken-2">
     <div class="card-content white-text">
         <p class="card-title">Username: {{account.username}} Password: {{account.password}}</p>
