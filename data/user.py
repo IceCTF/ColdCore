@@ -82,7 +82,7 @@ def create_user(username, email, password, background, country, team, tshirt_siz
 def confirm_email(current_user, confirmation_key):
     if current_user.email_confirmed:
         raise ValidationError("Email already confirmed")
-    if current_user.confirmation_key == confirmation_key:
+    if current_user.email_confirmation_key == confirmation_key:
         current_user.email_confirmed = True
         current_user.save()
     else:
