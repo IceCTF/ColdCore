@@ -18,7 +18,7 @@ def index():
     solved = challenge.get_solved(g.team)
     solves = challenge.get_solve_counts()
     categories = challenge.get_categories()
-    first_stage = {chall.alias: True for chall in challs[stages[0].id]}
+    first_stage = {chall.alias: True for chall in challs[stages[0].id]} if stages else None
     return render_template("challenges.html", stages=stages, first_stage=first_stage, challenges=challs, solved=solved, categories=categories, solves=solves)
 
 
