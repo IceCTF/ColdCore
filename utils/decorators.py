@@ -9,7 +9,7 @@ def login_required(f):
             return f(*args, **kwargs)
         else:
             flash("You need to be logged in")
-            return redirect(url_for('login'))
+            return redirect(url_for('users.login'))
     return decorated
 
 def must_be_allowed_to(thing):
