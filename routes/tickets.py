@@ -62,11 +62,11 @@ def comment(ticket_id):
         ticket.create_comment(t, g.user, request.form["comment"])
         flash("Comment added.")
 
-    if ticket.active and "resolved" in request.form:
+    if t.active and "resolved" in request.form:
         ticket.close_ticket(t)
         flash("Ticket closed.")
 
-    elif not ticket.active and "resolved" not in request.form:
+    elif not t.active and "resolved" not in request.form:
         ticket.open_ticket(t)
         flash("Ticket re-opened.")
 
