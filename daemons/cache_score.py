@@ -15,3 +15,4 @@ def run():
     graphdata = scoreboard.calculate_graph(data)
     set_complex("scoreboard", data)
     set_complex("graph", graphdata)
+    db.close()
