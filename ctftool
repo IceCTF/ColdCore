@@ -167,7 +167,7 @@ def clear_challenges(args):
 
 
 def recache_solves(args):
-    r = redis.StrictRedis()
+    r = redis.StrictRedis(host=config.redis.host, port=config.redis.port, db=config.redis.db)
     for chal in Challenge.select():
         r.hset("solves", chal.id, chal.solves.count())
     print(r.hvals("solves"))
