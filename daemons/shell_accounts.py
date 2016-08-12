@@ -1,13 +1,12 @@
-import api
 import spur
-import pwd
 import random
 import config
 from data.database import db
 from data import ssh
+import utils.misc
+
 
 def run():
-
     db.connect()
 
     try:
@@ -43,10 +42,10 @@ def run():
 
         accounts = []
         while new_accounts > 0:
-            username = random.choice(api.config.shell_user_prefixes) + \
-                    str(random.randint(0, api.config.shell_max_accounts))
+            username = random.choice(config.shell_user_prefixes) + \
+                str(random.randint(0, config.shell_max_accounts))
 
-            plaintext_password = api.common.token()[:api.config.shell_password_length]
+            plaintext_password = utils.misc.generate_random_string(config.shell_password_length, allowed_chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789")
 
             hashed_password = shell.run(["bash", "-c", "echo '{}' | openssl passwd -1 -stdin".format(plaintext_password)])
             hashed_password = hashed_password.output.decode("utf-8").strip()
