@@ -1,7 +1,7 @@
 from flask import Blueprint, g, render_template
 
 from data import ssh
-import decorators
+from utils import decorators
 
 
 shell = Blueprint("shell", __name__, template_folder="../templates/shell")
