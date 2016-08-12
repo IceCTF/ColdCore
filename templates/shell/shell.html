@@ -2,12 +2,12 @@
 {% block content %}
 <div class="card orange darken-2">
     <div class="card-content white-text">
-        <span class="card-title">Username: {{account.username}} Password: {{account.password}}</span>
+        <p class="card-title">Username: {{account.username}} Password: {{account.password}}</p>
         <code> ssh {{account.username}}@{{account.hostname}} -p {{account.port}}</code>
     </div>
 </div>
 <div class="center" style="margin-top: 50px;">
-    <iframe src="https://shell.icec.tf/wetty" frameBorder="0"></iframe>
+    <iframe class="shell-frame" src="https://shell.icec.tf/wetty" frameBorder="0"></iframe>
 </div>
 </div>
 {% endblock %}
