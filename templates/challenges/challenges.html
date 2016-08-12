@@ -20,6 +20,9 @@
 </div>
 {% for stage in stages %}
 <hr />
+{% if stage.description %}
+<p>{{stage.description}}</p>
+{% endif %}
 <span class="left"><h4>{{ stage.name }}</h4></span>
 <span class="right"><a class="stage-collapse" data-collapse="{{ stage.alias }}" href="#">Toggle</a></span>
 <div class="clearfix"></div>

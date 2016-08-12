@@ -19,7 +19,7 @@ def get_categories():
 
 
 def get_challenges():
-    challenges = Challenge.select().order_by(Challenge.stage, Challenge.points, Challenge.name)
+    challenges = Challenge.select().where(Challenge.enabled == True).order_by(Challenge.stage, Challenge.points, Challenge.name)
     d = dict()
     for chall in challenges:
         if chall.stage_id in d:
@@ -48,9 +48,9 @@ def get_solve_count(chall_id):
 def get_challenge(id=None, alias=None):
     try:
         if id is not None:
-            return Challenge.get(Challenge.id == id)
+            return Challenge.get(Challenge.id == id, Challenge.enabled == True)
         elif alias is not None:
-            return Challenge.get(Challenge.alias == alias)
+            return Challenge.get(Challenge.alias == alias, Challenge.enabled == True)
         else:
             raise ValueError("Invalid argument")
     except Challenge.DoesNotExist:
