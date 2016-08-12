@@ -41,6 +41,7 @@ custom_stylesheet = "css/main.css"
 enable_shell = True
 
 shell_port = 22
+shell_host = "shell.icec.tf"
 
 shell_user_prefixes = ["ctf-"]
 shell_password_length = 6

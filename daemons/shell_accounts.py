@@ -11,7 +11,7 @@ def run():
 
     try:
         shell = spur.SshShell(
-            hostname=config.secret.shell_host,
+            hostname=config.shell_host,
             username=config.secret.shell_username,
             private_key_file=config.secret.shell_privkey,
             port=config.shell_port,
