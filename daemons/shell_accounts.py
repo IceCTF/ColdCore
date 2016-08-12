@@ -74,7 +74,7 @@ def run():
             new_accounts -= 1
 
         if len(accounts) > 0:
-            ssh.insert_accounts(accounts)
+            ssh.create_accounts(accounts)
             print("Successfully imported accounts.")
 
         for team in teams:
