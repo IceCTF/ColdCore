@@ -44,7 +44,7 @@ shell_port = 22
 shell_host = "shell.icec.tf"
 
 shell_user_prefixes = ["ctf-"]
-shell_password_length = 6
+shell_password_length = 8
 shell_free_acounts = 10
 shell_max_accounts = 99999
 
