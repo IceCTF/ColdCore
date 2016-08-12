@@ -17,7 +17,7 @@ def must_be_allowed_to(thing):
         @wraps(f)
         def decorated(*args, **kwargs):
             if getattr(g, 'user_restricts', None) is None:
-                return redirect(url_for('login'))
+                return redirect(url_for('users.login'))
             if g.user_restricts and thing in g.user_restricts:
                 return "You are restricted from performing the {} action. Contact an organizer.".format(thing)
 
