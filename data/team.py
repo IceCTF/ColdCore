@@ -33,7 +33,7 @@ def create_team(name, affiliation):
     team_key = misc.generate_team_key()
     team = Team.create(name=name, affiliation=affiliation, key=team_key)
 
-    return True, team
+    return team
 
 
 def update_team(current_team, name, affiliation):
