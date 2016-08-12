@@ -20,11 +20,14 @@ class Team(BaseModel):
     affiliation = CharField(null=True)
     restricts = TextField(default="")
     key = CharField(unique=True, index=True)
+    eligibility = BooleanField(null=True)
 
     def solved(self, challenge):
         return ChallengeSolve.select().where(ChallengeSolve.team == self, ChallengeSolve.challenge == challenge).count()
 
     def eligible(self):
+        if self.eligibility is not None:
+            return self.eligibility
         return all([member.eligible() for member in self.members]) and self.members.count() <= 3
 
     @property
@@ -59,7 +62,7 @@ class User(BaseModel):
         return bcrypt.checkpw(pw.encode("utf-8"), self.password.encode("utf-8"))
 
     def eligible(self):
-        return self.country == "ISL"
+        return self.country == "ISL" and not self.banned
 
 
 class UserAccess(BaseModel):
