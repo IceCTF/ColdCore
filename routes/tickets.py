@@ -44,7 +44,7 @@ def detail(ticket_id):
         return redirect(url_for(".index"))
 
     comments = ticket.get_comments(t)
-    return render_template("ticket_detail.html", ticket_id=t, comments=comments)
+    return render_template("ticket_detail.html", ticket=t, comments=comments)
 
 
 @tickets.route('/tickets/<int:ticket_id>/comment/', methods=["POST"])
