@@ -20,3 +20,9 @@ def assign_shell_account(team):
     acct = SshAccount.select().order_by(fn.Random()).get()
     acct.team = team
     acct.save()
+
+def get_team_account(team):
+    try:
+        return team.ssh_account.get()
+    except SshAccount.DoesNotExist:
+        return None

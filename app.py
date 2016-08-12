@@ -12,7 +12,7 @@ from data.database import db
 import data
 
 # Blueprints
-from routes import api, admin, teams, users, challenges, tickets, scoreboard
+from routes import api, admin, teams, users, challenges, tickets, scoreboard, shell
 
 if config.production:
     logging.basicConfig(level=logging.INFO)
@@ -30,6 +30,7 @@ app.register_blueprint(users.users)
 app.register_blueprint(challenges.challenges)
 app.register_blueprint(tickets.tickets)
 app.register_blueprint(scoreboard.scoreboard)
+app.register_blueprint(shell.shell)
 
 
 @app.before_request

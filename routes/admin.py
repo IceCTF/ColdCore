@@ -53,7 +53,7 @@ def admin_dashboard():
     adjustments = ScoreAdjustment.select()
     scoredata = scoreboard.get_all_scores(teams, solves, adjustments)
     lastsolvedata = scoreboard.get_last_solves(teams, solves)
-    tickets = list(TroubleTicket.select().where(TroubleTicket.active==True))
+    tickets = list(TroubleTicket.select().where(TroubleTicket.active == True))
     return render_template("admin/dashboard.html", teams=teams, scoredata=scoredata, lastsolvedata=lastsolvedata, tickets=tickets)
 
 
