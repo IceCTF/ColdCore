@@ -80,7 +80,7 @@ def submit_flag(chall, user, team, flag):
         raise ValidationError("This challenge is disabled.")
     elif flag.strip().lower() != chall.flag.strip().lower():
         ChallengeFailure.create(user=user, team=team, challenge=chall, attempt=flag, time=datetime.now())
-        return "Incorrect flag"
+        raise ValidationError("Incorrect flag")
     else:
         ChallengeSolve.create(user=user, team=team, challenge=chall, time=datetime.now())
         g.redis.hincrby("solves", chall.id, 1)
