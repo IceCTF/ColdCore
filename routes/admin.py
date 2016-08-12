@@ -78,19 +78,19 @@ def admin_ticket_comment(ticket):
     ticket = TroubleTicket.get(TroubleTicket.id == ticket)
     if request.form["comment"]:
         TicketComment.create(ticket=ticket, comment_by=session["admin"], comment=request.form["comment"], time=datetime.now())
-        Notification.create(team=ticket.team, notification="A response has been added for {}.".format(make_link("ticket #{}".format(ticket.id), url_for("tickets.detail", ticket=ticket.id))))
+        Notification.create(team=ticket.team, notification="A response has been added for {}.".format(make_link("ticket #{}".format(ticket.id), url_for("tickets.detail", ticket_id=ticket.id))))
         flash("Comment added.")
 
     if ticket.active and "resolved" in request.form:
         ticket.active = False
         ticket.save()
-        Notification.create(team=ticket.team, notification="{} has been marked resolved.".format(make_link("Ticket #{}".format(ticket.id), url_for("tickets.detail", ticket=ticket.id))))
+        Notification.create(team=ticket.team, notification="{} has been marked resolved.".format(make_link("Ticket #{}".format(ticket.id), url_for("tickets.detail", ticket_id=ticket.id))))
         flash("Ticket closed.")
 
     elif not ticket.active and "resolved" not in request.form:
         ticket.active = True
         ticket.save()
-        Notification.create(team=ticket.team, notification="{} has been reopened.".format(make_link("Ticket #{}".format(ticket.id), url_for("tickets.detail", ticket=ticket.id))))
+        Notification.create(team=ticket.team, notification="{} has been reopened.".format(make_link("Ticket #{}".format(ticket.id), url_for("tickets.detail", ticket_id=ticket.id))))
         flash("Ticket reopened.")
 
     return redirect(url_for(".admin_ticket_detail", ticket=ticket.id))
