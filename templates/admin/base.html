@@ -14,7 +14,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         {% block head %}{% endblock %}
     </head>
-    <body class="admin-page">
+    <body class="admin-page" style="padding-top: 0px;">
         {% if "admin" in session %}
         <div class="navbar-fixed">
             <nav class="red darken-3">
@@ -24,7 +24,6 @@
                             <li><a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a></li>
                             <li><a href="{{ url_for('admin.admin_tickets') }}">Tickets</a></li>
                         </ul>
-                        <a href="{{ config.ctf_home_url }}" class="center"><img class="brand-logo" src={{ url_for('static', filename='logo.png') }}></img></a>
                         <ul class="right hide-on-med-and-down">
                             <li><a href="{{ url_for('admin.admin_logout') }}">Logout ({{ session.admin }})</a></li>
                         </ul>
