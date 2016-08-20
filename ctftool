@@ -112,8 +112,9 @@ def scan_challenges_stage(d, files):
         data = yaml.load(f)
         query = Stage.select().where(Stage.alias == data["alias"])
         if query.exists():
-            print("Updating %s..." % (data["name"]))
+            print("Updating %s..." % (data["alias"]))
             q = Stage.update(**data).where(Stage.alias == data["alias"])
+            q.execute()
         else:
             Stage.create(**data)
 
