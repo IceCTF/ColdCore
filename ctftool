@@ -113,7 +113,7 @@ def scan_challenges_stage(d, files):
         query = Stage.select().where(Stage.alias == data["alias"])
         if query.exists():
             print("Updating %s..." % (data["name"]))
-            q = Challenge.update(**data).where(Stage.alias == data["alias"])
+            q = Stage.update(**data).where(Stage.alias == data["alias"])
         else:
             Stage.create(**data)
 
