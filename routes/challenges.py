@@ -10,7 +10,7 @@ challenges = Blueprint("challenges", __name__, template_folder="../templates/cha
 
 @challenges.route('/challenges/')
 @decorators.must_be_allowed_to("view challenges")
-@decorators.competition_running_required
+@decorators.competition_started_required
 @decorators.confirmed_email_required
 def index():
     stages = challenge.get_stages()
@@ -25,7 +25,7 @@ def index():
 @challenges.route('/challenges/<challenge_id>/solves/')
 @decorators.must_be_allowed_to("view challenge solves")
 @decorators.must_be_allowed_to("view challenges")
-@decorators.competition_running_required
+@decorators.competition_started_required
 @decorators.confirmed_email_required
 def show_solves(challenge_id):
     try:

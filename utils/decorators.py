@@ -48,6 +48,15 @@ def competition_running_required(f):
         return f(*args, **kwargs)
     return decorated
 
+def competition_started_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not config.competition_has_started() and not ("admin" in session and session["admin"]):
+            flash("The competition hasn't started")
+            return redirect(url_for('scoreboard.index'))
+        return f(*args, **kwargs)
+    return decorated
+
 def admin_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):

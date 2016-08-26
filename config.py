@@ -63,6 +63,10 @@ if production:
 def competition_is_running():
     return competition_begin < datetime.now() < competition_end
 
+
+def competition_has_started():
+    return competition_begin < datetime.now()
+
 # Don't touch these. Instead, copy secrets.example to secrets and edit that.
 import yaml
 from collections import namedtuple
