@@ -9,7 +9,7 @@ shell = Blueprint("shell", __name__, template_folder="../templates/shell")
 
 @shell.route('/shell/')
 @decorators.must_be_allowed_to("access shell")
-@decorators.competition_running_required
+@decorators.competition_started_required
 @decorators.confirmed_email_required
 def index():
     account = ssh.get_team_account(g.team)
