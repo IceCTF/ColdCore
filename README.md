@@ -1,4 +1,4 @@
-# ColdPlatform
+# ColdCore
 This is the platform for IceCTF. It is based off of the platform for TJCTF, [TJCSec/ctf-platform](https://github.com/TJCSec/ctf-platform), although with hefty changes.
 
 ## Installation
