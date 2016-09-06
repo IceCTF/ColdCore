@@ -1,5 +1,5 @@
 # ColdPlatform
-This is the platform for IceCTF. It is based off of the platform for TJCTF, (https://github.com/TJCSec/ctf-platform)[https://github.com/TJCSec/ctf-platform]
+This is the platform for IceCTF. It is based off of the platform for TJCTF, [TJCSec/ctf-platform](https://github.com/TJCSec/ctf-platform), although with hefty changes.
 
 ## Installation
 Edit `config.py` to your liking. The variable names should be fairly
