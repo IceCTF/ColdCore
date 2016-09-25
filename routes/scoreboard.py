@@ -11,14 +11,14 @@ scoreboard = Blueprint("scoreboard", __name__, template_folder="../templates/sco
 @scoreboard.route('/scoreboard/')
 def index():
     scoreboard_data = cache.get_complex("scoreboard")
-    graphdata = cache.get_complex("graph")
-    if scoreboard_data is None or graphdata is None:
+    graph_data = cache.get_complex("graph")
+    if scoreboard_data is None or graph_data is None:
         if config.immediate_scoreboard:
             scoreboard_data = scoreboard.calculate_scores()
-            graphdata = scoreboard.calculate_graph(data)
-            data.scoreboard.set_complex("scoreboard", data, 120)
-            data.scoreboard.set_complex("graph", graphdata, 120)
+            graph_data = scoreboard.calculate_graph(data)
+            cache.set_complex("scoreboard", scoreboard_data, 120)
+            cache.set_complex("graph", graph_data, 120)
         else:
             return "CTF hasn't started!"
 
-    return render_template("scoreboard.html", data=scoreboard_data, graphdata=graphdata)
+    return render_template("scoreboard.html", data=scoreboard_data, graphdata=graph_data)
