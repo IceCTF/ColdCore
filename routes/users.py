@@ -89,7 +89,7 @@ def register():
                                  tshirt_size=tshirt_size, gender=gender)
         except exceptions.ValidationError as e:
             if not join_team:
-                team.delete_instance()
+                t.delete_instance()
             flash(str(e))
             return redirect(url_for('.register'))
         session["user_id"] = u.id
