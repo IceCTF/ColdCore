@@ -1,0 +1,18 @@
+[Unit]
+Description=IceCTF platform
+Requires=ctf-platform.socket
+After=network.target
+
+[Service]
+PIDFile=/srv/run/ctf-platform/pid
+User=deploy
+Group=deploy
+WorkingDirectory=/srv/ctf-platform/
+ExecStart=/usr/local/bin/gunicorn --pid /srv/run/ctf-platform/pid app:app
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+Environment=PRODUCTION=true
+
+[Install]
+WantedBy=multi-user.target

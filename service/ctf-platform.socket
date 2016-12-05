@@ -1,0 +1,9 @@
+[Unit]
+Description=IceCTF platform socket
+
+[Socket]
+ListenStream=/srv/run/ctf-platform/socket
+ListenStream=0.0.0.0:9002
+
+[Install]
+WantedBy=sockets.target
