@@ -30,6 +30,8 @@ user: user
 password: password
 ```
 
+Then initiate the database with `./ctftool database create-tables`.
+
 To run the server with production settings, set the environment variable `PRODUCTION=1` before running the server.
 
 You can create some problem YAML files that look like this:
