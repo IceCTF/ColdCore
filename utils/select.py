@@ -21,7 +21,7 @@ Backgrounds = [
 
 BackgroundKeys = [x[0] for x in Backgrounds]
 
-Countries = [(country.alpha3, country.name) for country in pycountry.countries]
+Countries = [(country.alpha_3, country.name) for country in pycountry.countries]
 Countries = (sorted(Countries, key=lambda x: "0" if x[1] == "Iceland" else x[1]))
 CountryKeys = [x[0] for x in Countries]
 
