@@ -125,11 +125,11 @@ def scan_challenges(args):
 
     os.makedirs(config.static_dir, exist_ok=True)
     for root, dirs, files in os.walk(path):
+        if "stage.yml" in files:
+            scan_challenges_stage(root, files)
         if "problem.yml" in files:
             n += 1
             scan_challenges_problem(root, files)
-        if "stage.yml" in files:
-            scan_challenges_stage(root, files)
 
     print(n, "challenges loaded")
 
